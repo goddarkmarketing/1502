@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insurance</title>
+  </head>
+  <body>
+    <script>
+      (function redirectToAppRoot() {
+        const basePath = '/portfolio1';
+        const nextPath =
+          window.location.pathname + window.location.search + window.location.hash;
+
+        window.sessionStorage.setItem('gh-pages-spa-path', nextPath);
+        window.location.replace(`${window.location.origin}${basePath}/`);
+      })();
+    </script>
+  </body>
+</html>
