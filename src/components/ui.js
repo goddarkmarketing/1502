@@ -1,5 +1,140 @@
 import { formatCompact, formatCurrency, formatDate } from '../utils/format.js';
-import { appUrl } from '../app/router.js';
+import { appUrl, staticUrl } from '../app/router.js';
+
+function providerComparisonColumnClass(column, selectedPlanSlug) {
+  return column.slug === selectedPlanSlug ? 'provider-comparison-col-selected' : '';
+}
+
+export function renderInsurerComparisonTable({ title, rows, columns, selectedPlanSlug = null }) {
+  return `
+    <section class="provider-comparison-section" aria-labelledby="provider-comparison-title">
+      <h2 id="provider-comparison-title" class="provider-comparison-title">${title}</h2>
+      <div class="provider-comparison-scroll">
+        <table class="provider-comparison-table" role="grid">
+          <thead>
+            <tr>
+              <th class="provider-comparison-corner" scope="col"><span class="sr-only">รายการเปรียบเทียบ</span></th>
+              ${columns
+                .map((column) => {
+                  const selected = providerComparisonColumnClass(column, selectedPlanSlug);
+                  return `
+                <th scope="col" class="provider-comparison-brand ${selected}">
+                  <div class="provider-comparison-brand-inner">
+                    <img
+                      class="provider-comparison-logo"
+                      src="${staticUrl(column.logo)}"
+                      alt="${column.provider}"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <label class="provider-comparison-picker-label">
+                      <span class="sr-only">เลือกแผน ${column.provider}</span>
+                      <select
+                        class="provider-comparison-plan-picker"
+                        data-insurer-key="${column.insurerKey}"
+                        aria-label="เลือกแผน ${column.provider}"
+                      >
+                        ${(column.planOptions ?? [])
+                          .map(
+                            (option) => `
+                          <option value="${option.id}" ${option.id === column.planId ? 'selected' : ''}>
+                            ${option.label}
+                          </option>
+                        `,
+                          )
+                          .join('')}
+                      </select>
+                    </label>
+                  </div>
+                </th>
+              `;
+                })
+                .join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows
+              .map(
+                (row, index) => `
+              <tr class="provider-comparison-row ${index % 2 === 1 ? 'provider-comparison-row-alt' : ''}">
+                <th scope="row" class="provider-comparison-label">${row.label}</th>
+                ${columns
+                  .map((column) => {
+                    const cell = column.values[row.key] ?? '—';
+                    const isPlanName = row.key === 'planName';
+                    const selected = providerComparisonColumnClass(column, selectedPlanSlug);
+                    return `
+                  <td class="provider-comparison-cell ${selected} ${isPlanName ? 'provider-comparison-cell-plan' : ''}">
+                    ${
+                      isPlanName
+                        ? `<a class="provider-comparison-plan-link" href="${appUrl(`/plans/${column.slug}`)}">${cell}</a>`
+                        : cell
+                    }
+                  </td>
+                `;
+                  })
+                  .join('')}
+              </tr>
+            `,
+              )
+              .join('')}
+            <tr class="provider-comparison-row provider-comparison-row-actions">
+              <th scope="row" class="provider-comparison-label">เลือกแผน</th>
+              ${columns
+                .map((column) => {
+                  const isSelected = column.slug === selectedPlanSlug;
+                  const selected = providerComparisonColumnClass(column, selectedPlanSlug);
+                  return `
+                <td class="provider-comparison-cell provider-comparison-cell-action ${selected}">
+                  <button
+                    class="button ${isSelected ? 'button-primary' : 'button-secondary'} provider-comparison-select"
+                    type="button"
+                    data-plan-slug="${column.slug}"
+                    data-plan-id="${column.planId}"
+                    aria-pressed="${isSelected ? 'true' : 'false'}"
+                  >
+                    ${isSelected ? 'เลือกแล้ว ✓' : 'เลือกแผนนี้'}
+                  </button>
+                </td>
+              `;
+                })
+                .join('')}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+export function renderSelectedPlanBar(plans, selectedPlanSlug) {
+  if (!selectedPlanSlug) {
+    return '';
+  }
+
+  const plan = plans.find((item) => item.slug === selectedPlanSlug);
+  if (!plan) {
+    return '';
+  }
+
+  const planTitle = plan.displayNameTh ?? plan.name;
+
+  return `
+    <aside class="provider-comparison-selection" aria-live="polite">
+      <div class="provider-comparison-selection-copy">
+        <span class="provider-comparison-selection-eyebrow">แผนที่คุณเลือก</span>
+        <strong>${planTitle}</strong>
+        <p>${plan.provider} · เบี้ยเริ่มต้น ${formatCurrency(plan.monthlyPremium)} / เดือน</p>
+      </div>
+      <div class="provider-comparison-selection-actions">
+        <a class="button button-secondary" href="${appUrl(`/plans/${plan.slug}`)}">ดูรายละเอียด</a>
+        <button class="button button-primary" type="button" data-open-quote="true" data-plan-id="${plan.id}">
+          รับคำปรึกษาแผนนี้
+        </button>
+      </div>
+    </aside>
+  `;
+}
 
 export function renderSectionHeader({ eyebrow, title, description, center = false }) {
   return `
@@ -13,23 +148,35 @@ export function renderSectionHeader({ eyebrow, title, description, center = fals
 
 export function renderPlanCard(plan, compareIds = []) {
   const inCompare = compareIds.includes(plan.id);
-  const mediaStyle = plan.image ? `style="--plan-image: url('${plan.image}')"` : '';
-  return `
-    <article class="plan-card">
-      <div class="plan-card-media plan-card-media-${plan.category} ${plan.image ? 'plan-card-media-has-image' : ''}" ${mediaStyle}>
+  const planTitle = plan.displayNameTh ?? plan.name;
+  const mediaMarkup = plan.image
+    ? `
+      <div class="plan-card-media plan-card-media--banner">
+        <img
+          class="plan-card-image"
+          src="${staticUrl(plan.image)}"
+          alt="${planTitle}"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    `
+    : `
+      <div class="plan-card-media plan-card-media-${plan.category}">
         <span class="plan-badge">${plan.badge}</span>
         <div class="plan-media-copy">
           <strong>${plan.category}</strong>
           <span>${plan.highlight}</span>
         </div>
       </div>
+    `;
+  return `
+    <article class="plan-card">
+      ${mediaMarkup}
       <div class="plan-card-body">
         <div class="plan-card-heading">
-          <div>
-            <p class="plan-provider">${plan.provider}</p>
-            <h3>${plan.displayNameTh ?? plan.name}</h3>
-          </div>
-          <span class="plan-rating">★ ${plan.rating}</span>
+          <p class="plan-provider">${plan.provider}</p>
+          <h3>${plan.displayNameTh ?? plan.name}</h3>
         </div>
         <p class="plan-description">${plan.description}</p>
         <div class="plan-meta-grid">
@@ -84,6 +231,31 @@ export function renderTrustCard(item, highlighted = false) {
       <span class="trust-icon">${item.icon}</span>
       <h3>${item.title}</h3>
       <p>${item.description}</p>
+    </article>
+  `;
+}
+
+export function renderArticleCard(article) {
+  return `
+    <article class="article-card">
+      <div class="article-card-media">
+        <img
+          src="${article.coverImage}"
+          alt="${article.title}"
+          class="article-card-image"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <div class="article-card-body">
+        <span class="article-meta">${article.category} • ${article.readTime}</span>
+        <h3>${article.title}</h3>
+        <p>${article.excerpt}</p>
+        <div class="article-footer">
+          <span>${article.publishedAt}</span>
+          <a href="${appUrl(`/articles/${article.slug}`)}" class="inline-link">อ่านบทความ</a>
+        </div>
+      </div>
     </article>
   `;
 }

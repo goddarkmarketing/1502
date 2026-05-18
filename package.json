@@ -1,0 +1,25 @@
+{
+  "name": "portfolio3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-pricing": "node scripts/build-pricing-data.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goddarkmarketing/portfolio1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/goddarkmarketing/portfolio1/issues"
+  },
+  "homepage": "https://github.com/goddarkmarketing/portfolio1#readme",
+  "dependencies": {
+    "pdf-parse": "^2.4.5"
+  }
+}

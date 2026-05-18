@@ -1,14 +1,27 @@
-const BASE_PATH = '/portfolio1';
+/** โฟลเดอร์โปรเจคบนเซิร์ฟเวอร์ (เช่น /portfolio3) — คำนวณจากตำแหน่งไฟล์นี้ ไม่ต้องแก้มือเมื่อย้ายโฟลเดอร์ */
+function computeBasePath() {
+  try {
+    const root = new URL('../..', import.meta.url);
+    let p = decodeURIComponent(root.pathname);
+    if (p.endsWith('/')) p = p.slice(0, -1);
+    return p;
+  } catch {
+    return '';
+  }
+}
+
+const BASE_PATH = computeBasePath();
 
 function stripBasePath(pathname) {
+  if (!BASE_PATH) {
+    return pathname || '/';
+  }
   if (pathname === BASE_PATH || pathname === `${BASE_PATH}/`) {
     return '/';
   }
-
   if (pathname.startsWith(`${BASE_PATH}/`)) {
     return pathname.slice(BASE_PATH.length) || '/';
   }
-
   return pathname || '/';
 }
 
@@ -20,6 +33,15 @@ function normalizePath(pathname) {
 export function appUrl(path = '/') {
   const normalized = path.startsWith('/') ? path : `/${path}`;
   return normalized === '/' ? `${BASE_PATH}/` : `${BASE_PATH}${normalized}`;
+}
+
+/** Static asset path (e.g. PDF under /PDF/) — each path segment is URL-encoded. */
+export function staticUrl(relativePath) {
+  const clean = String(relativePath).replace(/^\/+/, '');
+  if (!clean) {
+    return `${BASE_PATH}/`;
+  }
+  return `${BASE_PATH}/${clean.split('/').map(encodeURIComponent).join('/')}`;
 }
 
 export function getCurrentPath() {
@@ -104,7 +126,9 @@ export function migrateLegacyHashRoute() {
 }
 
 export function isInternalAppUrl(url) {
-  return url.origin === window.location.origin && url.pathname.startsWith(BASE_PATH);
+  if (url.origin !== window.location.origin) return false;
+  if (!BASE_PATH) return true;
+  return url.pathname === BASE_PATH || url.pathname.startsWith(`${BASE_PATH}/`);
 }
 
 export function appPathFromUrl(url) {

@@ -28,7 +28,10 @@ export function renderPlansPage(state, query) {
       return right.coverageAmount - left.coverageAmount;
     }
 
-    return Number(right.featured) - Number(left.featured) || right.rating - left.rating;
+    return (
+      Number(right.featured) - Number(left.featured) ||
+      (left.displayNameTh ?? left.name).localeCompare(right.displayNameTh ?? right.name, 'th')
+    );
   });
 
   return `

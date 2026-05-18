@@ -1,4 +1,5 @@
 import { companyHighlights, companyMilestones, partners } from '../data/mockData.js';
+import { staticUrl } from '../app/router.js';
 import { renderSectionHeader } from '../components/ui.js';
 
 export function renderAboutPage() {
@@ -70,7 +71,7 @@ export function renderAboutPage() {
                 <span class="partner-logo">
                   ${
                     partner.logo
-                      ? `<img src="${partner.logo}" alt="${partner.name} logo" class="partner-logo-image partner-logo-image-${partner.logoScale ?? 'standard'}" />`
+                      ? `<img src="${staticUrl(partner.logo)}" alt="${partner.name} logo" class="partner-logo-image partner-logo-image-${partner.logoScale ?? 'standard'}" loading="lazy" decoding="async" />`
                       : `<span class="partner-logo-fallback">${partner.mark}</span>`
                   }
                 </span>

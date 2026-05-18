@@ -1,25 +1,26 @@
 import {
-  categories,
+  articleTopics,
   faqs,
+  insurerComparison,
   partners,
   plans,
-  stats,
   testimonials,
   trustPoints,
 } from '../data/mockData.js';
 import {
-  renderCategoryCard,
+  renderArticleCard,
   renderFaqItem,
+  renderInsurerComparisonTable,
+  renderSelectedPlanBar,
   renderPlanCard,
   renderSectionHeader,
   renderTestimonialCard,
   renderTrustCard,
 } from '../components/ui.js';
-import { appUrl } from '../app/router.js';
+import { appUrl, staticUrl } from '../app/router.js';
+import { buildComparisonTableData } from '../utils/insurerComparison.js';
 
 export function renderHomePage(state) {
-  const featuredPlans = plans.filter((plan) => plan.featured);
-
   return `
     <section class="hero-section">
       <div class="hero-copy">
@@ -36,75 +37,65 @@ export function renderHomePage(state) {
           <a class="button button-primary" href="${appUrl('/plans')}">เลือกแผนที่ใช่</a>
           <button class="button button-secondary" type="button" data-open-quote="true">รับคำปรึกษาเบื้องต้น</button>
         </div>
-        <div class="hero-stats">
-          ${stats
-            .map(
-              (item) => `
-                <div class="hero-stat">
-                  <strong>${item.value}</strong>
-                  <span>${item.label}</span>
-                  <small>${item.detail}</small>
-                </div>
-              `,
-            )
-            .join('')}
-        </div>
       </div>
       <div class="hero-visual">
-        <div class="illustration-card">
-          <img
-            class="family-illustration"
-            src="https://media.istockphoto.com/id/2205778151/th/%E0%B8%A3%E0%B8%B9%E0%B8%9B%E0%B8%96%E0%B9%88%E0%B8%B2%E0%B8%A2/%E0%B8%84%E0%B8%A3%E0%B8%AD%E0%B8%9A%E0%B8%84%E0%B8%A3%E0%B8%B1%E0%B8%A7%E0%B8%8A%E0%B8%B2%E0%B8%A7%E0%B9%80%E0%B8%AD%E0%B9%80%E0%B8%8A%E0%B8%B5%E0%B8%A2%E0%B9%83%E0%B8%8A%E0%B9%89%E0%B9%80%E0%B8%A7%E0%B8%A5%E0%B8%B2%E0%B8%AD%E0%B8%A2%E0%B8%B9%E0%B9%88%E0%B8%94%E0%B9%89%E0%B8%A7%E0%B8%A2%E0%B8%81%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%B5%E0%B9%88%E0%B8%9A%E0%B9%89%E0%B8%B2%E0%B8%99.jpg?s=612x612&w=0&k=20&c=YT4cag13OSyut71ckByZ-qHy3SYW_suOtjt76DMmTlA="
-            alt="ครอบครัวกำลังใช้เวลาร่วมกันในบ้าน"
-          />
-          <div class="hero-floating-card">
-            <strong>ดูแผนได้ครบในมุมมองเดียว</strong>
-            <span>เปรียบเทียบความคุ้มครอง ส่งคำขอรับคำปรึกษา และติดตามรายการที่สนใจได้สะดวก</span>
-          </div>
-        </div>
+        <img
+          class="hero-visual-image"
+          src="${staticUrl('assets/hero-insurance-visual.png')}"
+          alt="ดูแลให้ครบในทุกช่วงชีวิต — เปรียบเทียบความคุ้มครองและติดตามแผนประกันได้สะดวก"
+          loading="eager"
+          decoding="async"
+        />
       </div>
     </section>
 
     <section class="section-surface">
-      ${renderSectionHeader({
-        eyebrow: 'แนะนำแผนเด่น',
-        title: 'ซื้อประกันออนไลน์ เลือกง่าย คุ้มครองทันที',
-        description: 'ใช้ข้อมูลชุดเดียวกันในการเทียบราคา ความคุ้มครอง และเริ่มส่งคำขอได้จากทุกหน้า',
-      })}
-      <div class="featured-grid">
-        ${featuredPlans.map((plan) => renderPlanCard(plan, state.compareIds)).join('')}
-      </div>
-    </section>
-
-    <section class="section-white">
-      ${renderSectionHeader({
-        title: 'แผนประกันที่ครอบคลุม',
-        description: 'เลือกตามหมวดที่คุณสนใจ แล้วค่อยเจาะลึกเป็นรายแผนในหน้ารายละเอียด',
-      })}
-      <div class="category-slider-controls">
-        <button class="slider-arrow" type="button" data-slider-target="category-slider" data-slider-direction="prev" aria-label="เลื่อนซ้าย">←</button>
-        <button class="slider-arrow" type="button" data-slider-target="category-slider" data-slider-direction="next" aria-label="เลื่อนขวา">→</button>
-      </div>
-      <div class="category-slider-shell" id="category-slider" data-auto-slider="true">
-        <div class="category-slider-track">
-          ${categories.map((item) => renderCategoryCard(item)).join('')}
+      <div class="plan-section-top">
+        ${renderSectionHeader({
+          eyebrow: 'แนะนำแผนเด่น',
+          title: 'ซื้อประกันออนไลน์ เลือกง่าย คุ้มครองทันที',
+          description: 'ใช้ข้อมูลชุดเดียวกันในการเทียบราคา ความคุ้มครอง และเริ่มส่งคำขอได้จากทุกหน้า',
+        })}
+        <div class="plan-slider-controls">
+          <button class="slider-arrow" type="button" data-slider-target="plan-slider" data-slider-direction="prev" aria-label="เลื่อนแผนก่อนหน้า">←</button>
+          <button class="slider-arrow" type="button" data-slider-target="plan-slider" data-slider-direction="next" aria-label="เลื่อนแผนถัดไป">→</button>
         </div>
       </div>
-      <div class="slider-dots" id="category-slider-dots" aria-label="สถานะสไลด์">
-        ${categories
-          .map(
-            (_, index) => `
+      <div
+        class="plan-slider-shell"
+        id="plan-slider"
+        data-auto-slider="true"
+        data-slider-card=".plan-card"
+        data-slider-visible="3"
+      >
+        <div class="plan-slider-track">
+          ${plans.map((plan) => renderPlanCard(plan, state.compareIds)).join('')}
+        </div>
+      </div>
+      <div class="slider-dots" id="plan-slider-dots" aria-label="สถานะสไลด์แผนประกัน">
+        ${Array.from({ length: Math.max(1, plans.length - 3 + 1) }, (_, index) => `
               <button
                 class="slider-dot ${index === 0 ? 'slider-dot-active' : ''}"
                 type="button"
-                data-slider-dot="category-slider"
+                data-slider-dot="plan-slider"
                 data-slider-index="${index}"
-                aria-label="ไปยังการ์ดที่ ${index + 1}"
+                aria-label="ไปยังสไลด์ที่ ${index + 1}"
               ></button>
-            `,
-          )
-          .join('')}
+            `).join('')}
       </div>
+    </section>
+
+    <section class="section-white provider-comparison-wrap">
+      ${renderInsurerComparisonTable(
+        buildComparisonTableData({
+          plans,
+          rows: insurerComparison.rows,
+          title: insurerComparison.title,
+          comparisonPlanIds: state.comparisonPlanIds,
+          selectedPlanSlug: state.selectedPlanSlug,
+        }),
+      )}
+      ${renderSelectedPlanBar(plans, state.selectedPlanSlug)}
     </section>
 
     <section class="section-surface centered-block">
@@ -130,7 +121,7 @@ export function renderHomePage(state) {
                   <span class="partner-logo">
                     ${
                       partner.logo
-                        ? `<img src="${partner.logo}" alt="${partner.name} logo" class="partner-logo-image partner-logo-image-${partner.logoScale ?? 'standard'}" />`
+                        ? `<img src="${staticUrl(partner.logo)}" alt="${partner.name} logo" class="partner-logo-image partner-logo-image-${partner.logoScale ?? 'standard'}" loading="lazy" decoding="async" />`
                         : `<span class="partner-logo-fallback">${partner.mark}</span>`
                     }
                   </span>
@@ -151,6 +142,21 @@ export function renderHomePage(state) {
       })}
       <div class="testimonial-grid">
         ${testimonials.map((item) => renderTestimonialCard(item)).join('')}
+      </div>
+    </section>
+
+    <section class="section-white home-articles-section">
+      ${renderSectionHeader({
+        eyebrow: 'บทความ',
+        title: 'บทความแนะนำ',
+        description: 'อ่านสาระประกันที่ช่วยให้ตัดสินใจเลือกความคุ้มครองได้มั่นใจขึ้น',
+        center: true,
+      })}
+      <div class="articles-grid home-articles-grid">
+        ${articleTopics.slice(0, 3).map((article) => renderArticleCard(article)).join('')}
+      </div>
+      <div class="home-articles-cta">
+        <a class="button button-secondary" href="${appUrl('/articles')}">ดูบทความทั้งหมด</a>
       </div>
     </section>
 

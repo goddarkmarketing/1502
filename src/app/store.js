@@ -1,6 +1,10 @@
+import { defaultComparisonPlanIds } from '../utils/insurerComparison.js';
+
 const STORAGE_KEYS = {
   requests: 'curated-coverage-requests',
   compare: 'curated-coverage-compare',
+  selectedPlan: 'curated-coverage-selected-plan',
+  comparisonPlans: 'curated-coverage-comparison-plans',
 };
 
 export const sampleRequests = [
@@ -44,6 +48,7 @@ const state = {
   requests: [],
   compareIds: [],
   selectedPlanSlug: null,
+  comparisonPlanIds: { ...defaultComparisonPlanIds },
   lastToast: '',
 };
 
@@ -83,6 +88,11 @@ export function hydrateStore() {
       writeStorage(STORAGE_KEYS.requests, sampleRequests);
     }
     state.compareIds = readStorage(STORAGE_KEYS.compare, []);
+    state.selectedPlanSlug = readStorage(STORAGE_KEYS.selectedPlan, null);
+    state.comparisonPlanIds = {
+      ...defaultComparisonPlanIds,
+      ...readStorage(STORAGE_KEYS.comparisonPlans, {}),
+    };
     state.loading = false;
     emit();
   }, 260);
@@ -116,6 +126,35 @@ export function queueToast(message) {
       emit();
     }
   }, 2800);
+}
+
+export function setComparisonPlan(insurerKey, planId) {
+  if (!insurerKey || !planId) {
+    return;
+  }
+
+  state.comparisonPlanIds = {
+    ...state.comparisonPlanIds,
+    [insurerKey]: planId,
+  };
+  writeStorage(STORAGE_KEYS.comparisonPlans, state.comparisonPlanIds);
+  queueToast('เปลี่ยนแผนที่เปรียบเทียบแล้ว');
+}
+
+export function selectPlan(slug) {
+  const isSame = state.selectedPlanSlug === slug;
+  state.selectedPlanSlug = isSame ? null : slug;
+  if (state.selectedPlanSlug) {
+    writeStorage(STORAGE_KEYS.selectedPlan, state.selectedPlanSlug);
+    queueToast('เลือกแผนประกันเรียบร้อยแล้ว');
+  } else {
+    try {
+      window.localStorage.removeItem(STORAGE_KEYS.selectedPlan);
+    } catch (error) {
+      state.error = 'ไม่สามารถบันทึกข้อมูลลงในเครื่องได้';
+    }
+    queueToast('ยกเลิกการเลือกแผนแล้ว');
+  }
 }
 
 export function toggleCompare(planId) {

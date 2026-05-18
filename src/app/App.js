@@ -1,6 +1,16 @@
 import { renderShell } from '../components/layout.js';
 import { appPathFromUrl, getRoute, isInternalAppUrl, migrateLegacyHashRoute, navigate } from './router.js';
-import { deleteRequest, getState, hydrateStore, setState, subscribe, toggleCompare, upsertRequest } from './store.js';
+import {
+  deleteRequest,
+  getState,
+  hydrateStore,
+  selectPlan,
+  setComparisonPlan,
+  setState,
+  subscribe,
+  toggleCompare,
+  upsertRequest,
+} from './store.js';
 import { plans } from '../data/mockData.js';
 import { renderAboutPage } from '../pages/aboutPage.js';
 import { renderArticleDetailPage } from '../pages/articleDetailPage.js';
@@ -178,6 +188,13 @@ function bindEvents() {
       return;
     }
 
+    const comparisonSelectButton = target.closest('.provider-comparison-select');
+    if (comparisonSelectButton) {
+      selectPlan(comparisonSelectButton.getAttribute('data-plan-slug') || '');
+      render();
+      return;
+    }
+
     const categoryButton = target.closest('[data-filter-category]');
     if (categoryButton) {
       const form = document.querySelector('#plans-filter-form');
@@ -235,6 +252,18 @@ function bindEvents() {
     const deleteButton = target.closest('.request-delete');
     if (deleteButton) {
       deleteRequest(deleteButton.getAttribute('data-request-id'));
+      render();
+    }
+  });
+
+  rootElement.addEventListener('change', (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLSelectElement)) {
+      return;
+    }
+
+    if (target.matches('.provider-comparison-plan-picker')) {
+      setComparisonPlan(target.getAttribute('data-insurer-key') || '', target.value);
       render();
     }
   });
@@ -312,20 +341,77 @@ function render() {
   setupAutoSliders();
 }
 
+function getSliderCardSelector(slider) {
+  return slider.dataset.sliderCard || '.category-card';
+}
+
+function getSliderVisibleCount(slider) {
+  if (slider.id === 'plan-slider') {
+    if (window.matchMedia('(max-width: 760px)').matches) {
+      return 1;
+    }
+    if (window.matchMedia('(max-width: 1080px)').matches) {
+      return 2;
+    }
+    return 3;
+  }
+
+  return 1;
+}
+
+function getSliderMaxIndex(slider, cards) {
+  const visibleCount = getSliderVisibleCount(slider);
+  return Math.max(0, cards.length - visibleCount);
+}
+
 function getSliderMetrics(slider) {
-  const cards = Array.from(slider.querySelectorAll('.category-card'));
+  const cards = Array.from(slider.querySelectorAll(getSliderCardSelector(slider)));
   if (!cards.length) {
-    return { cards: [], step: slider.clientWidth, activeIndex: 0 };
+    return { cards: [], step: slider.clientWidth, activeIndex: 0, maxIndex: 0 };
   }
 
   const firstCard = cards[0];
-  const step = firstCard.getBoundingClientRect().width + 22;
-  const activeIndex = Math.max(0, Math.min(cards.length - 1, Math.round(slider.scrollLeft / step)));
+  const gap = 22;
+  const step = firstCard.getBoundingClientRect().width + gap;
+  const maxIndex = getSliderMaxIndex(slider, cards);
+  const activeIndex = Math.max(0, Math.min(maxIndex, Math.round(slider.scrollLeft / step)));
 
-  return { cards, step, activeIndex };
+  return { cards, step, activeIndex, maxIndex };
+}
+
+function rebuildPlanSliderDots(slider) {
+  if (slider.id !== 'plan-slider') {
+    return;
+  }
+
+  const dotsContainer = document.getElementById('plan-slider-dots');
+  if (!dotsContainer) {
+    return;
+  }
+
+  const { activeIndex, maxIndex } = getSliderMetrics(slider);
+  const slideCount = maxIndex + 1;
+
+  dotsContainer.innerHTML = Array.from({ length: slideCount }, (_, index) => {
+    const isActive = index === activeIndex;
+    return `
+      <button
+        class="slider-dot ${isActive ? 'slider-dot-active' : ''}"
+        type="button"
+        data-slider-dot="plan-slider"
+        data-slider-index="${index}"
+        aria-label="ไปยังสไลด์ที่ ${index + 1}"
+      ></button>
+    `;
+  }).join('');
 }
 
 function syncSliderDots(slider) {
+  if (slider.id === 'plan-slider') {
+    rebuildPlanSliderDots(slider);
+    return;
+  }
+
   const sliderId = slider.id;
   const { activeIndex } = getSliderMetrics(slider);
   document.querySelectorAll(`[data-slider-dot="${sliderId}"]`).forEach((dot, index) => {
@@ -334,8 +420,8 @@ function syncSliderDots(slider) {
 }
 
 function goToSliderIndex(slider, nextIndex) {
-  const { cards, step } = getSliderMetrics(slider);
-  const clampedIndex = Math.max(0, Math.min(cards.length - 1, nextIndex));
+  const { cards, step, maxIndex } = getSliderMetrics(slider);
+  const clampedIndex = Math.max(0, Math.min(maxIndex, nextIndex));
   slider.scrollTo({
     left: clampedIndex * step,
     behavior: 'smooth',
@@ -344,17 +430,17 @@ function goToSliderIndex(slider, nextIndex) {
 }
 
 function moveSliderByCard(slider, direction) {
-  const { cards, activeIndex } = getSliderMetrics(slider);
+  const { cards, activeIndex, maxIndex } = getSliderMetrics(slider);
   if (!cards.length) {
     return;
   }
 
   let nextIndex = activeIndex + direction;
-  if (nextIndex >= cards.length) {
+  if (nextIndex > maxIndex) {
     nextIndex = 0;
   }
   if (nextIndex < 0) {
-    nextIndex = cards.length - 1;
+    nextIndex = maxIndex;
   }
 
   goToSliderIndex(slider, nextIndex);
@@ -383,13 +469,13 @@ function setupAutoSliders() {
         return;
       }
 
-      const { cards, activeIndex } = getSliderMetrics(slider);
+      const { cards, activeIndex, maxIndex } = getSliderMetrics(slider);
       if (!cards.length) {
         schedule();
         return;
       }
 
-      const nextIndex = activeIndex >= cards.length - 1 ? 0 : activeIndex + 1;
+      const nextIndex = activeIndex >= maxIndex ? 0 : activeIndex + 1;
       goToSliderIndex(slider, nextIndex);
       schedule();
     };
@@ -401,6 +487,14 @@ function setupAutoSliders() {
 
     schedule();
   });
+
+  const planSlider = document.getElementById('plan-slider');
+  if (planSlider instanceof HTMLElement && !window.planSliderResizeBound) {
+    window.planSliderResizeBound = true;
+    window.addEventListener('resize', () => {
+      rebuildPlanSliderDots(planSlider);
+    });
+  }
 }
 
 export function createApp(root) {

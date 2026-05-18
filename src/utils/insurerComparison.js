@@ -1,0 +1,144 @@
+import { formatCompact, formatCurrency } from './format.js';
+
+export const comparisonInsurers = [
+  {
+    key: 'allianz',
+    provider: 'Allianz Ayudhya',
+    logo: 'assets/logos/allianz.svg',
+    matchProvider: /allianz/i,
+  },
+  {
+    key: 'axa',
+    provider: 'AXA',
+    logo: 'assets/logos/axa.svg',
+    matchProvider: /axa/i,
+  },
+  {
+    key: 'pacific',
+    provider: 'Pacific Cross',
+    logo: 'assets/logos/pacific-cross.avif',
+    matchProvider: /pacific/i,
+  },
+];
+
+export const defaultComparisonPlanIds = {
+  allianz: 'allianz-smarter-health',
+  axa: 'axa-smartcare-essential',
+  pacific: 'pchi-maxima-plus',
+};
+
+export const comparisonPlanExtras = {
+  'allianz-smarter-health': {
+    provider: 'Allianz Ayudhya',
+    deductible: 'ไม่มี',
+    network: 'เลือกโรงพยาบาลได้',
+    hospitalCover: 'ตามเงื่อนไขแผน',
+    oncology: 'ตามเงื่อนไขแผน',
+  },
+  'axa-smartcare-essential-plan-4': {
+    provider: 'AXA Thailand',
+    deductible: 'เลือกลดเบี้ยได้',
+    network: 'เลือกโรงพยาบาลได้',
+    hospitalCover: 'สูงสุด 10,000 บาท/คืน',
+    oncology: 'ครอบคลุมตามวงเงินแผน',
+  },
+  'axa-international-exclusive-platinum': {
+    provider: 'AXA Thailand',
+    deductible: 'ตามแผนที่เลือก',
+    network: 'ทั่วโลก / เอเชีย',
+    hospitalCover: 'ตามวงเงินแผน',
+    oncology: 'ครอบคลุมตามวงเงินแผน',
+  },
+  'axa-easycare-visa-plan-2': {
+    provider: 'AXA Thailand',
+    deductible: 'เลือกลดเบี้ยได้',
+    network: 'ตามเครือข่ายแผน',
+    hospitalCover: 'ตามเงื่อนไขแผน',
+    oncology: 'ตามเงื่อนไขแผน',
+  },
+  'pacific-cross-standard-extra': {
+    provider: 'Pacific Cross',
+    deductible: 'มีตัวเลือก deductible',
+    network: 'เครือข่าย 450+ แห่ง',
+    hospitalCover: 'ตามเงื่อนไขแผน',
+    oncology: 'ตามเงื่อนไขแผน',
+  },
+  'pacific-cross-maxima': {
+    provider: 'Pacific Cross',
+    deductible: 'มีตัวเลือก deductible',
+    network: 'เครือข่าย 450+ แห่ง',
+    hospitalCover: 'สูงสุด 5,000 บาท/คืน',
+    oncology: 'ครอบคลุมตามวงเงินแผน',
+  },
+  'pacific-cross-maxima-plus': {
+    provider: 'Pacific Cross',
+    deductible: 'ไม่มี',
+    network: 'เครือข่าย 450+ แห่ง',
+    hospitalCover: 'สูงสุด 6,000 บาท/คืน',
+    oncology: 'ครอบคลุมเต็มจำนวน',
+  },
+};
+
+export function getPlansForInsurer(plans, insurer) {
+  return plans.filter((plan) => insurer.matchProvider.test(plan.provider));
+}
+
+function buildComparisonValues(plan, insurer) {
+  const extras = comparisonPlanExtras[plan.slug] ?? {};
+
+  return {
+    provider: extras.provider ?? insurer.provider,
+    planName: plan.displayNameTh ?? plan.name,
+    annualLimit:
+      plan.coverageAmount > 0 ? `${formatCompact(plan.coverageAmount)} บาท` : 'ตามแผนที่เลือก',
+    annualPremium:
+      plan.annualPremium > 0 ? formatCurrency(plan.annualPremium) : 'สอบถามรายละเอียด',
+    deductible: extras.deductible ?? 'ตามเงื่อนไขแผน',
+    network: extras.network ?? 'ตามเครือข่ายแผน',
+    hospitalCover: extras.hospitalCover ?? 'ตามเงื่อนไขแผน',
+    oncology: extras.oncology ?? 'ตามเงื่อนไขแผน',
+  };
+}
+
+export function buildComparisonColumns(plans, comparisonPlanIds) {
+  return comparisonInsurers.map((insurer) => {
+    const insurerPlans = getPlansForInsurer(plans, insurer);
+    const preferredId = comparisonPlanIds[insurer.key] ?? defaultComparisonPlanIds[insurer.key];
+    const plan =
+      insurerPlans.find((item) => item.id === preferredId) ??
+      insurerPlans[0] ??
+      null;
+
+    if (!plan) {
+      return null;
+    }
+
+    return {
+      insurerKey: insurer.key,
+      provider: insurer.provider,
+      logo: insurer.logo,
+      planId: plan.id,
+      slug: plan.slug,
+      planOptions: insurerPlans.map((item) => ({
+        id: item.id,
+        label: item.displayNameTh ?? item.name,
+      })),
+      values: buildComparisonValues(plan, insurer),
+    };
+  }).filter(Boolean);
+}
+
+export function buildComparisonTableData({
+  plans,
+  rows,
+  title,
+  comparisonPlanIds,
+  selectedPlanSlug,
+}) {
+  return {
+    title,
+    rows,
+    columns: buildComparisonColumns(plans, comparisonPlanIds),
+    selectedPlanSlug,
+  };
+}
