@@ -1,5 +1,6 @@
 import { renderQuoteModal } from './forms.js';
 import { appUrl } from '../app/router.js';
+import { LOCALE_LABELS, SUPPORTED_LOCALES, t } from '../i18n/index.js';
 
 function renderFloatingContact() {
   const items = [
@@ -26,7 +27,7 @@ function renderFloatingContact() {
       `,
     },
     {
-      label: 'อีเมล',
+      label: t('contact.email'),
       href: 'mailto:hello@curatedcoverage.co',
       className: 'email',
       icon: `
@@ -36,7 +37,7 @@ function renderFloatingContact() {
       `,
     },
     {
-      label: 'โทร',
+      label: t('contact.phone'),
       href: 'tel:021004242',
       className: 'phone',
       icon: `
@@ -59,7 +60,7 @@ function renderFloatingContact() {
 
   return `
     <details class="floating-contact">
-      <summary class="floating-contact-trigger" aria-label="ช่องทางติดต่อ">
+      <summary class="floating-contact-trigger" aria-label="${t('contact.channels')}">
         <span class="floating-contact-ring"></span>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M12 4.5c4.7 0 8.5 3.1 8.5 7 0 3.3-2.7 6-6.4 6.8l-3.7 1.7.8-2.9c-4-.2-7.2-3.1-7.2-6.9 0-3.9 3.8-7 8.5-7Z"/>
@@ -82,6 +83,23 @@ function renderFloatingContact() {
   `;
 }
 
+function renderLangSwitcher(state) {
+  return `
+    <div class="lang-switcher" role="group" aria-label="${t('lang.label')}">
+      ${SUPPORTED_LOCALES.map(
+        (locale) => `
+          <button
+            type="button"
+            class="lang-switcher-btn ${state.locale === locale ? 'lang-switcher-btn-active' : ''}"
+            data-locale="${locale}"
+            aria-pressed="${state.locale === locale ? 'true' : 'false'}"
+          >${LOCALE_LABELS[locale]}</button>
+        `,
+      ).join('')}
+    </div>
+  `;
+}
+
 export function renderHeader(state) {
   return `
     <header class="site-header-wrap">
@@ -90,14 +108,18 @@ export function renderHeader(state) {
           <a href="${appUrl('/')}" class="brand-mark">Insurance</a>
         </div>
         <nav class="site-nav ${state.mobileMenuOpen ? 'site-nav-open' : ''}">
-          <a href="${appUrl('/')}" class="nav-link">หน้าแรก</a>
-          <a href="${appUrl('/plans')}" class="nav-link">แผนประกัน</a>
-          <a href="${appUrl('/about')}" class="nav-link">เกี่ยวกับเรา</a>
-          <a href="${appUrl('/articles')}" class="nav-link">บทความ</a>
-          <a href="${appUrl('/contact')}" class="nav-link">ติดต่อเรา</a>
-          <button class="button button-primary nav-cta" type="button" data-open-quote="true">ส่งคำขอ</button>
+          <a href="${appUrl('/')}" class="nav-link">${t('nav.home')}</a>
+          <a href="${appUrl('/plans')}" class="nav-link">${t('nav.plans')}</a>
+          <a href="${appUrl('/about')}" class="nav-link">${t('nav.about')}</a>
+          <a href="${appUrl('/articles')}" class="nav-link">${t('nav.articles')}</a>
+          <a href="${appUrl('/contact')}" class="nav-link">${t('nav.contact')}</a>
+          ${renderLangSwitcher(state)}
+          <button class="button button-primary nav-cta" type="button" data-open-quote="true">${t('nav.submitRequest')}</button>
         </nav>
-        <button class="mobile-toggle" type="button" aria-label="เปิดเมนู">☰</button>
+        <div class="header-actions">
+          ${renderLangSwitcher(state)}
+          <button class="mobile-toggle" type="button" aria-label="${t('nav.openMenu')}">☰</button>
+        </div>
       </div>
     </header>
   `;
@@ -110,46 +132,43 @@ export function renderFooter() {
       <div class="site-footer">
         <div class="footer-brand-column">
           <strong>Insurance</strong>
-          <p>
-            ศูนย์รวมข้อมูลแผนประกันที่ช่วยให้คุณเปรียบเทียบความคุ้มครองได้ง่ายขึ้น
-            พร้อมรับคำแนะนำที่เหมาะกับความต้องการของคุณในทุกช่วงการตัดสินใจ
-          </p>
+          <p>${t('footer.tagline')}</p>
           <div class="footer-contact-list">
-            <span>อีเมล: hello@curatedcoverage.co</span>
-            <span>โทร: 02-100-4242</span>
-            <span>เวลาทำการ: ทุกวัน 09:00 - 18:00 น.</span>
+            <span>${t('footer.email')}: hello@curatedcoverage.co</span>
+            <span>${t('footer.phone')}: 02-100-4242</span>
+            <span>${t('footer.hours')}</span>
           </div>
         </div>
 
         <div class="footer-link-column">
-          <span class="footer-heading">เมนูหลัก</span>
-          <a href="${appUrl('/')}">หน้าแรก</a>
-          <a href="${appUrl('/plans')}">แผนทั้งหมด</a>
-          <a href="${appUrl('/about')}">เกี่ยวกับเรา</a>
-          <a href="${appUrl('/faq')}">คำถามที่พบบ่อย</a>
-          <a href="${appUrl('/articles')}">บทความ</a>
-          <a href="${appUrl('/contact')}">ติดต่อเรา</a>
+          <span class="footer-heading">${t('footer.mainMenu')}</span>
+          <a href="${appUrl('/')}">${t('nav.home')}</a>
+          <a href="${appUrl('/plans')}">${t('footer.allPlans')}</a>
+          <a href="${appUrl('/about')}">${t('nav.about')}</a>
+          <a href="${appUrl('/faq')}">${t('footer.faq')}</a>
+          <a href="${appUrl('/articles')}">${t('nav.articles')}</a>
+          <a href="${appUrl('/contact')}">${t('nav.contact')}</a>
         </div>
 
         <div class="footer-link-column">
-          <span class="footer-heading">หมวดประกัน</span>
-          <a href="${appUrl('/plans')}?category=สุขภาพ">ประกันสุขภาพ</a>
-          <a href="${appUrl('/plans')}?category=ชีวิต">ประกันชีวิต</a>
-          <a href="${appUrl('/plans')}?category=รถยนต์">ประกันรถยนต์</a>
-          <a href="${appUrl('/plans')}?category=เดินทาง">ประกันเดินทาง</a>
+          <span class="footer-heading">${t('footer.categories')}</span>
+          <a href="${appUrl('/plans')}?category=สุขภาพ">${t('footer.health')}</a>
+          <a href="${appUrl('/plans')}?category=ชีวิต">${t('footer.life')}</a>
+          <a href="${appUrl('/plans')}?category=รถยนต์">${t('footer.car')}</a>
+          <a href="${appUrl('/plans')}?category=เดินทาง">${t('footer.travel')}</a>
         </div>
 
         <div class="footer-link-column">
-          <span class="footer-heading">ข้อมูลเพิ่มเติม</span>
-          <span>สำนักงานใหญ่: Bangkok, Thailand</span>
-          <span>ใบอนุญาตนายหน้าประกันภัย: CC-2026-01</span>
-          <span>พร้อมดูแลข้อมูลแผนประกันและประสานงานด้านคำปรึกษาอย่างต่อเนื่อง</span>
+          <span class="footer-heading">${t('footer.moreInfo')}</span>
+          <span>${t('footer.hq')}</span>
+          <span>${t('footer.license')}</span>
+          <span>${t('footer.support')}</span>
         </div>
 
         <div class="footer-bottom">
-          <span>© ${year} Insurance. All rights reserved.</span>
-          <span>Privacy Policy</span>
-          <span>Terms of Service</span>
+          <span>© ${year} Insurance. ${t('footer.rights')}</span>
+          <span>${t('footer.privacy')}</span>
+          <span>${t('footer.terms')}</span>
         </div>
       </div>
     </footer>

@@ -1,3 +1,6 @@
+import { t } from '../i18n/index.js';
+import { getPlanDisplayName } from '../i18n/localize.js';
+
 export function renderQuoteModal({ open, planOptions, draft, errors }) {
   if (!open) {
     return '';
@@ -10,18 +13,24 @@ export function renderQuoteModal({ open, planOptions, draft, errors }) {
     email: draft?.email ?? '',
     phone: draft?.phone ?? '',
     ageRange: draft?.ageRange ?? '',
-    contactPreference: draft?.contactPreference ?? 'โทรกลับ',
+    contactPreference: draft?.contactPreference ?? t('form.callback'),
     coverageGoal: draft?.coverageGoal ?? '',
     note: draft?.note ?? '',
   };
+
+  const contactOptions = [
+    { value: t('form.callback'), label: t('form.callback') },
+    { value: 'LINE', label: 'LINE' },
+    { value: t('form.email'), label: t('form.email') },
+  ];
 
   return `
     <div class="modal-backdrop" data-modal-backdrop="true">
       <aside class="modal-panel" aria-modal="true" role="dialog" aria-labelledby="quote-modal-title">
         <div class="modal-header">
           <div>
-            <span class="section-eyebrow">แบบฟอร์มใช้งานจริง</span>
-            <h3 id="quote-modal-title">${draft?.id ? 'แก้ไขคำขอรับคำปรึกษา' : 'ส่งคำขอรับคำปรึกษา'}</h3>
+            <span class="section-eyebrow">${t('form.eyebrow')}</span>
+            <h3 id="quote-modal-title">${draft?.id ? t('form.editTitle') : t('form.submitTitle')}</h3>
           </div>
           <button class="icon-button" type="button" data-modal-close="true">✕</button>
         </div>
@@ -29,13 +38,13 @@ export function renderQuoteModal({ open, planOptions, draft, errors }) {
           <form id="quote-form" class="quote-form">
             <input type="hidden" name="id" value="${form.id}" />
             <label>
-              <span>แผนที่สนใจ</span>
+              <span>${t('form.planInterest')}</span>
               <select name="planId">
-                <option value="">เลือกภายหลัง</option>
+                <option value="">${t('form.chooseLater')}</option>
                 ${planOptions
                   .map(
                     (plan) =>
-                      `<option value="${plan.id}" ${plan.id === form.planId ? 'selected' : ''}>${plan.displayNameTh ?? plan.name}</option>`,
+                      `<option value="${plan.id}" ${plan.id === form.planId ? 'selected' : ''}>${getPlanDisplayName(plan)}</option>`,
                   )
                   .join('')}
               </select>
@@ -43,26 +52,26 @@ export function renderQuoteModal({ open, planOptions, draft, errors }) {
             </label>
             <div class="form-grid">
               <label>
-                <span>ชื่อ - นามสกุล</span>
-                <input name="fullName" value="${form.fullName}" placeholder="เช่น ปวีณ์ สายชล" />
+                <span>${t('form.fullName')}</span>
+                <input name="fullName" value="${form.fullName}" placeholder="${t('form.fullNamePlaceholder')}" />
                 ${errors.fullName ? `<small class="field-error">${errors.fullName}</small>` : ''}
               </label>
               <label>
-                <span>อีเมล</span>
+                <span>${t('form.email')}</span>
                 <input name="email" type="email" value="${form.email}" placeholder="name@example.com" />
                 ${errors.email ? `<small class="field-error">${errors.email}</small>` : ''}
               </label>
             </div>
             <div class="form-grid">
               <label>
-                <span>เบอร์โทร</span>
-                <input name="phone" value="${form.phone}" placeholder="08x-xxx-xxxx" />
+                <span>${t('form.phone')}</span>
+                <input name="phone" value="${form.phone}" placeholder="${t('form.phonePlaceholder')}" />
                 ${errors.phone ? `<small class="field-error">${errors.phone}</small>` : ''}
               </label>
               <label>
-                <span>ช่วงอายุ</span>
+                <span>${t('form.ageRange')}</span>
                 <select name="ageRange">
-                  <option value="">เลือกช่วงอายุ</option>
+                  <option value="">${t('form.selectAge')}</option>
                   ${['18-24', '25-34', '35-44', '45-54', '55+']
                     .map(
                       (ageRange) =>
@@ -75,29 +84,29 @@ export function renderQuoteModal({ open, planOptions, draft, errors }) {
             </div>
             <div class="form-grid">
               <label>
-                <span>ช่องทางที่สะดวก</span>
+                <span>${t('form.contactChannel')}</span>
                 <select name="contactPreference">
-                  ${['โทรกลับ', 'LINE', 'อีเมล']
+                  ${contactOptions
                     .map(
                       (channel) =>
-                        `<option value="${channel}" ${channel === form.contactPreference ? 'selected' : ''}>${channel}</option>`,
+                        `<option value="${channel.value}" ${channel.value === form.contactPreference ? 'selected' : ''}>${channel.label}</option>`,
                     )
                     .join('')}
                 </select>
               </label>
               <label>
-                <span>เป้าหมายความคุ้มครอง</span>
-                <input name="coverageGoal" value="${form.coverageGoal}" placeholder="เช่น สุขภาพครอบครัว / รถคันแรก" />
+                <span>${t('form.coverageGoal')}</span>
+                <input name="coverageGoal" value="${form.coverageGoal}" placeholder="${t('form.coveragePlaceholder')}" />
                 ${errors.coverageGoal ? `<small class="field-error">${errors.coverageGoal}</small>` : ''}
               </label>
             </div>
             <label>
-              <span>รายละเอียดเพิ่มเติม</span>
-              <textarea name="note" rows="4" placeholder="ระบุข้อมูลประกอบ เช่น งบประมาณหรือเงื่อนไขที่ต้องการ">${form.note}</textarea>
+              <span>${t('form.note')}</span>
+              <textarea name="note" rows="4" placeholder="${t('form.notePlaceholder')}">${form.note}</textarea>
             </label>
             <div class="modal-actions">
-              <button class="button button-secondary" type="button" data-modal-close="true">ยกเลิก</button>
-              <button class="button button-primary" type="submit">${draft?.id ? 'บันทึกการแก้ไข' : 'ส่งคำขอ'}</button>
+              <button class="button button-secondary" type="button" data-modal-close="true">${t('form.cancel')}</button>
+              <button class="button button-primary" type="submit">${draft?.id ? t('form.saveEdit') : t('form.submit')}</button>
             </div>
           </form>
         </div>

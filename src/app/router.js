@@ -88,6 +88,10 @@ export function getRoute() {
     return { name: 'category-detail', params: { slug: segments[1] } };
   }
 
+  if (segments[0] === 'insurance' && segments[1]) {
+    return { name: 'insurance-category-detail', params: { slug: segments[1] } };
+  }
+
   return { name: 'not-found', params: {} };
 }
 

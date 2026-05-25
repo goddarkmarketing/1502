@@ -1,6 +1,7 @@
 import { renderShell } from '../components/layout.js';
 import { appPathFromUrl, getRoute, isInternalAppUrl, migrateLegacyHashRoute, navigate } from './router.js';
 import {
+  changeLocale,
   deleteRequest,
   getState,
   hydrateStore,
@@ -11,6 +12,7 @@ import {
   toggleCompare,
   upsertRequest,
 } from './store.js';
+import { t } from '../i18n/index.js';
 import { plans } from '../data/mockData.js';
 import { renderAboutPage } from '../pages/aboutPage.js';
 import { renderArticleDetailPage } from '../pages/articleDetailPage.js';
@@ -19,6 +21,7 @@ import { renderCategoryPage } from '../pages/categoryPage.js';
 import { renderContactPage } from '../pages/contactPage.js';
 import { renderFaqPage } from '../pages/faqPage.js';
 import { renderHomePage } from '../pages/homePage.js';
+import { renderInsuranceCategoryDetailPage } from '../pages/insuranceCategoryDetailPage.js';
 import { renderNotFoundPage } from '../pages/notFoundPage.js';
 import { renderPlanDetailPage } from '../pages/planDetailPage.js';
 import { renderPlansPage } from '../pages/plansPage.js';
@@ -34,7 +37,7 @@ function buildQuoteDraft(existing = {}, planId = '') {
     email: existing.email ?? '',
     phone: existing.phone ?? '',
     ageRange: existing.ageRange ?? '',
-    contactPreference: existing.contactPreference ?? 'โทรกลับ',
+    contactPreference: existing.contactPreference ?? t('form.callback'),
     coverageGoal: existing.coverageGoal ?? '',
     note: existing.note ?? '',
   };
@@ -64,23 +67,23 @@ function validateQuoteForm(formValues) {
   const errors = {};
 
   if (!formValues.fullName.trim()) {
-    errors.fullName = 'กรุณาระบุชื่อผู้ติดต่อ';
+    errors.fullName = t('validation.fullName');
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formValues.email.trim())) {
-    errors.email = 'กรุณาระบุอีเมลให้ถูกต้อง';
+    errors.email = t('validation.email');
   }
 
   if (!/^0[0-9]{8,9}$/.test(formValues.phone.replace(/[^0-9]/g, ''))) {
-    errors.phone = 'กรุณาระบุเบอร์โทร 9-10 หลัก';
+    errors.phone = t('validation.phone');
   }
 
   if (!formValues.ageRange) {
-    errors.ageRange = 'กรุณาเลือกช่วงอายุ';
+    errors.ageRange = t('validation.ageRange');
   }
 
   if (!formValues.coverageGoal.trim()) {
-    errors.coverageGoal = 'กรุณาระบุเป้าหมายความคุ้มครอง';
+    errors.coverageGoal = t('validation.coverageGoal');
   }
 
   return errors;
@@ -95,7 +98,7 @@ function parseForm(event) {
     email: formData.get('email')?.toString() || '',
     phone: formData.get('phone')?.toString() || '',
     ageRange: formData.get('ageRange')?.toString() || '',
-    contactPreference: formData.get('contactPreference')?.toString() || 'โทรกลับ',
+    contactPreference: formData.get('contactPreference')?.toString() || t('form.callback'),
     coverageGoal: formData.get('coverageGoal')?.toString() || '',
     note: formData.get('note')?.toString() || '',
   };
@@ -141,6 +144,10 @@ function renderCurrentPage(state) {
     return renderCategoryPage(route.params.slug, state);
   }
 
+  if (route.name === 'insurance-category-detail') {
+    return renderInsuranceCategoryDetailPage(route.params.slug);
+  }
+
   return renderNotFoundPage();
 }
 
@@ -167,6 +174,12 @@ function bindEvents() {
 
     if (target.closest('.mobile-toggle')) {
       setState({ mobileMenuOpen: !getState().mobileMenuOpen });
+      return;
+    }
+
+    const localeButton = target.closest('[data-locale]');
+    if (localeButton instanceof HTMLElement) {
+      changeLocale(localeButton.getAttribute('data-locale') || 'th');
       return;
     }
 
@@ -202,6 +215,26 @@ function bindEvents() {
       if (form && categoryInput) {
         categoryInput.value = categoryButton.getAttribute('data-filter-category') || 'ทั้งหมด';
         form.requestSubmit();
+      }
+      return;
+    }
+
+    const insuranceCategoryButton = target.closest('[data-insurance-category]');
+    if (insuranceCategoryButton instanceof HTMLElement) {
+      const categoryKey = insuranceCategoryButton.getAttribute('data-insurance-category');
+      const showcase = insuranceCategoryButton.closest('.insurance-category-showcase');
+      if (showcase && categoryKey) {
+        showcase.querySelectorAll('[data-insurance-category]').forEach((button) => {
+          const isActive = button.getAttribute('data-insurance-category') === categoryKey;
+          button.classList.toggle('insurance-category-tab-active', isActive);
+          button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        showcase.querySelectorAll('[data-insurance-category-panel]').forEach((panel) => {
+          panel.classList.toggle(
+            'insurance-category-panel-active',
+            panel.getAttribute('data-insurance-category-panel') === categoryKey,
+          );
+        });
       }
       return;
     }
@@ -400,7 +433,7 @@ function rebuildPlanSliderDots(slider) {
         type="button"
         data-slider-dot="plan-slider"
         data-slider-index="${index}"
-        aria-label="ไปยังสไลด์ที่ ${index + 1}"
+        aria-label="${t('home.sliderGoTo', { n: index + 1 })}"
       ></button>
     `;
   }).join('');

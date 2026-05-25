@@ -1,12 +1,5 @@
-import {
-  articleTopics,
-  faqs,
-  insurerComparison,
-  partners,
-  plans,
-  testimonials,
-  trustPoints,
-} from '../data/mockData.js';
+import { partners } from '../data/mockData.js';
+import { insuranceCategoryShowcase } from '../data/insuranceCategories.js';
 import {
   renderArticleCard,
   renderFaqItem,
@@ -19,46 +12,132 @@ import {
 } from '../components/ui.js';
 import { appUrl, staticUrl } from '../app/router.js';
 import { buildComparisonTableData } from '../utils/insurerComparison.js';
+import { t } from '../i18n/index.js';
+import {
+  getInsurerComparisonRows,
+  getInsurerComparisonTitle,
+  getLocalizedArticles,
+  getLocalizedFaqs,
+  getLocalizedPlans,
+  getLocalizedTestimonials,
+  getLocalizedTrustPoints,
+} from '../i18n/localize.js';
+
+function renderCategoryIcon(type) {
+  const icons = {
+    plane:
+      '<path d="M4 13.5 20 5l-4.2 14-3.5-5.3-5.6 3.6-2.7-3.8Z"/><path d="m12.3 13.7 7.2-8.2"/>',
+    car:
+      '<path d="M5 15h14l-1.2-4.2A2.5 2.5 0 0 0 15.4 9H8.6a2.5 2.5 0 0 0-2.4 1.8L5 15Z"/><path d="M7 15v2.5M17 15v2.5"/><circle cx="8" cy="18" r="1.4"/><circle cx="16" cy="18" r="1.4"/><path d="M7.5 12h9"/>',
+    health:
+      '<path d="M12 5v14M5 12h14"/><path d="M7.3 4.8h9.4a2.5 2.5 0 0 1 2.5 2.5v9.4a2.5 2.5 0 0 1-2.5 2.5H7.3a2.5 2.5 0 0 1-2.5-2.5V7.3a2.5 2.5 0 0 1 2.5-2.5Z"/>',
+    home:
+      '<path d="M4 11.5 12 5l8 6.5"/><path d="M6.5 10.5v8h11v-8"/><path d="M10 18.5v-5h4v5"/>',
+    advisor:
+      '<path d="M12 12a3.8 3.8 0 1 0 0-7.6 3.8 3.8 0 0 0 0 7.6Z"/><path d="M4.8 20c.9-3.6 3.5-5.4 7.2-5.4s6.3 1.8 7.2 5.4"/><path d="M16.6 6.2c1.8.7 3 2.1 3.4 4.1"/>',
+    more:
+      '<circle cx="6.5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="17.5" cy="12" r="1.2"/>',
+  };
+
+  return `<svg viewBox="0 0 24 24" aria-hidden="true">${icons[type] ?? icons.more}</svg>`;
+}
+
+function renderInsuranceCategoryShowcase() {
+  return `
+    <section class="insurance-category-showcase" id="insurance-categories" aria-labelledby="insurance-category-title">
+      <div class="insurance-category-heading">
+        <span class="section-eyebrow">บริการประกันภัย</span>
+        <h2 id="insurance-category-title">ประกันภัยสำหรับบ้าน เดินทาง และต่อวีซ่า</h2>
+        <p>เลือกหมวดที่สนใจ แล้วส่งรายละเอียดให้ทีมแอดมินช่วยแนะนำแผนที่เหมาะกับคุณ</p>
+      </div>
+
+      <div class="insurance-category-tabs" role="tablist" aria-label="หมวดประกันภัย">
+        ${insuranceCategoryShowcase
+          .map(
+            (item, index) => `
+              <button
+                class="insurance-category-tab ${index === 0 ? 'insurance-category-tab-active' : ''}"
+                type="button"
+                role="tab"
+                aria-selected="${index === 0 ? 'true' : 'false'}"
+                data-insurance-category="${item.key}"
+              >
+                <span class="insurance-category-icon">${renderCategoryIcon(item.icon)}</span>
+                <span>${item.label}</span>
+              </button>
+            `,
+          )
+          .join('')}
+      </div>
+
+      <div class="insurance-category-panels">
+        ${insuranceCategoryShowcase
+          .map(
+            (item, index) => `
+              <article class="insurance-category-panel ${index === 0 ? 'insurance-category-panel-active' : ''}" data-insurance-category-panel="${item.key}">
+                <div class="insurance-category-media">
+                  <img src="${staticUrl(item.image)}" alt="${item.title}" loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async" />
+                </div>
+                <div class="insurance-category-copy">
+                  <span class="section-eyebrow">${item.label}</span>
+                  <h3>${item.title}</h3>
+                  <p>${item.description}</p>
+                  <div class="insurance-category-actions">
+                    <a class="button button-secondary" href="${appUrl(`/insurance/${item.key}`)}">${item.secondaryAction}</a>
+                    <button class="button button-primary" type="button" data-open-quote="true">${item.primaryAction}</button>
+                  </div>
+                </div>
+              </article>
+            `,
+          )
+          .join('')}
+      </div>
+    </section>
+  `;
+}
 
 export function renderHomePage(state) {
+  const plans = getLocalizedPlans();
+  const faqs = getLocalizedFaqs();
+  const articleTopics = getLocalizedArticles();
+
   return `
     <section class="hero-section">
       <div class="hero-copy">
-        <span class="hero-eyebrow">แพลตฟอร์มคัดเลือกประกันออนไลน์</span>
+        <span class="hero-eyebrow">${t('home.eyebrow')}</span>
         <h1>
-          <span class="hero-line hero-line-dark">ปกป้องทุกสิ่งที่สำคัญ</span>
-          <span class="hero-line hero-line-accent">เพื่อคนที่คุณรัก</span>
+          <span class="hero-line hero-line-dark">${t('home.titleLine1')}</span>
+          <span class="hero-line hero-line-accent">${t('home.titleLine2')}</span>
         </h1>
-        <p>
-          เปรียบเทียบแผนประกันสุขภาพ ชีวิต รถยนต์ และที่อยู่อาศัยในโครงสร้างเดียวกัน
-          พร้อมส่งคำขอรับคำปรึกษาที่ติดตามต่อได้จริง
-        </p>
+        <p>${t('home.subtitle')}</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="${appUrl('/plans')}">เลือกแผนที่ใช่</a>
-          <button class="button button-secondary" type="button" data-open-quote="true">รับคำปรึกษาเบื้องต้น</button>
+          <a class="button button-primary" href="${appUrl('/plans')}">${t('home.choosePlan')}</a>
+          <button class="button button-secondary" type="button" data-open-quote="true">${t('home.getConsultation')}</button>
         </div>
       </div>
       <div class="hero-visual">
         <img
           class="hero-visual-image"
           src="${staticUrl('assets/hero-insurance-visual.png')}"
-          alt="ดูแลให้ครบในทุกช่วงชีวิต — เปรียบเทียบความคุ้มครองและติดตามแผนประกันได้สะดวก"
+          alt="${t('home.heroAlt')}"
           loading="eager"
           decoding="async"
         />
       </div>
     </section>
 
+    ${renderInsuranceCategoryShowcase()}
+
     <section class="section-surface">
       <div class="plan-section-top">
         ${renderSectionHeader({
-          eyebrow: 'แนะนำแผนเด่น',
-          title: 'ซื้อประกันออนไลน์ เลือกง่าย คุ้มครองทันที',
-          description: 'ใช้ข้อมูลชุดเดียวกันในการเทียบราคา ความคุ้มครอง และเริ่มส่งคำขอได้จากทุกหน้า',
+          eyebrow: t('home.featuredEyebrow'),
+          title: t('home.featuredTitle'),
+          description: t('home.featuredDesc'),
         })}
         <div class="plan-slider-controls">
-          <button class="slider-arrow" type="button" data-slider-target="plan-slider" data-slider-direction="prev" aria-label="เลื่อนแผนก่อนหน้า">←</button>
-          <button class="slider-arrow" type="button" data-slider-target="plan-slider" data-slider-direction="next" aria-label="เลื่อนแผนถัดไป">→</button>
+          <button class="slider-arrow" type="button" data-slider-target="plan-slider" data-slider-direction="prev" aria-label="${t('home.sliderPrev')}">←</button>
+          <button class="slider-arrow" type="button" data-slider-target="plan-slider" data-slider-direction="next" aria-label="${t('home.sliderNext')}">→</button>
         </div>
       </div>
       <div
@@ -72,14 +151,14 @@ export function renderHomePage(state) {
           ${plans.map((plan) => renderPlanCard(plan, state.compareIds)).join('')}
         </div>
       </div>
-      <div class="slider-dots" id="plan-slider-dots" aria-label="สถานะสไลด์แผนประกัน">
+      <div class="slider-dots" id="plan-slider-dots" aria-label="${t('home.sliderStatus')}">
         ${Array.from({ length: Math.max(1, plans.length - 3 + 1) }, (_, index) => `
               <button
                 class="slider-dot ${index === 0 ? 'slider-dot-active' : ''}"
                 type="button"
                 data-slider-dot="plan-slider"
                 data-slider-index="${index}"
-                aria-label="ไปยังสไลด์ที่ ${index + 1}"
+                aria-label="${t('home.sliderGoTo', { n: index + 1 })}"
               ></button>
             `).join('')}
       </div>
@@ -89,8 +168,8 @@ export function renderHomePage(state) {
       ${renderInsurerComparisonTable(
         buildComparisonTableData({
           plans,
-          rows: insurerComparison.rows,
-          title: insurerComparison.title,
+          rows: getInsurerComparisonRows(),
+          title: getInsurerComparisonTitle(),
           comparisonPlanIds: state.comparisonPlanIds,
           selectedPlanSlug: state.selectedPlanSlug,
         }),
@@ -100,18 +179,18 @@ export function renderHomePage(state) {
 
     <section class="section-surface centered-block">
       ${renderSectionHeader({
-        title: 'ทำไมลูกค้าถึงไว้วางใจเรา',
-        description: 'เราจัดข้อมูลให้เข้าใจง่าย เพื่อช่วยให้คุณเลือกแผนที่เหมาะสมและตัดสินใจได้มั่นใจขึ้น',
+        title: t('home.trustTitle'),
+        description: t('home.trustDesc'),
         center: true,
       })}
       <div class="trust-grid">
-        ${trustPoints.map((item, index) => renderTrustCard(item, index === 1)).join('')}
+        ${getLocalizedTrustPoints().map((item, index) => renderTrustCard(item, index === 1)).join('')}
       </div>
     </section>
 
     <section class="partner-section">
-      <p class="partner-intro">พาร์ตเนอร์เครือข่ายและผู้ให้บริการตัวอย่าง</p>
-      <h2 class="partner-title">เครือข่ายพันธมิตรที่ช่วยให้การดูแลของคุณต่อเนื่องทุกช่วงเวลา</h2>
+      <p class="partner-intro">${t('home.partnerIntro')}</p>
+      <h2 class="partner-title">${t('home.partnerTitle')}</h2>
       <div class="partner-slider-shell">
         <div class="partner-strip">
           ${[...partners, ...partners]
@@ -136,34 +215,34 @@ export function renderHomePage(state) {
 
     <section class="section-white">
       ${renderSectionHeader({
-        title: 'เสียงตอบรับจากลูกค้าตัวจริง',
-        description: 'โครงสร้างรีวิวแบบเดียวกับ UI reference พร้อมใช้เป็นบล็อก social proof จริง',
+        title: t('home.testimonialTitle'),
+        description: t('home.testimonialDesc'),
         center: true,
       })}
       <div class="testimonial-grid">
-        ${testimonials.map((item) => renderTestimonialCard(item)).join('')}
+        ${getLocalizedTestimonials().map((item) => renderTestimonialCard(item)).join('')}
       </div>
     </section>
 
     <section class="section-white home-articles-section">
       ${renderSectionHeader({
-        eyebrow: 'บทความ',
-        title: 'บทความแนะนำ',
-        description: 'อ่านสาระประกันที่ช่วยให้ตัดสินใจเลือกความคุ้มครองได้มั่นใจขึ้น',
+        eyebrow: t('home.articlesEyebrow'),
+        title: t('home.articlesTitle'),
+        description: t('home.articlesDesc'),
         center: true,
       })}
       <div class="articles-grid home-articles-grid">
         ${articleTopics.slice(0, 3).map((article) => renderArticleCard(article)).join('')}
       </div>
       <div class="home-articles-cta">
-        <a class="button button-secondary" href="${appUrl('/articles')}">ดูบทความทั้งหมด</a>
+        <a class="button button-secondary" href="${appUrl('/articles')}">${t('home.allArticles')}</a>
       </div>
     </section>
 
     <section class="section-surface faq-section">
       ${renderSectionHeader({
-        title: 'คำถามที่พบบ่อย (FAQ)',
-        description: 'ตอบคำถามสำคัญก่อนเริ่มใช้งานหรือส่งคำขอ',
+        title: t('home.faqTitle'),
+        description: t('home.faqDesc'),
         center: true,
       })}
       <div class="faq-list">
@@ -173,12 +252,12 @@ export function renderHomePage(state) {
 
     <section class="cta-section">
       <div>
-        <h2>พร้อมเริ่มต้นความคุ้มครองของคุณหรือยัง?</h2>
-        <p>เริ่มเปรียบเทียบแผนที่เหมาะกับคุณ หรือส่งคำขอรับคำปรึกษาเพื่อให้ทีมงานช่วยดูแลต่อได้ทันที</p>
+        <h2>${t('home.ctaTitle')}</h2>
+        <p>${t('home.ctaDesc')}</p>
       </div>
       <div class="cta-actions">
-        <a class="button button-light" href="${appUrl('/plans')}">เลือกแผนเลย</a>
-        <button class="button button-secondary inverted" type="button" data-open-quote="true">ส่งคำขอรับคำปรึกษา</button>
+        <a class="button button-light" href="${appUrl('/plans')}">${t('home.ctaChoose')}</a>
+        <button class="button button-secondary inverted" type="button" data-open-quote="true">${t('home.ctaSubmit')}</button>
       </div>
     </section>
   `;

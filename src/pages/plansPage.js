@@ -1,11 +1,14 @@
-import { filters, plans } from '../data/mockData.js';
+import { filters } from '../data/mockData.js';
 import { appUrl } from '../app/router.js';
 import { renderEmptyState, renderPlanCard, renderSectionHeader } from '../components/ui.js';
+import { t } from '../i18n/index.js';
+import { getFilterLabelSync, getLocalizedPlans } from '../i18n/localize.js';
 
 export function renderPlansPage(state, query) {
   const keyword = (query.get('q') ?? '').trim().toLowerCase();
   const category = query.get('category') ?? 'ทั้งหมด';
   const sort = query.get('sort') ?? 'featured';
+  const plans = getLocalizedPlans();
 
   let filteredPlans = plans.filter((plan) => {
     const matchKeyword =
@@ -14,7 +17,7 @@ export function renderPlansPage(state, query) {
         .join(' ')
         .toLowerCase()
         .includes(keyword);
-    const matchCategory = category === 'ทั้งหมด' || plan.category === category;
+    const matchCategory = category === 'ทั้งหมด' || plan.categoryKey === category;
 
     return matchKeyword && matchCategory;
   });
@@ -30,17 +33,16 @@ export function renderPlansPage(state, query) {
 
     return (
       Number(right.featured) - Number(left.featured) ||
-      (left.displayNameTh ?? left.name).localeCompare(right.displayNameTh ?? right.name, 'th')
+      (left.displayName ?? left.name).localeCompare(right.displayName ?? right.name, 'th')
     );
   });
 
   return `
     <section class="page-hero compact">
       ${renderSectionHeader({
-        eyebrow: 'Plans Directory',
-        title: 'เลือกแผนที่เหมาะกับงบและเป้าหมายของคุณ',
-        description:
-          'ค้นหา กรอง และเปรียบเทียบแผนประกันตามงบประมาณ ความคุ้มครอง และความต้องการของคุณได้ในที่เดียว',
+        eyebrow: t('plans.eyebrow'),
+        title: t('plans.title'),
+        description: t('plans.desc'),
       })}
     </section>
 
@@ -48,17 +50,17 @@ export function renderPlansPage(state, query) {
       <aside class="filter-panel">
         <form id="plans-filter-form">
           <label>
-            <span>ค้นหาแผนหรือผู้ให้บริการ</span>
-            <input name="q" value="${keyword}" placeholder="เช่น สุขภาพ / Auto Shield" />
+            <span>${t('plans.searchLabel')}</span>
+            <input name="q" value="${keyword}" placeholder="${t('plans.searchPlaceholder')}" />
           </label>
           <label>
-            <span>หมวดประกัน</span>
+            <span>${t('plans.categoryLabel')}</span>
             <div class="chip-grid">
               ${filters
                 .map(
                   (item) => `
                     <button class="chip ${item === category ? 'chip-active' : ''}" type="button" data-filter-category="${item}">
-                      ${item}
+                      ${getFilterLabelSync(item)}
                     </button>
                   `,
                 )
@@ -67,23 +69,23 @@ export function renderPlansPage(state, query) {
           </label>
           <input type="hidden" name="category" value="${category}" />
           <label>
-            <span>เรียงลำดับ</span>
+            <span>${t('plans.sortLabel')}</span>
             <select name="sort">
-              <option value="featured" ${sort === 'featured' ? 'selected' : ''}>แนะนำก่อน</option>
-              <option value="price-low" ${sort === 'price-low' ? 'selected' : ''}>เบี้ยต่ำไปสูง</option>
-              <option value="coverage-high" ${sort === 'coverage-high' ? 'selected' : ''}>วงเงินสูงสุดก่อน</option>
+              <option value="featured" ${sort === 'featured' ? 'selected' : ''}>${t('plans.sortFeatured')}</option>
+              <option value="price-low" ${sort === 'price-low' ? 'selected' : ''}>${t('plans.sortPriceLow')}</option>
+              <option value="coverage-high" ${sort === 'coverage-high' ? 'selected' : ''}>${t('plans.sortCoverageHigh')}</option>
             </select>
           </label>
-          <button class="button button-primary" type="submit">อัปเดตผลลัพธ์</button>
+          <button class="button button-primary" type="submit">${t('plans.updateResults')}</button>
         </form>
       </aside>
       <div class="directory-content">
         <div class="directory-toolbar">
           <div>
             <strong>${filteredPlans.length}</strong>
-            <span>แผนที่ตรงกับเงื่อนไข</span>
+            <span>${t('plans.matchCount')}</span>
           </div>
-          <button class="button button-secondary" type="button" data-open-quote="true">ให้ช่วยเลือกแผน</button>
+          <button class="button button-secondary" type="button" data-open-quote="true">${t('plans.helpChoose')}</button>
         </div>
         ${
           filteredPlans.length
@@ -91,9 +93,9 @@ export function renderPlansPage(state, query) {
                 .map((plan) => renderPlanCard(plan, state.compareIds))
                 .join('')}</div>`
             : renderEmptyState({
-                title: 'ยังไม่พบแผนที่ตรงกับเงื่อนไข',
-                description: 'ลองล้างคำค้นหาหรือเปลี่ยนหมวดประกัน แล้วระบบจะอัปเดตผลลัพธ์ให้ทันที',
-                actionLabel: 'ล้างตัวกรอง',
+                title: t('plans.emptyTitle'),
+                description: t('plans.emptyDesc'),
+                actionLabel: t('plans.clearFilters'),
                 actionHref: appUrl('/plans'),
               })
         }

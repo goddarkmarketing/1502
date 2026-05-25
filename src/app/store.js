@@ -1,10 +1,12 @@
 import { defaultComparisonPlanIds } from '../utils/insurerComparison.js';
+import { setLocale, t } from '../i18n/index.js';
 
 const STORAGE_KEYS = {
   requests: 'curated-coverage-requests',
   compare: 'curated-coverage-compare',
   selectedPlan: 'curated-coverage-selected-plan',
   comparisonPlans: 'curated-coverage-comparison-plans',
+  locale: 'curated-coverage-locale',
 };
 
 export const sampleRequests = [
@@ -50,6 +52,7 @@ const state = {
   selectedPlanSlug: null,
   comparisonPlanIds: { ...defaultComparisonPlanIds },
   lastToast: '',
+  locale: 'th',
 };
 
 function emit() {
@@ -61,7 +64,7 @@ function readStorage(key, fallback) {
     const raw = window.localStorage.getItem(key);
     return raw ? JSON.parse(raw) : fallback;
   } catch (error) {
-    state.error = 'ไม่สามารถอ่านข้อมูลที่บันทึกไว้ในเครื่องได้';
+    state.error = t('state.storageReadError');
     return fallback;
   }
 }
@@ -71,7 +74,7 @@ function writeStorage(key, value) {
     window.localStorage.setItem(key, JSON.stringify(value));
     state.error = '';
   } catch (error) {
-    state.error = 'ไม่สามารถบันทึกข้อมูลลงในเครื่องได้';
+    state.error = t('state.storageWriteError');
   }
 }
 
@@ -93,6 +96,11 @@ export function hydrateStore() {
       ...defaultComparisonPlanIds,
       ...readStorage(STORAGE_KEYS.comparisonPlans, {}),
     };
+    const storedLocale = readStorage(STORAGE_KEYS.locale, null);
+    if (storedLocale && ['th', 'en', 'zh'].includes(storedLocale)) {
+      state.locale = storedLocale;
+      setLocale(storedLocale);
+    }
     state.loading = false;
     emit();
   }, 260);
@@ -138,7 +146,7 @@ export function setComparisonPlan(insurerKey, planId) {
     [insurerKey]: planId,
   };
   writeStorage(STORAGE_KEYS.comparisonPlans, state.comparisonPlanIds);
-  queueToast('เปลี่ยนแผนที่เปรียบเทียบแล้ว');
+  queueToast(t('toast.comparisonChanged'));
 }
 
 export function selectPlan(slug) {
@@ -146,14 +154,14 @@ export function selectPlan(slug) {
   state.selectedPlanSlug = isSame ? null : slug;
   if (state.selectedPlanSlug) {
     writeStorage(STORAGE_KEYS.selectedPlan, state.selectedPlanSlug);
-    queueToast('เลือกแผนประกันเรียบร้อยแล้ว');
+    queueToast(t('toast.planSelected'));
   } else {
     try {
       window.localStorage.removeItem(STORAGE_KEYS.selectedPlan);
     } catch (error) {
-      state.error = 'ไม่สามารถบันทึกข้อมูลลงในเครื่องได้';
+      state.error = t('state.storageWriteError');
     }
-    queueToast('ยกเลิกการเลือกแผนแล้ว');
+    queueToast(t('toast.planDeselected'));
   }
 }
 
@@ -164,7 +172,7 @@ export function toggleCompare(planId) {
     : [...state.compareIds, planId].slice(-3);
   writeStorage(STORAGE_KEYS.compare, state.compareIds);
   queueToast(
-    isSelected ? 'นำแผนออกจากการเปรียบเทียบแล้ว' : 'เพิ่มแผนลงรายการเปรียบเทียบแล้ว',
+    isSelected ? t('toast.compareRemoved') : t('toast.compareAdded'),
   );
 }
 
@@ -183,11 +191,21 @@ export function upsertRequest(payload) {
   state.editingRequestId = null;
   state.quoteDraft = null;
   writeStorage(STORAGE_KEYS.requests, state.requests);
-  queueToast(existingIndex >= 0 ? 'อัปเดตคำขอเรียบร้อยแล้ว' : 'ส่งคำขอสำเร็จแล้ว');
+  queueToast(existingIndex >= 0 ? t('toast.requestUpdated') : t('toast.requestSubmitted'));
+}
+
+export function changeLocale(locale) {
+  if (!['th', 'en', 'zh'].includes(locale) || state.locale === locale) {
+    return;
+  }
+  setLocale(locale);
+  state.locale = locale;
+  writeStorage(STORAGE_KEYS.locale, locale);
+  emit();
 }
 
 export function deleteRequest(requestId) {
   state.requests = state.requests.filter((request) => request.id !== requestId);
   writeStorage(STORAGE_KEYS.requests, state.requests);
-  queueToast('ลบคำขอเรียบร้อยแล้ว');
+  queueToast(t('toast.requestDeleted'));
 }

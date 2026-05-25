@@ -1,20 +1,21 @@
 import { appUrl } from '../app/router.js';
-import { articleTopics } from '../data/mockData.js';
 import { renderEmptyState } from '../components/ui.js';
+import { t } from '../i18n/index.js';
+import { getLocalizedArticle, getLocalizedArticles } from '../i18n/localize.js';
 
 export function renderArticleDetailPage(slug) {
-  const article = articleTopics.find((item) => item.slug === slug);
+  const article = getLocalizedArticle(slug);
 
   if (!article) {
     return renderEmptyState({
-      title: 'ไม่พบบทความที่ต้องการ',
-      description: 'บทความนี้อาจถูกย้ายหรือไม่มีอยู่ในระบบแล้ว',
-      actionLabel: 'กลับไปหน้าบทความ',
+      title: t('articles.notFoundTitle'),
+      description: t('articles.notFoundDesc'),
+      actionLabel: t('articles.backToArticles'),
       actionHref: appUrl('/articles'),
     });
   }
 
-  const relatedArticles = articleTopics.filter((item) => item.slug !== article.slug).slice(0, 3);
+  const relatedArticles = getLocalizedArticles().filter((item) => item.slug !== article.slug).slice(0, 3);
 
   return `
     <section class="article-detail-hero">
@@ -44,18 +45,18 @@ export function renderArticleDetailPage(slug) {
           .join('')}
 
         <div class="article-callout">
-          <strong>ต้องการคำแนะนำเพิ่มเติม?</strong>
-          <p>คุณสามารถเปิดดูแผนในหมวดเดียวกัน หรือส่งคำขอรับคำปรึกษาเพื่อให้ทีมงานช่วยแนะนำตัวเลือกที่เหมาะกับคุณได้</p>
+          <strong>${t('articles.needMore')}</strong>
+          <p>${t('articles.needMoreDesc')}</p>
           <div class="cta-actions">
-            <a class="button button-primary" href="${appUrl('/plans')}?category=${encodeURIComponent(article.category)}">ดูแผนที่เกี่ยวข้อง</a>
-            <button class="button button-secondary" type="button" data-open-quote="true">ส่งคำขอรับคำปรึกษา</button>
+            <a class="button button-primary" href="${appUrl('/plans')}">${t('articles.relatedPlans')}</a>
+            <button class="button button-secondary" type="button" data-open-quote="true">${t('articles.submitRequest')}</button>
           </div>
         </div>
       </article>
 
       <aside class="article-detail-sidebar">
         <div class="detail-panel">
-          <h3>บทความที่เกี่ยวข้อง</h3>
+          <h3>${t('articles.relatedTitle')}</h3>
           <div class="related-article-list">
             ${relatedArticles
               .map(

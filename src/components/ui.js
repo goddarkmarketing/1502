@@ -1,5 +1,7 @@
 import { formatCompact, formatCurrency, formatDate } from '../utils/format.js';
 import { appUrl, staticUrl } from '../app/router.js';
+import { t } from '../i18n/index.js';
+import { getLocalizedPlan, getPlanDisplayName } from '../i18n/localize.js';
 
 function providerComparisonColumnClass(column, selectedPlanSlug) {
   return column.slug === selectedPlanSlug ? 'provider-comparison-col-selected' : '';
@@ -13,7 +15,7 @@ export function renderInsurerComparisonTable({ title, rows, columns, selectedPla
         <table class="provider-comparison-table" role="grid">
           <thead>
             <tr>
-              <th class="provider-comparison-corner" scope="col"><span class="sr-only">รายการเปรียบเทียบ</span></th>
+              <th class="provider-comparison-corner" scope="col"><span class="sr-only">${t('comparison.items')}</span></th>
               ${columns
                 .map((column) => {
                   const selected = providerComparisonColumnClass(column, selectedPlanSlug);
@@ -28,11 +30,11 @@ export function renderInsurerComparisonTable({ title, rows, columns, selectedPla
                       decoding="async"
                     />
                     <label class="provider-comparison-picker-label">
-                      <span class="sr-only">เลือกแผน ${column.provider}</span>
+                      <span class="sr-only">${t('comparison.selectPlan', { provider: column.provider })}</span>
                       <select
                         class="provider-comparison-plan-picker"
                         data-insurer-key="${column.insurerKey}"
-                        aria-label="เลือกแผน ${column.provider}"
+                        aria-label="${t('comparison.selectPlan', { provider: column.provider })}"
                       >
                         ${(column.planOptions ?? [])
                           .map(
@@ -79,7 +81,7 @@ export function renderInsurerComparisonTable({ title, rows, columns, selectedPla
               )
               .join('')}
             <tr class="provider-comparison-row provider-comparison-row-actions">
-              <th scope="row" class="provider-comparison-label">เลือกแผน</th>
+              <th scope="row" class="provider-comparison-label">${t('comparison.selectRow')}</th>
               ${columns
                 .map((column) => {
                   const isSelected = column.slug === selectedPlanSlug;
@@ -93,7 +95,7 @@ export function renderInsurerComparisonTable({ title, rows, columns, selectedPla
                     data-plan-id="${column.planId}"
                     aria-pressed="${isSelected ? 'true' : 'false'}"
                   >
-                    ${isSelected ? 'เลือกแล้ว ✓' : 'เลือกแผนนี้'}
+                    ${isSelected ? t('comparison.selected') : t('comparison.selectThis')}
                   </button>
                 </td>
               `;
@@ -112,24 +114,24 @@ export function renderSelectedPlanBar(plans, selectedPlanSlug) {
     return '';
   }
 
-  const plan = plans.find((item) => item.slug === selectedPlanSlug);
+  const plan = getLocalizedPlan(plans.find((item) => item.slug === selectedPlanSlug));
   if (!plan) {
     return '';
   }
 
-  const planTitle = plan.displayNameTh ?? plan.name;
+  const planTitle = plan.displayName ?? getPlanDisplayName(plan);
 
   return `
     <aside class="provider-comparison-selection" aria-live="polite">
       <div class="provider-comparison-selection-copy">
-        <span class="provider-comparison-selection-eyebrow">แผนที่คุณเลือก</span>
+        <span class="provider-comparison-selection-eyebrow">${t('comparison.yourSelection')}</span>
         <strong>${planTitle}</strong>
-        <p>${plan.provider} · เบี้ยเริ่มต้น ${formatCurrency(plan.monthlyPremium)} / เดือน</p>
+        <p>${plan.provider} · ${t('plan.premiumFrom')} ${formatCurrency(plan.monthlyPremium)} ${t('plan.perMonth')}</p>
       </div>
       <div class="provider-comparison-selection-actions">
-        <a class="button button-secondary" href="${appUrl(`/plans/${plan.slug}`)}">ดูรายละเอียด</a>
+        <a class="button button-secondary" href="${appUrl(`/plans/${plan.slug}`)}">${t('plan.viewDetails')}</a>
         <button class="button button-primary" type="button" data-open-quote="true" data-plan-id="${plan.id}">
-          รับคำปรึกษาแผนนี้
+          ${t('comparison.consultPlan')}
         </button>
       </div>
     </aside>
@@ -147,8 +149,9 @@ export function renderSectionHeader({ eyebrow, title, description, center = fals
 }
 
 export function renderPlanCard(plan, compareIds = []) {
+  const localized = getLocalizedPlan(plan);
   const inCompare = compareIds.includes(plan.id);
-  const planTitle = plan.displayNameTh ?? plan.name;
+  const planTitle = localized.displayName ?? getPlanDisplayName(plan);
   const mediaMarkup = plan.image
     ? `
       <div class="plan-card-media plan-card-media--banner">
@@ -163,10 +166,10 @@ export function renderPlanCard(plan, compareIds = []) {
     `
     : `
       <div class="plan-card-media plan-card-media-${plan.category}">
-        <span class="plan-badge">${plan.badge}</span>
+        <span class="plan-badge">${localized.badge}</span>
         <div class="plan-media-copy">
-          <strong>${plan.category}</strong>
-          <span>${plan.highlight}</span>
+          <strong>${localized.category}</strong>
+          <span>${localized.highlight}</span>
         </div>
       </div>
     `;
@@ -176,26 +179,26 @@ export function renderPlanCard(plan, compareIds = []) {
       <div class="plan-card-body">
         <div class="plan-card-heading">
           <p class="plan-provider">${plan.provider}</p>
-          <h3>${plan.displayNameTh ?? plan.name}</h3>
+          <h3>${planTitle}</h3>
         </div>
-        <p class="plan-description">${plan.description}</p>
+        <p class="plan-description">${localized.description}</p>
         <div class="plan-meta-grid">
           <div>
-            <span>เบี้ยเริ่มต้น</span>
-            <strong>${formatCurrency(plan.monthlyPremium)} / เดือน</strong>
+            <span>${t('plan.premiumFrom')}</span>
+            <strong>${formatCurrency(plan.monthlyPremium)} ${t('plan.perMonth')}</strong>
           </div>
           <div>
-            <span>วงเงิน</span>
-            <strong>${formatCompact(plan.coverageAmount)} บาท</strong>
+            <span>${t('plan.coverage')}</span>
+            <strong>${formatCompact(plan.coverageAmount)} ${t('plan.baht')}</strong>
           </div>
         </div>
         <ul class="plan-benefits-list">
-          ${plan.benefits.map((benefit) => `<li>${benefit}</li>`).join('')}
+          ${localized.benefits.map((benefit) => `<li>${benefit}</li>`).join('')}
         </ul>
         <div class="plan-actions">
-          <a class="button button-primary" href="${appUrl(`/plans/${plan.slug}`)}">ดูรายละเอียด</a>
+          <a class="button button-primary" href="${appUrl(`/plans/${plan.slug}`)}">${t('plan.viewDetails')}</a>
           <button class="button button-secondary compare-toggle" data-plan-id="${plan.id}">
-            ${inCompare ? 'เอาออกจากเปรียบเทียบ' : 'เปรียบเทียบแผน'}
+            ${inCompare ? t('plan.removeCompare') : t('plan.compare')}
           </button>
         </div>
       </div>
@@ -218,7 +221,7 @@ export function renderCategoryCard(item) {
         </ul>
       </div>
       <div class="category-card-footer">
-        <a href="${appUrl(`/categories/${item.slug ?? encodeURIComponent(item.name)}`)}" class="inline-link">ดูแผนในหมวดนี้</a>
+        <a href="${appUrl(`/categories/${item.slug ?? encodeURIComponent(item.name)}`)}" class="inline-link">${t('category.viewPlans')}</a>
         <span class="category-arrow">↗</span>
       </div>
     </article>
@@ -253,7 +256,7 @@ export function renderArticleCard(article) {
         <p>${article.excerpt}</p>
         <div class="article-footer">
           <span>${article.publishedAt}</span>
-          <a href="${appUrl(`/articles/${article.slug}`)}" class="inline-link">อ่านบทความ</a>
+          <a href="${appUrl(`/articles/${article.slug}`)}" class="inline-link">${t('articles.readArticle')}</a>
         </div>
       </div>
     </article>
@@ -290,18 +293,18 @@ export function renderFaqItem(item, index) {
   `;
 }
 
-export function renderLoadingState(label = 'กำลังโหลดข้อมูล...') {
+export function renderLoadingState(label) {
   return `
     <div class="state-panel">
       <div class="spinner"></div>
-      <p>${label}</p>
+      <p>${label ?? t('state.loading')}</p>
     </div>
   `;
 }
 
 export function renderEmptyState({
-  title = 'ยังไม่มีข้อมูล',
-  description = 'ลองปรับตัวกรองหรือเริ่มต้นรายการใหม่อีกครั้ง',
+  title = t('state.emptyTitle'),
+  description = t('state.emptyDesc'),
   actionLabel = '',
   actionHref = appUrl('/plans'),
 }) {
@@ -314,12 +317,12 @@ export function renderEmptyState({
   `;
 }
 
-export function renderErrorState(message = 'เกิดข้อผิดพลาดในการโหลดข้อมูล') {
+export function renderErrorState(message = t('state.errorDefault')) {
   return `
     <div class="state-panel error-state">
-      <h3>เกิดข้อผิดพลาด</h3>
+      <h3>${t('state.errorTitle')}</h3>
       <p>${message}</p>
-      <a class="button button-primary" href="${appUrl('/')}">กลับหน้าแรก</a>
+      <a class="button button-primary" href="${appUrl('/')}">${t('state.backHome')}</a>
     </div>
   `;
 }
@@ -330,11 +333,11 @@ export function renderRequestTable(requests, plansById) {
       <table class="request-table">
         <thead>
           <tr>
-            <th>ผู้ขอคำปรึกษา</th>
-            <th>แผนที่สนใจ</th>
-            <th>ช่องทางติดต่อ</th>
-            <th>สถานะ</th>
-            <th>อัปเดตล่าสุด</th>
+            <th>${t('table.requester')}</th>
+            <th>${t('table.planInterest')}</th>
+            <th>${t('table.contactChannel')}</th>
+            <th>${t('table.status')}</th>
+            <th>${t('table.lastUpdated')}</th>
             <th></th>
           </tr>
         </thead>
@@ -349,15 +352,15 @@ export function renderRequestTable(requests, plansById) {
                     <span>${request.phone}</span>
                   </td>
                   <td>
-                    <strong>${plan?.name ?? 'ยังไม่ระบุแผน'}</strong>
+                    <strong>${plan ? getPlanDisplayName(plan) : t('table.noPlan')}</strong>
                     <span>${request.coverageGoal}</span>
                   </td>
                   <td>${request.contactPreference}</td>
                   <td><span class="status-pill">${request.status}</span></td>
                   <td>${formatDate(request.createdAt)}</td>
                   <td class="table-actions">
-                    <button class="button button-ghost request-edit" data-request-id="${request.id}">แก้ไข</button>
-                    <button class="button button-ghost danger request-delete" data-request-id="${request.id}">ลบ</button>
+                    <button class="button button-ghost request-edit" data-request-id="${request.id}">${t('table.edit')}</button>
+                    <button class="button button-ghost danger request-delete" data-request-id="${request.id}">${t('table.delete')}</button>
                   </td>
                 </tr>
               `;

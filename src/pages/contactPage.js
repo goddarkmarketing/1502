@@ -1,11 +1,12 @@
 import { appUrl } from '../app/router.js';
-import { contactChannels, officeLocations } from '../data/mockData.js';
 import { renderSectionHeader } from '../components/ui.js';
+import { t } from '../i18n/index.js';
+import { getLocalizedContactChannels, getLocalizedOfficeLocations } from '../i18n/localize.js';
 
 function renderContactIcon(title) {
-  const iconClass = title.includes('โทร')
+  const iconClass = title.includes('โทร') || title.toLowerCase().includes('call')
     ? 'phone'
-    : title.includes('เมล') || title.includes('อีเมล')
+    : title.includes('เมล') || title.includes('อีเมล') || title.toLowerCase().includes('email')
       ? 'mail'
       : 'line';
 
@@ -45,15 +46,15 @@ export function renderContactPage() {
   return `
     <section class="page-hero compact">
       ${renderSectionHeader({
-        eyebrow: 'ติดต่อเรา',
-        title: 'สอบถามข้อมูลแผนประกันหรือนัดหมายที่ปรึกษาได้ตามช่องทางที่สะดวก',
-        description: 'ทีมงานพร้อมช่วยแนะนำแผนที่เหมาะกับเป้าหมายของคุณ และประสานการติดต่อกลับอย่างรวดเร็ว',
+        eyebrow: t('contactPage.eyebrow'),
+        title: t('contactPage.title'),
+        description: t('contactPage.desc'),
       })}
     </section>
 
     <section class="contact-stack">
       <div class="contact-channel-list">
-        ${contactChannels
+        ${getLocalizedContactChannels()
           .map(
             (item) => `
               <article class="detail-panel contact-channel-card">
@@ -72,9 +73,9 @@ export function renderContactPage() {
       </div>
 
       <div class="detail-panel contact-office-panel">
-        <h2>สำนักงานและเวลาทำการ</h2>
+        <h2>${t('contactPage.officeTitle')}</h2>
         <div class="location-list">
-          ${officeLocations
+          ${getLocalizedOfficeLocations()
             .map(
               (item) => `
                 <article class="location-item">
@@ -87,13 +88,13 @@ export function renderContactPage() {
             .join('')}
         </div>
         <div class="cta-actions">
-          <button class="button button-primary" type="button" data-open-quote="true">ส่งคำขอรับคำปรึกษา</button>
-          <a class="button button-secondary" href="${appUrl('/faq')}">ดูคำถามที่พบบ่อย</a>
+          <button class="button button-primary" type="button" data-open-quote="true">${t('contactPage.submitRequest')}</button>
+          <a class="button button-secondary" href="${appUrl('/faq')}">${t('contactPage.viewFaq')}</a>
         </div>
       </div>
 
       <div class="detail-panel map-panel contact-map-panel">
-        <h2>ตำแหน่งที่ตั้ง</h2>
+        <h2>${t('contactPage.mapTitle')}</h2>
         <div class="map-embed-shell">
           <iframe
             title="Insurance Map"
@@ -102,7 +103,7 @@ export function renderContactPage() {
             referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
-        <p>สำนักงานใหญ่ตั้งอยู่ในย่านสุขุมวิท กรุงเทพฯ เดินทางสะดวกทั้งรถไฟฟ้าและรถยนต์ส่วนตัว</p>
+        <p>${t('contactPage.mapDesc')}</p>
       </div>
     </section>
   `;

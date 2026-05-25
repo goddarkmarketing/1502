@@ -1,4 +1,5 @@
 import { createApp } from './app/App.js';
+import { initLocale } from './i18n/index.js';
 
 const GITHUB_PAGES_PATH_KEY = 'gh-pages-spa-path';
 
@@ -14,5 +15,14 @@ function restoreGithubPagesPath() {
 }
 
 restoreGithubPagesPath();
+
+try {
+  const storedLocale = window.localStorage.getItem('curated-coverage-locale');
+  if (storedLocale) {
+    initLocale(JSON.parse(storedLocale));
+  }
+} catch {
+  /* ignore */
+}
 
 createApp(document.querySelector('#app'));

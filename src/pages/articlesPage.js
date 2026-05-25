@@ -1,18 +1,19 @@
-import { articleTopics } from '../data/mockData.js';
 import { renderArticleCard, renderSectionHeader } from '../components/ui.js';
+import { t } from '../i18n/index.js';
+import { getLocalizedArticles } from '../i18n/localize.js';
 
 export function renderArticlesPage() {
   return `
     <section class="page-hero compact">
       ${renderSectionHeader({
-        eyebrow: 'บทความ',
-        title: 'สาระประกันที่ช่วยให้ตัดสินใจได้ง่ายขึ้น',
-        description: 'รวมบทความสำหรับทำความเข้าใจแผนประกัน เงื่อนไขสำคัญ และแนวทางเลือกความคุ้มครองให้เหมาะกับไลฟ์สไตล์',
+        eyebrow: t('articles.eyebrow'),
+        title: t('articles.title'),
+        description: t('articles.desc'),
       })}
     </section>
 
     <section class="section-white articles-grid">
-      ${articleTopics.map((article) => renderArticleCard(article)).join('')}
+      ${getLocalizedArticles().map((article) => renderArticleCard(article)).join('')}
     </section>
   `;
 }

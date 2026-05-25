@@ -1,4 +1,6 @@
 import { formatCompact, formatCurrency } from './format.js';
+import { t } from '../i18n/index.js';
+import { getComparisonExtra, getLocalizedPlan, getPlanDisplayName } from '../i18n/localize.js';
 
 export const comparisonInsurers = [
   {
@@ -84,19 +86,22 @@ export function getPlansForInsurer(plans, insurer) {
 }
 
 function buildComparisonValues(plan, insurer) {
-  const extras = comparisonPlanExtras[plan.slug] ?? {};
+  const localized = getLocalizedPlan(plan);
+  const extras = getComparisonExtra(plan.slug) ?? {};
 
   return {
     provider: extras.provider ?? insurer.provider,
-    planName: plan.displayNameTh ?? plan.name,
+    planName: localized.displayName ?? getPlanDisplayName(plan),
     annualLimit:
-      plan.coverageAmount > 0 ? `${formatCompact(plan.coverageAmount)} บาท` : 'ตามแผนที่เลือก',
+      plan.coverageAmount > 0
+        ? `${formatCompact(plan.coverageAmount)} ${t('plan.baht')}`
+        : t('comparison.asPerPlan'),
     annualPremium:
-      plan.annualPremium > 0 ? formatCurrency(plan.annualPremium) : 'สอบถามรายละเอียด',
-    deductible: extras.deductible ?? 'ตามเงื่อนไขแผน',
-    network: extras.network ?? 'ตามเครือข่ายแผน',
-    hospitalCover: extras.hospitalCover ?? 'ตามเงื่อนไขแผน',
-    oncology: extras.oncology ?? 'ตามเงื่อนไขแผน',
+      plan.annualPremium > 0 ? formatCurrency(plan.annualPremium) : t('comparison.inquireDetails'),
+    deductible: extras.deductible ?? t('comparison.perPlanTerms'),
+    network: extras.network ?? t('comparison.perNetwork'),
+    hospitalCover: extras.hospitalCover ?? t('comparison.perPlanTerms'),
+    oncology: extras.oncology ?? t('comparison.perPlanTerms'),
   };
 }
 
@@ -121,7 +126,7 @@ export function buildComparisonColumns(plans, comparisonPlanIds) {
       slug: plan.slug,
       planOptions: insurerPlans.map((item) => ({
         id: item.id,
-        label: item.displayNameTh ?? item.name,
+        label: getPlanDisplayName(item),
       })),
       values: buildComparisonValues(plan, insurer),
     };
