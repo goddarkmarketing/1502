@@ -311,6 +311,80 @@ export default {
       waitingPeriod: 'Per policy terms',
     },
   },
+  insuranceCategories: {
+    travel: {
+      label: 'Travel',
+      title: 'Travel Insurance',
+      description:
+        'Travel with confidence, with coverage for emergency medical care, lost baggage, flight delays, and unexpected events worldwide.',
+      primaryAction: 'Buy Now',
+      secondaryAction: 'Details',
+      detailLead:
+        'Best for customers traveling overseas who need protection for medical costs, flight delays, and emergencies during the trip.',
+      highlights: ['Emergency medical expenses', 'Lost or damaged baggage', 'Flight delay or cancellation', 'Unexpected events worldwide'],
+      documents: ['Destination country', 'Travel dates', 'Number of travelers', 'Age of each traveler'],
+    },
+    car: {
+      label: 'Car',
+      title: 'Car Insurance',
+      description:
+        'Compare car coverage that fits real usage, including Class 1, 2+, 3+, and emergency assistance.',
+      primaryAction: 'Buy Now',
+      secondaryAction: 'Details',
+      detailLead:
+        'Best for customers who want to compare insurance class, sum insured, repair options, and emergency assistance.',
+      highlights: ['Class 1, 2+, 3+', 'Accident and third-party coverage', 'Emergency assistance', 'Dealer or garage repair options'],
+      documents: ['Car model and registration year', 'Registration book photo', 'Claim history if available', 'Vehicle usage type'],
+    },
+    health: {
+      label: 'Health',
+      title: 'Health Insurance',
+      description:
+        'Select health plans from multiple insurers by inpatient limit, room benefit, hospital network, and key conditions.',
+      primaryAction: 'Buy Now',
+      secondaryAction: 'Details',
+      detailLead:
+        'Best for customers planning medical expenses and choosing limits, room benefits, and hospital networks that fit their budget.',
+      highlights: ['Inpatient and room benefits', 'Hospital network', 'Pre-existing condition and waiting period terms', 'Compare multiple insurers'],
+      documents: ['Age and gender', 'Medical history or pre-existing conditions', 'Preferred budget', 'Preferred hospitals'],
+    },
+    home: {
+      label: 'Home & Condo',
+      title: 'Home Insurance',
+      description:
+        'Protect houses, condos, and contents against fire, water leakage, natural disasters, and third-party liability.',
+      primaryAction: 'Buy Now',
+      secondaryAction: 'Details',
+      detailLead:
+        'Best for homeowners, condo owners, or landlords who want protection for structure, contents, and household risks.',
+      highlights: ['Fire and natural disasters', 'Water leakage and interior damage', 'Home contents', 'Third-party liability'],
+      documents: ['Property type', 'Province or district', 'Estimated property or contents value', 'Coverage focus'],
+    },
+    visa: {
+      label: 'Visa',
+      title: 'Visa Insurance',
+      description:
+        'Choose health or travel insurance that fits visa application or renewal requirements, with preliminary admin review.',
+      primaryAction: 'Buy Now',
+      secondaryAction: 'Details',
+      detailLead:
+        'Best for customers needing insurance for visa applications, renewals, or long stays, with admin help to review requirements.',
+      highlights: ['Health insurance for visa requirements', 'International travel insurance', 'Destination and coverage period review', 'Plan screening before submission'],
+      documents: ['Visa destination country', 'Visa type', 'Required coverage period', 'Embassy insurance requirements if available'],
+    },
+    other: {
+      label: 'Other',
+      title: 'Other Insurance',
+      description:
+        'If you are not sure which plan to choose, send your details and our admin team will help shortlist suitable options.',
+      primaryAction: 'Buy Now',
+      secondaryAction: 'Details',
+      detailLead:
+        'Best for customers with special needs such as business, accident, pet insurance, or those unsure where to start.',
+      highlights: ['Personal accident insurance', 'Business or property insurance', 'Pet insurance', 'Find coverage for special requirements'],
+      documents: ['Your requirements', 'Approximate budget', 'Risks you are concerned about', 'Insured person or asset details'],
+    },
+  },
   comparisonExtras: {
     'allianz-smarter-health': {
       deductible: 'None',

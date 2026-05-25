@@ -53,6 +53,8 @@
   --layout-max: 1180px;
   --layout-gutter: 20px;
   --container: min(var(--layout-max), calc(100% - 2 * var(--layout-gutter)));
+  --section-title-size: clamp(2.1rem, 2.55vw, 2.75rem);
+  --detail-title-size: var(--section-title-size);
 }
 
 .app-shell {
@@ -96,6 +98,10 @@ body {
 
 body.modal-open {
   overflow: hidden;
+}
+
+body.compare-bar-open {
+  padding-bottom: 128px;
 }
 
 a {
@@ -155,6 +161,104 @@ main {
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
+}
+
+.floating-compare-bar {
+  position: fixed !important;
+  inset: auto 20px 24px 20px !important;
+  z-index: 1000;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: min(1120px, calc(100vw - 40px));
+  max-width: none;
+  margin: 0 auto;
+  padding: 14px 16px 14px 20px;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+  backdrop-filter: blur(18px);
+  animation: compareBarIn 240ms ease both;
+  transform: translateZ(0);
+}
+
+.floating-compare-summary {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.floating-compare-summary > span {
+  flex: 0 0 auto;
+  color: var(--primary-strong);
+  font-weight: 800;
+  font-size: 0.98rem;
+}
+
+.floating-compare-items {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.floating-compare-chip {
+  min-width: 0;
+  max-width: 230px;
+  border: 0;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px 9px 14px;
+  color: var(--text);
+  background: rgba(239, 246, 255, 0.86);
+  font-weight: 700;
+}
+
+.floating-compare-chip span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.floating-compare-chip strong {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: rgba(15, 23, 42, 0.42);
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.floating-compare-actions {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.floating-compare-actions .button {
+  padding: 11px 16px;
+  border-radius: 999px;
+  font-size: 1rem;
+}
+
+.floating-compare-clear {
+  background: rgba(248, 250, 252, 0.96);
+}
+
+.mobile-compare-shortcut {
+  display: none;
 }
 
 .floating-contact summary {
@@ -618,10 +722,12 @@ main {
 
 .provider-comparison-title {
   margin: 0 0 24px;
-  font-size: clamp(1.65rem, 2.4vw, 2.1rem);
+  font-family: "DBAdmanX", "Leelawadee UI", "Segoe UI", Tahoma, sans-serif;
+  font-size: var(--section-title-size);
   font-weight: 700;
   color: var(--text);
-  letter-spacing: -0.02em;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
 }
 
 .provider-comparison-scroll {
@@ -847,9 +953,9 @@ main {
   max-width: none;
   color: var(--text);
   font-family: "DBAdmanX", "Leelawadee UI", "Segoe UI", Tahoma, sans-serif;
-  font-size: clamp(2.25rem, 3.35vw, 3.55rem);
-  line-height: 0.98;
-  letter-spacing: -0.045em;
+  font-size: var(--section-title-size);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
   white-space: nowrap;
 }
 
@@ -1000,9 +1106,9 @@ main {
   margin: 10px 0 16px;
   color: var(--text);
   font-family: "DBAdmanX", "Leelawadee UI", "Segoe UI", Tahoma, sans-serif;
-  font-size: clamp(3rem, 5vw, 5.2rem);
-  line-height: 0.95;
-  letter-spacing: -0.05em;
+  font-size: var(--detail-title-size);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
 }
 
 .insurance-detail-copy p {
@@ -1027,10 +1133,10 @@ main {
 }
 
 .insurance-detail-media img {
+  display: block;
   width: 100%;
-  height: 100%;
-  min-height: 390px;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
 }
 
 .insurance-detail-grid {
@@ -1057,8 +1163,8 @@ main {
   margin: 8px 0 18px;
   color: var(--text);
   font-family: "DBAdmanX", "Leelawadee UI", "Segoe UI", Tahoma, sans-serif;
-  font-size: clamp(2rem, 3vw, 3rem);
-  line-height: 1;
+  font-size: var(--section-title-size);
+  line-height: 1.02;
   letter-spacing: -0.04em;
 }
 
@@ -1171,6 +1277,136 @@ main {
   line-height: 1.25;
 }
 
+.compare-page-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 0 8px;
+}
+
+.compare-page-hero h1 {
+  margin: 8px 0 12px;
+  color: var(--text);
+  font-family: "DBAdmanX", "Leelawadee UI", "Segoe UI", Tahoma, sans-serif;
+  font-size: var(--section-title-size);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.compare-page-hero p {
+  max-width: 680px;
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.75;
+}
+
+.compare-page-actions {
+  flex: 0 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.compare-page-shell {
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  box-shadow: 0 24px 56px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+.compare-page-scroll {
+  overflow-x: auto;
+}
+
+.compare-page-table {
+  width: 100%;
+  min-width: 860px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.compare-page-table th,
+.compare-page-table td {
+  padding: 18px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  vertical-align: top;
+}
+
+.compare-page-table thead th {
+  background: linear-gradient(180deg, rgba(239, 246, 255, 0.92), rgba(255, 255, 255, 0.96));
+}
+
+.compare-page-table tbody th {
+  width: 190px;
+  color: #fff;
+  background: linear-gradient(180deg, #1d8cff 0%, #0b6fe8 100%);
+  text-align: left;
+  font-weight: 800;
+}
+
+.compare-page-table td {
+  color: var(--text);
+  background: #fff;
+  line-height: 1.6;
+}
+
+.compare-page-plan-head {
+  display: grid;
+  gap: 6px;
+  position: relative;
+  padding-right: 32px;
+  text-align: left;
+}
+
+.compare-page-plan-head span {
+  color: var(--primary-strong);
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+.compare-page-plan-head strong {
+  color: var(--text);
+  font-size: 1.08rem;
+  line-height: 1.25;
+}
+
+.compare-page-plan-head button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.compare-page-benefits {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.compare-page-row-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.compare-page-row-actions .button {
+  width: 100%;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.compare-page-mobile-list {
+  display: none;
+}
+
 .section-surface,
 .section-white,
 .partner-section,
@@ -1211,8 +1447,9 @@ main {
 .section-header h2,
 .cta-section h2,
 .detail-copy h1 {
-  font-size: clamp(2.7rem, 3.9vw, 3.9rem);
+  font-size: var(--section-title-size);
   margin: 8px 0 12px;
+  line-height: 1.02;
 }
 
 .featured-grid,
@@ -2256,9 +2493,10 @@ main {
 
 .partner-title {
   margin: 0;
-  font-size: clamp(2.35rem, 3.5vw, 3.6rem);
-  line-height: 1.06;
-  letter-spacing: -0.03em;
+  font-family: "DBAdmanX", "Leelawadee UI", "Segoe UI", Tahoma, sans-serif;
+  font-size: var(--section-title-size);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
 }
 
 .partner-slider-shell {
@@ -2886,6 +3124,18 @@ textarea:focus {
   }
 }
 
+@keyframes compareBarIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes partnerMarquee {
   from {
     transform: translateX(0);
@@ -2917,6 +3167,7 @@ textarea:focus {
   .insurance-detail-hero,
   .insurance-detail-grid,
   .insurance-detail-process,
+  .compare-page-hero,
   .quote-center-grid,
   .directory-layout,
   .detail-columns,
@@ -2945,6 +3196,8 @@ textarea:focus {
 @media (max-width: 760px) {
   :root {
     --layout-gutter: 14px;
+    --section-title-size: clamp(1.85rem, 7.4vw, 2.35rem);
+    --detail-title-size: var(--section-title-size);
   }
 
   main {
@@ -2970,7 +3223,7 @@ textarea:focus {
 
   .floating-contact {
     right: 16px;
-    bottom: 16px;
+    bottom: 90px;
   }
 
   .floating-contact-trigger {
@@ -2993,6 +3246,75 @@ textarea:focus {
     width: 38px;
     height: 38px;
     border-radius: 12px;
+  }
+
+  .floating-compare-bar {
+    display: none;
+  }
+
+  .floating-compare-items {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .floating-compare-chip {
+    max-width: 220px;
+    flex: 0 0 auto;
+  }
+
+  .floating-compare-actions {
+    width: 100%;
+  }
+
+  .floating-compare-actions .button {
+    flex: 1 1 0;
+    justify-content: center;
+    min-height: 46px;
+  }
+
+  .mobile-compare-shortcut {
+    display: grid;
+    gap: 12px;
+    margin: 18px 0 0;
+    padding: 14px;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.1);
+  }
+
+  .mobile-compare-shortcut > div {
+    min-width: 0;
+    display: grid;
+    gap: 4px;
+  }
+
+  .mobile-compare-shortcut span {
+    color: var(--primary-strong);
+    font-weight: 800;
+  }
+
+  .mobile-compare-shortcut strong {
+    overflow: hidden;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-compare-shortcut-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .mobile-compare-shortcut-actions .button {
+    min-height: 44px;
+    justify-content: center;
+    width: 100%;
+    padding-inline: 10px;
   }
 
   .site-nav {
@@ -3065,9 +3387,15 @@ textarea:focus {
     gap: 20px;
   }
 
-  .insurance-category-media,
+  .insurance-category-media {
+    min-height: 0;
+    border-radius: 14px;
+  }
+
   .insurance-category-media img {
-    min-height: 240px;
+    height: auto;
+    min-height: 0;
+    object-fit: contain;
   }
 
   .insurance-category-actions .button {
@@ -3089,7 +3417,7 @@ textarea:focus {
 
   .provider-comparison-title {
     margin-bottom: 18px;
-    font-size: 1.55rem;
+    font-size: var(--section-title-size);
   }
 
   .provider-comparison-label,
@@ -3126,8 +3454,8 @@ textarea:focus {
     justify-content: center;
   }
 
-  .insurance-detail-media img {
-    min-height: 260px;
+  .insurance-detail-media {
+    border-radius: 14px;
   }
 
   .insurance-detail-steps,
@@ -3137,6 +3465,166 @@ textarea:focus {
 
   .insurance-detail-process {
     padding: 24px;
+  }
+
+  .compare-page-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 10px 0 0;
+  }
+
+  .compare-page-hero > div:first-child {
+    display: grid;
+    gap: 6px;
+  }
+
+  .compare-page-hero h1 {
+    margin: 0;
+    font-size: clamp(2rem, 8vw, 2.35rem);
+  }
+
+  .compare-page-hero p {
+    max-width: none;
+    margin: 0;
+    font-size: 0.98rem;
+    line-height: 1.65;
+  }
+
+  .compare-page-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .compare-page-actions .button {
+    width: 100%;
+    min-height: 46px;
+    justify-content: center;
+    padding: 11px 10px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .compare-page-clear-action {
+    grid-column: 1 / -1;
+  }
+
+  .compare-page-shell {
+    display: none;
+  }
+
+  .compare-page-mobile-list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(310px, 88vw);
+    gap: 14px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: 2px;
+    scroll-snap-type: x mandatory;
+    padding: 2px 0 10px;
+    scrollbar-width: none;
+  }
+
+  .compare-page-mobile-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .compare-page-mobile-card {
+    scroll-snap-align: start;
+    display: grid;
+    gap: 16px;
+    padding: 18px;
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+  }
+
+  .compare-page-mobile-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .compare-page-mobile-head span,
+  .compare-page-mobile-benefits span {
+    color: var(--primary-strong);
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .compare-page-mobile-head h2 {
+    margin: 4px 0 0;
+    color: var(--text);
+    font-size: 1.55rem;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .compare-page-mobile-head button {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(15, 23, 42, 0.42);
+  }
+
+  .compare-page-mobile-details {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 18px;
+  }
+
+  .compare-page-mobile-details div {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #fff;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .compare-page-mobile-details div:last-child {
+    border-bottom: 0;
+  }
+
+  .compare-page-mobile-details dt {
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .compare-page-mobile-details dd {
+    margin: 0;
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .compare-page-mobile-benefits {
+    display: grid;
+    gap: 8px;
+  }
+
+  .compare-page-mobile-benefits ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding-left: 20px;
+    color: var(--text-muted);
+  }
+
+  .compare-page-mobile-card .compare-page-row-actions {
+    grid-template-columns: 1fr;
   }
 
   .provider-comparison-cell-action .button {

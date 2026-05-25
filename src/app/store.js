@@ -176,6 +176,24 @@ export function toggleCompare(planId) {
   );
 }
 
+export function removeCompare(planId) {
+  if (!planId || !state.compareIds.includes(planId)) {
+    return;
+  }
+  state.compareIds = state.compareIds.filter((id) => id !== planId);
+  writeStorage(STORAGE_KEYS.compare, state.compareIds);
+  queueToast(t('toast.compareRemoved'));
+}
+
+export function clearCompare() {
+  if (!state.compareIds.length) {
+    return;
+  }
+  state.compareIds = [];
+  writeStorage(STORAGE_KEYS.compare, state.compareIds);
+  queueToast(t('toast.compareCleared'));
+}
+
 export function upsertRequest(payload) {
   const requests = [...state.requests];
   const existingIndex = requests.findIndex((item) => item.id === payload.id);

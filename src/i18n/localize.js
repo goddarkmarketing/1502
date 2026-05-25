@@ -12,6 +12,7 @@ import {
   testimonials,
   trustPoints,
 } from '../data/mockData.js';
+import { insuranceCategoryShowcase } from '../data/insuranceCategories.js';
 import { comparisonPlanExtras } from '../utils/insurerComparison.js';
 import contentEn from './content/en.js';
 import contentZh from './content/zh.js';
@@ -124,6 +125,28 @@ export function getLocalizedCategories() {
 
 export function getLocalizedCategory(slug) {
   return getLocalizedCategories().find((item) => item.slug === slug);
+}
+
+export function getLocalizedInsuranceCategories() {
+  const map = contentMap('insuranceCategories');
+  return insuranceCategoryShowcase.map((item) => {
+    const localized = map?.[item.key] ?? {};
+    return {
+      ...item,
+      label: localized.label ?? item.label,
+      title: localized.title ?? item.title,
+      description: localized.description ?? item.description,
+      primaryAction: localized.primaryAction ?? item.primaryAction,
+      secondaryAction: localized.secondaryAction ?? item.secondaryAction,
+      detailLead: localized.detailLead ?? item.detailLead,
+      highlights: localized.highlights ?? item.highlights,
+      documents: localized.documents ?? item.documents,
+    };
+  });
+}
+
+export function getLocalizedInsuranceCategory(key) {
+  return getLocalizedInsuranceCategories().find((item) => item.key === key);
 }
 
 export function getLocalizedArticles() {

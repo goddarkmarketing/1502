@@ -60,6 +60,10 @@ export function getRoute() {
     return { name: 'plans', params: {} };
   }
 
+  if (path === '/compare') {
+    return { name: 'compare', params: {} };
+  }
+
   if (segments[0] === 'plans' && segments[1]) {
     return { name: 'plan-detail', params: { slug: segments[1] } };
   }

@@ -9,7 +9,7 @@ function providerComparisonColumnClass(column, selectedPlanSlug) {
 
 export function renderInsurerComparisonTable({ title, rows, columns, selectedPlanSlug = null }) {
   return `
-    <section class="provider-comparison-section" aria-labelledby="provider-comparison-title">
+    <section class="provider-comparison-section" id="provider-comparison" aria-labelledby="provider-comparison-title">
       <h2 id="provider-comparison-title" class="provider-comparison-title">${title}</h2>
       <div class="provider-comparison-scroll">
         <table class="provider-comparison-table" role="grid">
@@ -197,7 +197,7 @@ export function renderPlanCard(plan, compareIds = []) {
         </ul>
         <div class="plan-actions">
           <a class="button button-primary" href="${appUrl(`/plans/${plan.slug}`)}">${t('plan.viewDetails')}</a>
-          <button class="button button-secondary compare-toggle" data-plan-id="${plan.id}">
+          <button class="button button-secondary compare-toggle" type="button" data-plan-id="${plan.id}">
             ${inCompare ? t('plan.removeCompare') : t('plan.compare')}
           </button>
         </div>

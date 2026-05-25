@@ -1,5 +1,4 @@
 import { partners } from '../data/mockData.js';
-import { insuranceCategoryShowcase } from '../data/insuranceCategories.js';
 import {
   renderArticleCard,
   renderFaqItem,
@@ -19,8 +18,10 @@ import {
   getLocalizedArticles,
   getLocalizedFaqs,
   getLocalizedPlans,
+  getLocalizedInsuranceCategories,
   getLocalizedTestimonials,
   getLocalizedTrustPoints,
+  getPlanDisplayName,
 } from '../i18n/localize.js';
 
 function renderCategoryIcon(type) {
@@ -43,15 +44,17 @@ function renderCategoryIcon(type) {
 }
 
 function renderInsuranceCategoryShowcase() {
+  const insuranceCategoryShowcase = getLocalizedInsuranceCategories();
+
   return `
     <section class="insurance-category-showcase" id="insurance-categories" aria-labelledby="insurance-category-title">
       <div class="insurance-category-heading">
-        <span class="section-eyebrow">บริการประกันภัย</span>
-        <h2 id="insurance-category-title">ประกันภัยสำหรับบ้าน เดินทาง และต่อวีซ่า</h2>
-        <p>เลือกหมวดที่สนใจ แล้วส่งรายละเอียดให้ทีมแอดมินช่วยแนะนำแผนที่เหมาะกับคุณ</p>
+        <span class="section-eyebrow">${t('insuranceShowcase.eyebrow')}</span>
+        <h2 id="insurance-category-title">${t('insuranceShowcase.title')}</h2>
+        <p>${t('insuranceShowcase.description')}</p>
       </div>
 
-      <div class="insurance-category-tabs" role="tablist" aria-label="หมวดประกันภัย">
+      <div class="insurance-category-tabs" role="tablist" aria-label="${t('insuranceShowcase.tabsLabel')}">
         ${insuranceCategoryShowcase
           .map(
             (item, index) => `
@@ -93,6 +96,29 @@ function renderInsuranceCategoryShowcase() {
           .join('')}
       </div>
     </section>
+  `;
+}
+
+function renderMobileCompareShortcut(plans, compareIds = []) {
+  const comparePlans = compareIds
+    .map((id) => plans.find((plan) => plan.id === id))
+    .filter(Boolean);
+
+  if (!comparePlans.length) {
+    return '';
+  }
+
+  return `
+    <div class="mobile-compare-shortcut" aria-live="polite">
+      <div>
+        <span>${t('compareBar.count', { count: comparePlans.length })}</span>
+        <strong>${comparePlans.map((plan) => getPlanDisplayName(plan)).join(' · ')}</strong>
+      </div>
+      <div class="mobile-compare-shortcut-actions">
+        <button class="button button-primary" type="button" data-compare-view="true">${t('compareBar.view')}</button>
+        <button class="button button-secondary" type="button" data-compare-clear="true">${t('compareBar.clear')}</button>
+      </div>
+    </div>
   `;
 }
 
@@ -162,6 +188,7 @@ export function renderHomePage(state) {
               ></button>
             `).join('')}
       </div>
+      ${renderMobileCompareShortcut(plans, state.compareIds)}
     </section>
 
     <section class="section-white provider-comparison-wrap">

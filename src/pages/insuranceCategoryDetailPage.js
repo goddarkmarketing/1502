@@ -1,18 +1,24 @@
 import { appUrl, staticUrl } from '../app/router.js';
-import { getInsuranceCategory, insuranceCategoryShowcase } from '../data/insuranceCategories.js';
 import { renderEmptyState } from '../components/ui.js';
+import { t } from '../i18n/index.js';
+import {
+  getLocalizedInsuranceCategory,
+  getLocalizedInsuranceCategories,
+} from '../i18n/localize.js';
 
 export function renderInsuranceCategoryDetailPage(slug) {
-  const category = getInsuranceCategory(slug);
+  const category = getLocalizedInsuranceCategory(slug);
 
   if (!category) {
     return renderEmptyState({
-      title: 'ไม่พบหมวดประกันที่ต้องการ',
-      description: 'หมวดประกันนี้อาจถูกย้ายหรือไม่มีอยู่ในระบบ',
-      actionLabel: 'กลับหน้าแรก',
+      title: t('insuranceDetail.notFoundTitle'),
+      description: t('insuranceDetail.notFoundDescription'),
+      actionLabel: t('state.backHome'),
       actionHref: appUrl('/'),
     });
   }
+
+  const relatedCategories = getLocalizedInsuranceCategories().filter((item) => item.key !== category.key);
 
   return `
     <section class="insurance-detail-hero">
@@ -22,7 +28,7 @@ export function renderInsuranceCategoryDetailPage(slug) {
         <p>${category.detailLead}</p>
         <div class="insurance-detail-actions">
           <button class="button button-primary" type="button" data-open-quote="true">${category.primaryAction}</button>
-          <a class="button button-secondary" href="${appUrl('/')}#insurance-categories">ดูหมวดอื่น</a>
+          <a class="button button-secondary" href="${appUrl('/')}#insurance-categories">${t('insuranceDetail.viewOtherCategories')}</a>
         </div>
       </div>
       <div class="insurance-detail-media">
@@ -32,16 +38,16 @@ export function renderInsuranceCategoryDetailPage(slug) {
 
     <section class="insurance-detail-grid">
       <article class="insurance-detail-panel">
-        <span class="section-eyebrow">ความคุ้มครองที่ควรดู</span>
-        <h2>จุดสำคัญของ${category.title}</h2>
+        <span class="section-eyebrow">${t('insuranceDetail.coverageEyebrow')}</span>
+        <h2>${t('insuranceDetail.highlightsTitle', { title: category.title })}</h2>
         <ul class="insurance-detail-list">
           ${category.highlights.map((item) => `<li>${item}</li>`).join('')}
         </ul>
       </article>
 
       <article class="insurance-detail-panel insurance-detail-panel-accent">
-        <span class="section-eyebrow">ส่งให้แอดมินช่วยดู</span>
-        <h2>ข้อมูลที่แนะนำให้เตรียม</h2>
+        <span class="section-eyebrow">${t('insuranceDetail.documentsEyebrow')}</span>
+        <h2>${t('insuranceDetail.documentsTitle')}</h2>
         <ul class="insurance-detail-list">
           ${category.documents.map((item) => `<li>${item}</li>`).join('')}
         </ul>
@@ -50,36 +56,35 @@ export function renderInsuranceCategoryDetailPage(slug) {
 
     <section class="insurance-detail-process">
       <div>
-        <span class="section-eyebrow">ขั้นตอนง่ายๆ</span>
-        <h2>ส่งรายละเอียด แล้วให้ทีมงานช่วยคัดแผน</h2>
+        <span class="section-eyebrow">${t('insuranceDetail.processEyebrow')}</span>
+        <h2>${t('insuranceDetail.processTitle')}</h2>
       </div>
       <div class="insurance-detail-steps">
         <article>
           <strong>1</strong>
-          <h3>เลือกหมวดประกัน</h3>
-          <p>เลือกประเภทที่ตรงกับความต้องการ หรือส่งรายละเอียดเพิ่มเติมหากยังไม่แน่ใจ</p>
+          <h3>${t('insuranceDetail.step1Title')}</h3>
+          <p>${t('insuranceDetail.step1Description')}</p>
         </article>
         <article>
           <strong>2</strong>
-          <h3>แอดมินตรวจข้อมูล</h3>
-          <p>ทีมงานช่วยดูเงื่อนไข งบประมาณ และความคุ้มครองที่เหมาะสมเบื้องต้น</p>
+          <h3>${t('insuranceDetail.step2Title')}</h3>
+          <p>${t('insuranceDetail.step2Description')}</p>
         </article>
         <article>
           <strong>3</strong>
-          <h3>เสนอแผนที่เหมาะ</h3>
-          <p>เปรียบเทียบตัวเลือกและส่งรายละเอียดกลับให้ตัดสินใจได้ง่ายขึ้น</p>
+          <h3>${t('insuranceDetail.step3Title')}</h3>
+          <p>${t('insuranceDetail.step3Description')}</p>
         </article>
       </div>
     </section>
 
     <section class="insurance-detail-related">
       <div class="section-header">
-        <span class="section-eyebrow">หมวดประกันอื่นๆ</span>
-        <h2>เลือกดูบริการประกันภัยเพิ่มเติม</h2>
+        <span class="section-eyebrow">${t('insuranceDetail.relatedEyebrow')}</span>
+        <h2>${t('insuranceDetail.relatedTitle')}</h2>
       </div>
       <div class="insurance-detail-related-grid">
-        ${insuranceCategoryShowcase
-          .filter((item) => item.key !== category.key)
+        ${relatedCategories
           .map(
             (item) => `
               <a class="insurance-detail-related-card" href="${appUrl(`/insurance/${item.key}`)}">

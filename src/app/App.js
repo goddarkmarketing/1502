@@ -2,9 +2,11 @@ import { renderShell } from '../components/layout.js';
 import { appPathFromUrl, getRoute, isInternalAppUrl, migrateLegacyHashRoute, navigate } from './router.js';
 import {
   changeLocale,
+  clearCompare,
   deleteRequest,
   getState,
   hydrateStore,
+  removeCompare,
   selectPlan,
   setComparisonPlan,
   setState,
@@ -21,6 +23,7 @@ import { renderCategoryPage } from '../pages/categoryPage.js';
 import { renderContactPage } from '../pages/contactPage.js';
 import { renderFaqPage } from '../pages/faqPage.js';
 import { renderHomePage } from '../pages/homePage.js';
+import { renderComparePage } from '../pages/comparePage.js';
 import { renderInsuranceCategoryDetailPage } from '../pages/insuranceCategoryDetailPage.js';
 import { renderNotFoundPage } from '../pages/notFoundPage.js';
 import { renderPlanDetailPage } from '../pages/planDetailPage.js';
@@ -116,6 +119,10 @@ function renderCurrentPage(state) {
     return renderPlansPage(state, query);
   }
 
+  if (route.name === 'compare') {
+    return renderComparePage(state);
+  }
+
   if (route.name === 'plan-detail') {
     return renderPlanDetailPage(route.params.slug, state);
   }
@@ -198,6 +205,24 @@ function bindEvents() {
     if (compareButton) {
       toggleCompare(compareButton.getAttribute('data-plan-id'));
       render();
+      return;
+    }
+
+    const compareRemoveButton = target.closest('[data-compare-remove]');
+    if (compareRemoveButton) {
+      removeCompare(compareRemoveButton.getAttribute('data-compare-remove'));
+      render();
+      return;
+    }
+
+    if (target.closest('[data-compare-clear]')) {
+      clearCompare();
+      render();
+      return;
+    }
+
+    if (target.closest('[data-compare-view]')) {
+      navigate('/compare');
       return;
     }
 
@@ -363,14 +388,18 @@ function bindEvents() {
 
 function render() {
   const state = getState();
+  const route = getRoute();
+  const showCompareBar = route.name !== 'compare';
   rootElement.innerHTML = renderShell({
     state,
     content: renderCurrentPage(state),
     planOptions: plans,
     quoteDraft: state.quoteDraft,
     quoteErrors,
+    showCompareBar,
   });
   document.body.classList.toggle('modal-open', state.quoteModalOpen);
+  document.body.classList.toggle('compare-bar-open', showCompareBar && state.compareIds.length > 0);
   setupAutoSliders();
 }
 

@@ -1,6 +1,7 @@
 import { renderQuoteModal } from './forms.js';
 import { appUrl } from '../app/router.js';
 import { LOCALE_LABELS, SUPPORTED_LOCALES, t } from '../i18n/index.js';
+import { getPlanDisplayName } from '../i18n/localize.js';
 
 function renderFloatingContact() {
   const items = [
@@ -100,6 +101,44 @@ function renderLangSwitcher(state) {
   `;
 }
 
+function renderFloatingCompareBar(state, plans = []) {
+  if (!state.compareIds?.length) {
+    return '';
+  }
+
+  const comparePlans = state.compareIds
+    .map((id) => plans.find((plan) => plan.id === id))
+    .filter(Boolean);
+
+  if (!comparePlans.length) {
+    return '';
+  }
+
+  return `
+    <aside class="floating-compare-bar" aria-live="polite">
+      <div class="floating-compare-summary">
+        <span>${t('compareBar.count', { count: comparePlans.length })}</span>
+        <div class="floating-compare-items">
+          ${comparePlans
+            .map(
+              (plan) => `
+                <button class="floating-compare-chip" type="button" data-compare-remove="${plan.id}" aria-label="${t('compareBar.remove', { plan: getPlanDisplayName(plan) })}">
+                  <span>${getPlanDisplayName(plan)}</span>
+                  <strong aria-hidden="true">×</strong>
+                </button>
+              `,
+            )
+            .join('')}
+        </div>
+      </div>
+      <div class="floating-compare-actions">
+        <button class="button button-primary floating-compare-view" type="button" data-compare-view="true">${t('compareBar.view')}</button>
+        <button class="button button-secondary floating-compare-clear" type="button" data-compare-clear="true">${t('compareBar.clear')}</button>
+      </div>
+    </aside>
+  `;
+}
+
 export function renderHeader(state) {
   return `
     <header class="site-header-wrap">
@@ -175,7 +214,7 @@ export function renderFooter() {
   `;
 }
 
-export function renderShell({ state, content, planOptions, quoteDraft, quoteErrors }) {
+export function renderShell({ state, content, planOptions, quoteDraft, quoteErrors, showCompareBar = true }) {
   return `
     <div class="app-shell">
       ${renderHeader(state)}
@@ -188,6 +227,7 @@ export function renderShell({ state, content, planOptions, quoteDraft, quoteErro
         draft: quoteDraft,
         errors: quoteErrors,
       })}
+      ${showCompareBar ? renderFloatingCompareBar(state, planOptions) : ''}
       ${state.lastToast ? `<div class="toast">${state.lastToast}</div>` : ''}
     </div>
   `;
