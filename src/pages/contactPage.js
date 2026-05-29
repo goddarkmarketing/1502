@@ -3,6 +3,9 @@ import { renderSectionHeader } from '../components/ui.js';
 import { t } from '../i18n/index.js';
 import { getLocalizedContactChannels, getLocalizedOfficeLocations } from '../i18n/localize.js';
 
+const googleMapsUrl = 'https://maps.app.goo.gl/2GkiD3bE3g7Z4cHeA?g_st=al';
+const googleMapsEmbedUrl = 'https://maps.google.com/maps?q=7.886,98.395&z=17&output=embed';
+
 function renderContactIcon(title) {
   const iconClass = title.includes('โทร') || title.toLowerCase().includes('call')
     ? 'phone'
@@ -87,6 +90,10 @@ export function renderContactPage() {
             )
             .join('')}
         </div>
+        <div class="license-proof license-proof-compact">
+          <span>${t('contactPage.licenseLabel')}</span>
+          <strong>${t('contactPage.licenseNumber')}</strong>
+        </div>
         <div class="cta-actions">
           <button class="button button-primary" type="button" data-open-quote="true">${t('contactPage.submitRequest')}</button>
           <a class="button button-secondary" href="${appUrl('/faq')}">${t('contactPage.viewFaq')}</a>
@@ -97,13 +104,14 @@ export function renderContactPage() {
         <h2>${t('contactPage.mapTitle')}</h2>
         <div class="map-embed-shell">
           <iframe
-            title="Insurance Map"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=100.53%2C13.72%2C100.57%2C13.75&layer=mapnik&marker=13.7367%2C100.5610"
+            title="Phuket Wealth Map"
+            src="${googleMapsEmbedUrl}"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
         <p>${t('contactPage.mapDesc')}</p>
+        <a class="button button-primary" href="${googleMapsUrl}" target="_blank" rel="noreferrer">${t('contactPage.openMap')}</a>
       </div>
     </section>
   `;

@@ -18,16 +18,16 @@ export default {
   ],
   trustPoints: [
     {
-      title: 'Easy Comparison',
-      description: 'See premiums, coverage, and highlights of each plan in one view.',
+      title: 'Over 28 Years of Experience',
+      description: 'Experienced in both life and non-life insurance, with more than 10,000 customers cared for.',
     },
     {
-      title: 'Real Advisors',
-      description: 'Submit a request and track follow-ups from the request center with full contact history.',
+      title: 'After-Sales Support Team',
+      description: 'We are not just an insurance intermediary. Our team follows up, coordinates, and supports customers after purchase.',
     },
     {
-      title: 'Fast Response',
-      description: 'Our team helps pre-screen plans and coordinates callbacks quickly.',
+      title: 'Real Offices',
+      description: 'A physical office in Phuket and head office in Bangkok help customers feel confident when working with us.',
     },
   ],
   testimonials: [
@@ -52,16 +52,16 @@ export default {
   ],
   companyHighlights: [
     {
-      title: 'Systematic Plan Comparison',
-      description: 'See premiums, coverage, and highlights in an easy-to-read format.',
+      title: 'Life and Non-Life Insurance Expertise',
+      description: 'More than 28 years of experience helps us understand coverage, policy conditions, and long-term customer care.',
     },
     {
-      title: 'Continuous Advisory Support',
-      description: 'Our team helps assess needs, coordinate appointments, and track requests step by step.',
+      title: 'More Than 10,000 Customers Served',
+      description: 'Experience from many customer cases helps our team screen plans, coordinate requests, and follow up systematically.',
     },
     {
-      title: 'Multiple Insurance Categories',
-      description: 'Health, life, auto, travel, accident, and home insurance — all in one website.',
+      title: 'After-Sales Care in Thailand and Abroad',
+      description: 'Our support team helps customers after purchase, with a real Phuket office and a head office in Bangkok.',
     },
   ],
   companyMilestones: [
@@ -80,18 +80,19 @@ export default {
   ],
   contactChannels: [
     { title: 'Call Us', note: 'Daily 09:00 – 18:00' },
+    { title: 'WhatsApp', note: 'Ask about plans and schedule consultations' },
+    { title: 'LINE', note: 'Ask about plans and schedule consultations' },
     { title: 'Email', note: 'Reply within business days' },
-    { title: 'LINE Official', note: 'Ask about plans and schedule consultations' },
   ],
   officeLocations: [
     {
-      name: 'Bangkok Head Office',
-      address: '88 Sukhumvit Road, Khlong Toei Nuea, Watthana, Bangkok 10110',
+      name: 'AXA Phuket Office',
+      address: '37/7 Baan Nattakamol 2, Damrong Road, Mueang Phuket, Phuket 83000',
       hours: 'Daily 09:00 – 18:00',
     },
     {
       name: 'Online Coordination Center',
-      address: 'Service via website, phone, and LINE Official',
+      address: 'Service via website, phone, WhatsApp, and LINE',
       hours: 'Reply within business days',
     },
   ],

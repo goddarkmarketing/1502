@@ -29,7 +29,6 @@ export function renderQuoteModal({ open, planOptions, draft, errors }) {
       <aside class="modal-panel" aria-modal="true" role="dialog" aria-labelledby="quote-modal-title">
         <div class="modal-header">
           <div>
-            <span class="section-eyebrow">${t('form.eyebrow')}</span>
             <h3 id="quote-modal-title">${draft?.id ? t('form.editTitle') : t('form.submitTitle')}</h3>
           </div>
           <button class="icon-button" type="button" data-modal-close="true">✕</button>

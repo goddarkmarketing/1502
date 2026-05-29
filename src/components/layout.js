@@ -7,7 +7,7 @@ function renderFloatingContact() {
   const items = [
     {
       label: 'LINE',
-      href: 'https://line.me/R/ti/p/@curatedcoverage',
+      href: 'https://line.me/R/ti/p/0617822979',
       className: 'line',
       icon: `
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -18,18 +18,18 @@ function renderFloatingContact() {
       `,
     },
     {
-      label: 'Facebook',
-      href: 'https://facebook.com/insurance',
-      className: 'facebook',
+      label: 'WhatsApp',
+      href: 'https://wa.me/66617822979',
+      className: 'whatsapp',
       icon: `
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v2.9h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12Z"/>
+          <path fill="currentColor" d="M12 2.5a9.3 9.3 0 0 0-8 14l-1 4.2 4.3-1a9.3 9.3 0 1 0 4.7-17.2Zm0 2a7.3 7.3 0 0 1 6.2 11.2l-.3.4.6 1.8-1.9-.5-.4.2A7.3 7.3 0 0 1 5 11.8a7.3 7.3 0 0 1 7-7.3Zm-3.1 3.7c-.2 0-.5.1-.7.4-.3.3-.9.9-.9 2.1s.9 2.4 1 2.5c.1.2 1.8 2.8 4.4 3.8 2.2.9 2.6.7 3.1.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.2-.2-.5-.3l-1.7-.8c-.2-.1-.4-.1-.6.2l-.7.9c-.1.2-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.6 6.6 0 0 1-1.2-1.6c-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2.1-.3 0-.5l-.8-1.8c-.2-.4-.4-.4-.6-.4h-.5Z"/>
         </svg>
       `,
     },
     {
       label: t('contact.email'),
-      href: 'mailto:hello@curatedcoverage.co',
+      href: 'mailto:phuketwealth@gmail.com',
       className: 'email',
       icon: `
         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -39,21 +39,11 @@ function renderFloatingContact() {
     },
     {
       label: t('contact.phone'),
-      href: 'tel:021004242',
+      href: 'tel:0617822979',
       className: 'phone',
       icon: `
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M7.2 4.5h2.2l1.2 4.1-1.8 1.8a14.7 14.7 0 0 0 4.8 4.8l1.8-1.8 4.1 1.2v2.2c0 .8-.6 1.5-1.4 1.6-.5 0-1 .1-1.4.1-7 0-12.7-5.7-12.7-12.7 0-.5 0-1 .1-1.4.1-.8.8-1.4 1.6-1.4Z"/>
-        </svg>
-      `,
-    },
-    {
-      label: 'TikTok',
-      href: 'https://www.tiktok.com/@insurance',
-      className: 'tiktok',
-      icon: `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M16.8 3c.4 1.9 1.5 3.3 3.2 4.1v3a8.6 8.6 0 0 1-3.2-1v6.6a5.7 5.7 0 1 1-5.7-5.7c.3 0 .6 0 .9.1v3.1a2.6 2.6 0 1 0 1.7 2.5V3h3.1Z"/>
         </svg>
       `,
     },
@@ -144,7 +134,7 @@ export function renderHeader(state) {
     <header class="site-header-wrap">
       <div class="site-header">
         <div class="brand-lockup">
-          <a href="${appUrl('/')}" class="brand-mark">Insurance</a>
+          <a href="${appUrl('/')}" class="brand-mark">Phuket Wealth</a>
         </div>
         <nav class="site-nav ${state.mobileMenuOpen ? 'site-nav-open' : ''}">
           <a href="${appUrl('/')}" class="nav-link">${t('nav.home')}</a>
@@ -170,11 +160,12 @@ export function renderFooter() {
     <footer class="site-footer-wrap">
       <div class="site-footer">
         <div class="footer-brand-column">
-          <strong>Insurance</strong>
+          <strong>Phuket Wealth</strong>
           <p>${t('footer.tagline')}</p>
           <div class="footer-contact-list">
-            <span>${t('footer.email')}: hello@curatedcoverage.co</span>
-            <span>${t('footer.phone')}: 02-100-4242</span>
+            <span>${t('footer.email')}: phuketwealth@gmail.com</span>
+            <span>WhatsApp / LINE: 0617822979</span>
+            <span>${t('footer.phone')}: 0617822979</span>
             <span>${t('footer.hours')}</span>
           </div>
         </div>
@@ -205,7 +196,7 @@ export function renderFooter() {
         </div>
 
         <div class="footer-bottom">
-          <span>© ${year} Insurance. ${t('footer.rights')}</span>
+          <span>© ${year} Phuket Wealth. ${t('footer.rights')}</span>
           <span>${t('footer.privacy')}</span>
           <span>${t('footer.terms')}</span>
         </div>

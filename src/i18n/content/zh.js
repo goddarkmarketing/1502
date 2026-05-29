@@ -15,16 +15,16 @@ export default {
   ],
   trustPoints: [
     {
-      title: '轻松比较',
-      description: '在同一视图查看各方案的保费、保障和亮点。',
+      title: '超过 28 年经验',
+      description: '具备寿险与财产险经验，已服务超过 10,000 位客户。',
     },
     {
-      title: '真实顾问',
-      description: '提交申请后可在申请中心跟踪跟进，联系记录完整。',
+      title: '售后服务团队',
+      description: '我们不只是保险中介，团队会在投保后持续跟进、协调并协助客户。',
     },
     {
-      title: '快速响应',
-      description: '团队协助初步筛选方案并快速协调回电。',
+      title: '真实办公室',
+      description: '在普吉设有实体办公室，并在曼谷设有总部，让客户更安心。',
     },
   ],
   testimonials: [
@@ -46,16 +46,16 @@ export default {
   ],
   companyHighlights: [
     {
-      title: '系统化方案比较',
-      description: '以易读格式呈现保费、保障和亮点。',
+      title: '寿险与财产险专业经验',
+      description: '超过 28 年经验，让我们更了解保障内容、保单条件及长期客户服务。',
     },
     {
-      title: '持续顾问支持',
-      description: '团队协助评估需求、协调预约并逐步跟踪申请。',
+      title: '服务超过 10,000 位客户',
+      description: '丰富客户案例帮助团队更系统地筛选方案、协调申请并持续跟进。',
     },
     {
-      title: '多类保险覆盖',
-      description: '健康、人寿、汽车、旅行、意外和房屋保险 — 同一网站。',
+      title: '泰国及海外售后服务',
+      description: '投保后由团队持续协助，并设有普吉实体办公室及曼谷总部。',
     },
   ],
   companyMilestones: [
@@ -74,18 +74,19 @@ export default {
   ],
   contactChannels: [
     { title: '致电我们', note: '每日 09:00 – 18:00' },
+    { title: 'WhatsApp', note: '咨询方案及预约顾问' },
+    { title: 'LINE', note: '咨询方案及预约顾问' },
     { title: '邮箱', note: '工作日内回复' },
-    { title: 'LINE 官方账号', note: '咨询方案及预约顾问' },
   ],
   officeLocations: [
     {
-      name: '曼谷总部',
-      address: '泰国曼谷 Watthana 区 Khlong Toei Nuea 素坤逸路 88 号 10110',
+      name: 'AXA 普吉办公室',
+      address: '泰国普吉府普吉市 Damrong 路 Baan Nattakamol 2，37/7，邮编 83000',
       hours: '每日 09:00 – 18:00',
     },
     {
       name: '在线协调中心',
-      address: '通过网站、电话和 LINE 官方账号服务',
+      address: '通过网站、电话、WhatsApp 和 LINE 服务',
       hours: '工作日内回复',
     },
   ],
