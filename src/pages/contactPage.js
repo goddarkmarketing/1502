@@ -104,7 +104,7 @@ export function renderContactPage() {
         <h2>${t('contactPage.mapTitle')}</h2>
         <div class="map-embed-shell">
           <iframe
-            title="Phuket Wealth Map"
+            title="InsureMe @Thailand Map"
             src="${googleMapsEmbedUrl}"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"

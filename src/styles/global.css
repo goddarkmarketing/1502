@@ -444,9 +444,17 @@ main {
 }
 
 .brand-mark {
-  font-weight: 800;
-  font-size: 1.9rem;
-  letter-spacing: -0.03em;
+  display: inline-flex;
+  align-items: center;
+  width: 150px;
+  max-width: 34vw;
+  line-height: 0;
+}
+
+.brand-mark img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .site-nav {

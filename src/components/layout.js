@@ -1,5 +1,5 @@
 import { renderQuoteModal } from './forms.js';
-import { appUrl } from '../app/router.js';
+import { appUrl, staticUrl } from '../app/router.js';
 import { LOCALE_LABELS, SUPPORTED_LOCALES, t } from '../i18n/index.js';
 import { getPlanDisplayName } from '../i18n/localize.js';
 
@@ -134,7 +134,9 @@ export function renderHeader(state) {
     <header class="site-header-wrap">
       <div class="site-header">
         <div class="brand-lockup">
-          <a href="${appUrl('/')}" class="brand-mark">Phuket Wealth</a>
+          <a href="${appUrl('/')}" class="brand-mark" aria-label="InsureMe @Thailand">
+            <img src="${staticUrl('assets/logos/insureme-thailand.png')}" alt="InsureMe @Thailand" />
+          </a>
         </div>
         <nav class="site-nav ${state.mobileMenuOpen ? 'site-nav-open' : ''}">
           <a href="${appUrl('/')}" class="nav-link">${t('nav.home')}</a>
@@ -160,7 +162,7 @@ export function renderFooter() {
     <footer class="site-footer-wrap">
       <div class="site-footer">
         <div class="footer-brand-column">
-          <strong>Phuket Wealth</strong>
+          <strong>InsureMe @Thailand</strong>
           <p>${t('footer.tagline')}</p>
           <div class="footer-contact-list">
             <span>${t('footer.email')}: phuketwealth@gmail.com</span>
@@ -196,7 +198,7 @@ export function renderFooter() {
         </div>
 
         <div class="footer-bottom">
-          <span>© ${year} Phuket Wealth. ${t('footer.rights')}</span>
+          <span>© ${year} InsureMe @Thailand. ${t('footer.rights')}</span>
           <span>${t('footer.privacy')}</span>
           <span>${t('footer.terms')}</span>
         </div>

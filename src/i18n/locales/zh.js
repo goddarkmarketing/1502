@@ -147,7 +147,7 @@ export default {
   about: {
     eyebrow: '关于我们',
     title: '让选择保险变得简单可信',
-    desc: 'Phuket Wealth 凭借超过 28 年寿险与财产险经验、售后服务团队，以及普吉和曼谷实体办公室为客户提供支持。',
+    desc: 'InsureMe @Thailand 凭借超过 28 年寿险与财产险经验、售后服务团队，以及普吉和曼谷实体办公室为客户提供支持。',
     timelineTitle: '我们的工作方式',
     timelineDesc: '我们设计的体验让客户轻松开始、信息清晰，一步提交咨询申请。',
     partnersTitle: '共同服务客户的网络',

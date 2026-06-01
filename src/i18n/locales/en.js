@@ -151,7 +151,7 @@ export default {
   about: {
     eyebrow: 'About Us',
     title: 'Making Insurance Selection Simple and Trustworthy',
-    desc: 'Phuket Wealth supports customers with more than 28 years of life and non-life insurance experience, after-sales care, and real offices in Phuket and Bangkok.',
+    desc: 'InsureMe @Thailand supports customers with more than 28 years of life and non-life insurance experience, after-sales care, and real offices in Phuket and Bangkok.',
     timelineTitle: 'How We Work',
     timelineDesc:
       'We designed the experience so customers can start easily, see clear information, and submit consultation requests in one step.',
