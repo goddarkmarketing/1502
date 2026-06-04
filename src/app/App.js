@@ -16,6 +16,7 @@ import {
 } from './store.js';
 import { t } from '../i18n/index.js';
 import { plans } from '../data/mockData.js';
+import { buildWhatsAppUrl } from '../utils/contactLinks.js';
 import { renderAboutPage } from '../pages/aboutPage.js';
 import { renderArticleDetailPage } from '../pages/articleDetailPage.js';
 import { renderArticlesPage } from '../pages/articlesPage.js';
@@ -40,7 +41,7 @@ function buildQuoteDraft(existing = {}, planId = '') {
     email: existing.email ?? '',
     phone: existing.phone ?? '',
     ageRange: existing.ageRange ?? '',
-    contactPreference: existing.contactPreference ?? t('form.callback'),
+    contactPreference: existing.contactPreference ?? 'whatsapp',
     coverageGoal: existing.coverageGoal ?? '',
     note: existing.note ?? '',
   };
@@ -101,7 +102,7 @@ function parseForm(event) {
     email: formData.get('email')?.toString() || '',
     phone: formData.get('phone')?.toString() || '',
     ageRange: formData.get('ageRange')?.toString() || '',
-    contactPreference: formData.get('contactPreference')?.toString() || t('form.callback'),
+    contactPreference: formData.get('contactPreference')?.toString() || 'whatsapp',
     coverageGoal: formData.get('coverageGoal')?.toString() || '',
     note: formData.get('note')?.toString() || '',
   };
@@ -158,6 +159,13 @@ function renderCurrentPage(state) {
   return renderNotFoundPage();
 }
 
+function syncLineQrPanel(root, preference) {
+  const panel = root.querySelector('[data-line-qr-panel]');
+  if (panel) {
+    panel.hidden = preference !== 'line';
+  }
+}
+
 function bindEvents() {
   rootElement.addEventListener('click', (event) => {
     const target = event.target;
@@ -169,6 +177,9 @@ function bindEvents() {
     const anchor = target.closest('a[href]');
     if (anchor instanceof HTMLAnchorElement && anchor.target !== '_blank') {
       const href = anchor.getAttribute('href') || '';
+      if (href.startsWith('#')) {
+        return;
+      }
       if (!href.startsWith('mailto:') && !href.startsWith('tel:')) {
         const url = new URL(anchor.href, window.location.origin);
         if (isInternalAppUrl(url)) {
@@ -326,6 +337,17 @@ function bindEvents() {
     }
   });
 
+  rootElement.addEventListener('change', (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLSelectElement)) {
+      return;
+    }
+
+    if (target.name === 'contactPreference' && target.closest('#quote-form')) {
+      syncLineQrPanel(rootElement, target.value);
+    }
+  });
+
   rootElement.addEventListener('submit', (event) => {
     const target = event.target;
     if (!(target instanceof HTMLFormElement)) {
@@ -348,12 +370,18 @@ function bindEvents() {
       }
 
       quoteErrors = {};
+      const selectedPlan = payload.planId ? plans.find((plan) => plan.id === payload.planId) : null;
       upsertRequest({
         ...payload,
         id: payload.id || `qr-${crypto.randomUUID()}`,
         status: existingRequest?.status ?? 'ใหม่',
         createdAt: existingRequest?.createdAt ?? new Date().toISOString(),
       });
+
+      if (payload.contactPreference === 'whatsapp') {
+        window.open(buildWhatsAppUrl(payload, selectedPlan), '_blank', 'noopener,noreferrer');
+      }
+
       render();
       return;
     }

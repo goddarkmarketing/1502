@@ -1772,6 +1772,65 @@ main {
   color: var(--text-muted);
 }
 
+.contact-channel-card-link {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.contact-channel-card-link:hover {
+  transform: translateY(-2px);
+}
+
+.contact-qr-panel {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(6, 199, 85, 0.08);
+  text-align: center;
+}
+
+.contact-qr-panel-title {
+  margin: 0 0 6px;
+  font-weight: 700;
+  font-size: 1.08rem;
+}
+
+.contact-qr-panel-desc {
+  margin: 0 0 14px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.contact-qr-panel img {
+  display: block;
+  width: min(220px, 100%);
+  height: auto;
+  margin: 0 auto;
+  border-radius: 14px;
+  box-shadow: var(--shadow-soft);
+}
+
+.contact-qr-section {
+  scroll-margin-top: 110px;
+}
+
+.contact-qr-card {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 18px;
+}
+
+.contact-qr-card img {
+  width: min(280px, 100%);
+  height: auto;
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
+}
+
+.contact-qr-actions {
+  justify-content: center;
+}
+
 .contact-office-panel {
   display: grid;
   gap: 20px;

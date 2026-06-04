@@ -1,17 +1,42 @@
-import { appUrl } from '../app/router.js';
+import { appUrl, staticUrl } from '../app/router.js';
 import { renderSectionHeader } from '../components/ui.js';
 import { t } from '../i18n/index.js';
 import { getLocalizedContactChannels, getLocalizedOfficeLocations } from '../i18n/localize.js';
+import { LINE_ADD_URL, WHATSAPP_NUMBER } from '../utils/contactLinks.js';
 
 const googleMapsUrl = 'https://maps.app.goo.gl/2GkiD3bE3g7Z4cHeA?g_st=al';
 const googleMapsEmbedUrl = 'https://maps.google.com/maps?q=7.886,98.395&z=17&output=embed';
+
+function getChannelHref(title) {
+  const normalized = title.toLowerCase();
+
+  if (normalized.includes('whatsapp')) {
+    return `https://wa.me/${WHATSAPP_NUMBER}`;
+  }
+
+  if (normalized.includes('line')) {
+    return '#line-qr';
+  }
+
+  if (normalized.includes('email') || title.includes('อีเมล') || title.includes('เมล')) {
+    return 'mailto:phuketwealth@gmail.com';
+  }
+
+  if (normalized.includes('call') || title.includes('โทร')) {
+    return 'tel:0617822979';
+  }
+
+  return '';
+}
 
 function renderContactIcon(title) {
   const iconClass = title.includes('โทร') || title.toLowerCase().includes('call')
     ? 'phone'
     : title.includes('เมล') || title.includes('อีเมล') || title.toLowerCase().includes('email')
       ? 'mail'
-      : 'line';
+      : title.toLowerCase().includes('whatsapp')
+        ? 'whatsapp'
+        : 'line';
 
   if (iconClass === 'phone') {
     return `
@@ -29,6 +54,16 @@ function renderContactIcon(title) {
         <svg viewBox="0 0 24 24" fill="none">
           <rect x="3.5" y="5.5" width="17" height="13" rx="2.5" />
           <path d="m5.5 8 6.5 5 6.5-5" />
+        </svg>
+      </span>
+    `;
+  }
+
+  if (iconClass === 'whatsapp') {
+    return `
+      <span class="contact-icon contact-icon-whatsapp" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 2.5a9.3 9.3 0 0 0-8 14l-1 4.2 4.3-1a9.3 9.3 0 1 0 4.7-17.2Z" />
         </svg>
       </span>
     `;
@@ -58,9 +93,15 @@ export function renderContactPage() {
     <section class="contact-stack">
       <div class="contact-channel-list">
         ${getLocalizedContactChannels()
-          .map(
-            (item) => `
-              <article class="detail-panel contact-channel-card">
+          .map((item) => {
+            const href = getChannelHref(item.title);
+            const tagName = href ? 'a' : 'article';
+            const linkAttrs = href
+              ? ` href="${href}" ${href.startsWith('http') ? 'target="_blank" rel="noreferrer"' : ''}`
+              : '';
+
+            return `
+              <${tagName} class="detail-panel contact-channel-card contact-channel-card-link"${linkAttrs}>
                 <div class="contact-channel-label">
                   ${renderContactIcon(item.title)}
                   <h3>${item.title}</h3>
@@ -69,10 +110,27 @@ export function renderContactPage() {
                   <strong>${item.detail}</strong>
                   <p>${item.note}</p>
                 </div>
-              </article>
-            `,
-          )
+              </${tagName}>
+            `;
+          })
           .join('')}
+      </div>
+
+      <div class="detail-panel contact-qr-section" id="line-qr">
+        <h2>${t('contactPage.lineQrTitle')}</h2>
+        <p>${t('contactPage.lineQrDesc')}</p>
+        <div class="contact-qr-card">
+          <img
+            src="${staticUrl('assets/contact/line-qr.png')}"
+            alt="${t('contactPage.lineQrAlt')}"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="cta-actions contact-qr-actions">
+          <a class="button button-primary" href="${LINE_ADD_URL}" target="_blank" rel="noreferrer">${t('contactPage.openLine')}</a>
+          <a class="button button-secondary" href="https://wa.me/${WHATSAPP_NUMBER}" target="_blank" rel="noreferrer">${t('contactPage.openWhatsApp')}</a>
+        </div>
       </div>
 
       <div class="detail-panel contact-office-panel">

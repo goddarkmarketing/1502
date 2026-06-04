@@ -1,5 +1,13 @@
 import { t } from '../i18n/index.js';
 import { getPlanDisplayName } from '../i18n/localize.js';
+import { staticUrl } from '../app/router.js';
+
+const CONTACT_OPTIONS = [
+  { value: 'whatsapp', labelKey: 'form.whatsapp' },
+  { value: 'line', labelKey: 'form.line' },
+  { value: 'phone', labelKey: 'form.callback' },
+  { value: 'email', labelKey: 'form.email' },
+];
 
 export function renderQuoteModal({ open, planOptions, draft, errors }) {
   if (!open) {
@@ -13,16 +21,12 @@ export function renderQuoteModal({ open, planOptions, draft, errors }) {
     email: draft?.email ?? '',
     phone: draft?.phone ?? '',
     ageRange: draft?.ageRange ?? '',
-    contactPreference: draft?.contactPreference ?? t('form.callback'),
+    contactPreference: draft?.contactPreference ?? 'whatsapp',
     coverageGoal: draft?.coverageGoal ?? '',
     note: draft?.note ?? '',
   };
 
-  const contactOptions = [
-    { value: t('form.callback'), label: t('form.callback') },
-    { value: 'LINE', label: 'LINE' },
-    { value: t('form.email'), label: t('form.email') },
-  ];
+  const showLineQr = form.contactPreference === 'line';
 
   return `
     <div class="modal-backdrop" data-modal-backdrop="true">
@@ -85,12 +89,10 @@ export function renderQuoteModal({ open, planOptions, draft, errors }) {
               <label>
                 <span>${t('form.contactChannel')}</span>
                 <select name="contactPreference">
-                  ${contactOptions
-                    .map(
-                      (channel) =>
-                        `<option value="${channel.value}" ${channel.value === form.contactPreference ? 'selected' : ''}>${channel.label}</option>`,
-                    )
-                    .join('')}
+                  ${CONTACT_OPTIONS.map(
+                    (channel) =>
+                      `<option value="${channel.value}" ${channel.value === form.contactPreference ? 'selected' : ''}>${t(channel.labelKey)}</option>`,
+                  ).join('')}
                 </select>
               </label>
               <label>
@@ -98,6 +100,16 @@ export function renderQuoteModal({ open, planOptions, draft, errors }) {
                 <input name="coverageGoal" value="${form.coverageGoal}" placeholder="${t('form.coveragePlaceholder')}" />
                 ${errors.coverageGoal ? `<small class="field-error">${errors.coverageGoal}</small>` : ''}
               </label>
+            </div>
+            <div class="contact-qr-panel" data-line-qr-panel ${showLineQr ? '' : 'hidden'}>
+              <p class="contact-qr-panel-title">${t('form.lineQrTitle')}</p>
+              <p class="contact-qr-panel-desc">${t('form.lineQrHint')}</p>
+              <img
+                src="${staticUrl('assets/contact/line-qr.png')}"
+                alt="${t('form.lineQrAlt')}"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <label>
               <span>${t('form.note')}</span>

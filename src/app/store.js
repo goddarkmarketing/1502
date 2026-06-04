@@ -52,7 +52,7 @@ const state = {
   selectedPlanSlug: null,
   comparisonPlanIds: { ...defaultComparisonPlanIds },
   lastToast: '',
-  locale: 'th',
+  locale: 'en',
 };
 
 function emit() {
@@ -97,9 +97,12 @@ export function hydrateStore() {
       ...readStorage(STORAGE_KEYS.comparisonPlans, {}),
     };
     const storedLocale = readStorage(STORAGE_KEYS.locale, null);
-    if (storedLocale && ['th', 'en', 'zh'].includes(storedLocale)) {
+    if (storedLocale && ['en', 'zh', 'th'].includes(storedLocale)) {
       state.locale = storedLocale;
       setLocale(storedLocale);
+    } else {
+      setLocale('en');
+      state.locale = 'en';
     }
     state.loading = false;
     emit();
@@ -213,7 +216,7 @@ export function upsertRequest(payload) {
 }
 
 export function changeLocale(locale) {
-  if (!['th', 'en', 'zh'].includes(locale) || state.locale === locale) {
+  if (!['en', 'zh', 'th'].includes(locale) || state.locale === locale) {
     return;
   }
   setLocale(locale);

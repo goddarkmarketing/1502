@@ -4,7 +4,7 @@ import zh from './locales/zh.js';
 
 const locales = { th, en, zh };
 
-export const SUPPORTED_LOCALES = ['th', 'en', 'zh'];
+export const SUPPORTED_LOCALES = ['en', 'zh', 'th'];
 
 export const LOCALE_LABELS = {
   th: 'TH',
@@ -14,7 +14,7 @@ export const LOCALE_LABELS = {
 
 const STORAGE_KEY = 'curated-coverage-locale';
 
-let currentLocale = 'th';
+let currentLocale = 'en';
 
 function resolveNested(obj, key) {
   return key.split('.').reduce((acc, part) => acc?.[part], obj);
@@ -42,14 +42,14 @@ export function initLocale(stored) {
   if (stored && SUPPORTED_LOCALES.includes(stored)) {
     setLocale(stored);
   } else {
-    document.documentElement.lang = currentLocale === 'zh' ? 'zh-CN' : currentLocale;
+    setLocale('en');
   }
 }
 
 export function t(key, params = {}) {
   let value = resolveNested(locales[currentLocale], key);
   if (value === undefined) {
-    value = resolveNested(locales.th, key);
+    value = resolveNested(locales.en, key);
   }
   if (typeof value !== 'string') {
     return key;
