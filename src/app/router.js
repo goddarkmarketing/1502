@@ -80,6 +80,14 @@ export function getRoute() {
     return { name: 'faq', params: {} };
   }
 
+  if (path === '/privacy') {
+    return { name: 'privacy', params: {} };
+  }
+
+  if (path === '/terms') {
+    return { name: 'terms', params: {} };
+  }
+
   if (path === '/articles') {
     return { name: 'articles', params: {} };
   }

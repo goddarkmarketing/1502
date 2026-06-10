@@ -33,6 +33,126 @@ export default {
     privacy: 'Privacy Policy',
     terms: 'Terms of Service',
   },
+  privacyPage: {
+    eyebrow: 'Legal',
+    title: 'Privacy Policy',
+    intro:
+      'This policy explains how InsureMe @Thailand collects, uses, and protects personal information when you use our website and advisory services.',
+    updated: 'Last updated: June 2026',
+    contactCta: 'Contact Us',
+    backHome: 'Back to Home',
+    sections: [
+      {
+        heading: '1. Who We Are',
+        paragraphs: [
+          'InsureMe @Thailand is an insurance comparison and advisory service operating in Thailand. We help visitors compare insurance plans and connect with licensed advisors.',
+          'Insurance broker license no. 6304007553. Contact: phuketwealth@gmail.com, 061-782-2979. Offices in Phuket and Bangkok, Thailand.',
+        ],
+      },
+      {
+        heading: '2. Information We Collect',
+        paragraphs: [
+          'We may collect information you provide directly, such as your name, phone number, email address, preferred contact channel, insurance interests, and messages submitted through our forms.',
+          'We may also collect technical data automatically, including browser type, device information, pages visited, and approximate location derived from IP address, to improve site performance and security.',
+        ],
+      },
+      {
+        heading: '3. How We Use Your Information',
+        paragraphs: [
+          'We use your information to respond to inquiries, provide insurance plan information, coordinate advisory services, improve our website, and comply with applicable laws.',
+          'We do not sell your personal information. We may share data with licensed insurers, partners, or service providers only when necessary to fulfill your request or operate our services.',
+        ],
+      },
+      {
+        heading: '4. Cookies and Local Storage',
+        paragraphs: [
+          'This website may use browser local storage to remember your language preference, comparison selections, and similar settings on your device.',
+          'You can clear stored data through your browser settings at any time.',
+        ],
+      },
+      {
+        heading: '5. Data Retention and Security',
+        paragraphs: [
+          'We retain personal information only as long as needed for the purposes described in this policy or as required by law.',
+          'We apply reasonable technical and organizational measures to protect your data, though no online transmission can be guaranteed completely secure.',
+        ],
+      },
+      {
+        heading: '6. Your Rights',
+        paragraphs: [
+          'Depending on applicable law, you may request access to, correction of, or deletion of your personal information, or withdraw consent where processing is based on consent.',
+          'To exercise these rights, contact us at phuketwealth@gmail.com. We will respond within a reasonable timeframe.',
+        ],
+      },
+      {
+        heading: '7. Changes to This Policy',
+        paragraphs: [
+          'We may update this Privacy Policy from time to time. The revised version will be posted on this page with an updated date.',
+          'Continued use of the website after changes are posted constitutes acceptance of the updated policy.',
+        ],
+      },
+    ],
+  },
+  termsPage: {
+    eyebrow: 'Legal',
+    title: 'Terms of Service',
+    intro:
+      'These terms govern your use of the InsureMe @Thailand website and related advisory coordination services. By using this site, you agree to these terms.',
+    updated: 'Last updated: June 2026',
+    contactCta: 'Contact Us',
+    backHome: 'Back to Home',
+    sections: [
+      {
+        heading: '1. About Our Service',
+        paragraphs: [
+          'InsureMe @Thailand provides insurance plan information, comparison tools, and coordination with licensed insurance advisors in Thailand.',
+          'We are an insurance broker (license no. 6304007553), not an insurer. Final coverage terms, premiums, and policy documents are determined by the respective insurance company.',
+        ],
+      },
+      {
+        heading: '2. Informational Purpose Only',
+        paragraphs: [
+          'Content on this website is for general information and comparison purposes. It does not constitute legal, financial, or insurance advice tailored to your specific circumstances unless confirmed in writing by a licensed advisor.',
+          'Plan details, benefits, and pricing shown may change without notice. Always verify current terms with the insurer before purchasing.',
+        ],
+      },
+      {
+        heading: '3. User Responsibilities',
+        paragraphs: [
+          'You agree to provide accurate information when submitting forms or requests and to use this website lawfully.',
+          'You must not attempt to disrupt the site, scrape data without permission, or misuse contact channels for spam or unauthorized purposes.',
+        ],
+      },
+      {
+        heading: '4. Advisory Requests and Communication',
+        paragraphs: [
+          'When you submit a request, we may contact you via email, phone, WhatsApp, LINE, or other channels you select to provide plan information or advisory support.',
+          'Submitting a form does not create an insurance contract. A policy is formed only after you accept an insurer\'s offer and complete required underwriting and payment steps.',
+        ],
+      },
+      {
+        heading: '5. Third-Party Links and Insurers',
+        paragraphs: [
+          'This site may reference or link to third-party insurers, products, or external websites. We are not responsible for the content, availability, or practices of third-party sites.',
+          'Your relationship with an insurer is governed by that insurer\'s policy terms and applicable regulations.',
+        ],
+      },
+      {
+        heading: '6. Limitation of Liability',
+        paragraphs: [
+          'To the fullest extent permitted by law, InsureMe @Thailand is not liable for indirect, incidental, or consequential damages arising from use of this website or reliance on displayed information.',
+          'We do not guarantee uninterrupted access to the site and may modify or discontinue features at any time.',
+        ],
+      },
+      {
+        heading: '7. Governing Law and Contact',
+        paragraphs: [
+          'These terms are governed by the laws of Thailand. Disputes shall be subject to the jurisdiction of competent courts in Thailand, unless otherwise required by mandatory consumer protection rules.',
+          'Questions about these terms: phuketwealth@gmail.com or 061-782-2979.',
+        ],
+      },
+    ],
+  },
   contact: {
     channels: 'Contact channels',
     email: 'Email',

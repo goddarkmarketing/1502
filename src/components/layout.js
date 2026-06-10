@@ -135,7 +135,7 @@ export function renderHeader(state) {
       <div class="site-header">
         <div class="brand-lockup">
           <a href="${appUrl('/')}" class="brand-mark" aria-label="InsureMe @Thailand">
-            <img src="${staticUrl('assets/logos/insureme-thailand.png')}" alt="InsureMe @Thailand" />
+            <img src="${staticUrl('assets/logos/insureme-thailand.png')}?v=2" alt="InsureMe @Thailand" />
           </a>
         </div>
         <nav class="site-nav ${state.mobileMenuOpen ? 'site-nav-open' : ''}">
@@ -199,8 +199,8 @@ export function renderFooter() {
 
         <div class="footer-bottom">
           <span>© ${year} InsureMe @Thailand. ${t('footer.rights')}</span>
-          <span>${t('footer.privacy')}</span>
-          <span>${t('footer.terms')}</span>
+          <a href="${appUrl('/privacy')}">${t('footer.privacy')}</a>
+          <a href="${appUrl('/terms')}">${t('footer.terms')}</a>
         </div>
       </div>
     </footer>

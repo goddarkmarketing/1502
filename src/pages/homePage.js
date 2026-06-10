@@ -124,6 +124,9 @@ function renderMobileCompareShortcut(plans, compareIds = []) {
 
 export function renderHomePage(state) {
   const plans = getLocalizedPlans();
+  const featuredPlans = [...plans]
+    .filter((plan) => plan.featured)
+    .sort((left, right) => (left.featuredOrder ?? 999) - (right.featuredOrder ?? 999));
   const faqs = getLocalizedFaqs();
   const articleTopics = getLocalizedArticles();
 
@@ -174,11 +177,11 @@ export function renderHomePage(state) {
         data-slider-visible="3"
       >
         <div class="plan-slider-track">
-          ${plans.map((plan) => renderPlanCard(plan, state.compareIds)).join('')}
+          ${featuredPlans.map((plan) => renderPlanCard(plan, state.compareIds)).join('')}
         </div>
       </div>
       <div class="slider-dots" id="plan-slider-dots" aria-label="${t('home.sliderStatus')}">
-        ${Array.from({ length: Math.max(1, plans.length - 3 + 1) }, (_, index) => `
+        ${Array.from({ length: Math.max(1, featuredPlans.length - 3 + 1) }, (_, index) => `
               <button
                 class="slider-dot ${index === 0 ? 'slider-dot-active' : ''}"
                 type="button"

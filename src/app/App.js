@@ -26,6 +26,7 @@ import { renderFaqPage } from '../pages/faqPage.js';
 import { renderHomePage } from '../pages/homePage.js';
 import { renderComparePage } from '../pages/comparePage.js';
 import { renderInsuranceCategoryDetailPage } from '../pages/insuranceCategoryDetailPage.js';
+import { renderPrivacyPage, renderTermsPage } from '../pages/legalPage.js';
 import { renderNotFoundPage } from '../pages/notFoundPage.js';
 import { renderPlanDetailPage } from '../pages/planDetailPage.js';
 import { renderPlansPage } from '../pages/plansPage.js';
@@ -138,6 +139,14 @@ function renderCurrentPage(state) {
 
   if (route.name === 'faq') {
     return renderFaqPage();
+  }
+
+  if (route.name === 'privacy') {
+    return renderPrivacyPage();
+  }
+
+  if (route.name === 'terms') {
+    return renderTermsPage();
   }
 
   if (route.name === 'articles') {

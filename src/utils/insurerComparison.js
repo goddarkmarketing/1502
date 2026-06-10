@@ -4,16 +4,16 @@ import { getComparisonExtra, getLocalizedPlan, getPlanDisplayName } from '../i18
 
 export const comparisonInsurers = [
   {
-    key: 'allianz',
-    provider: 'Allianz Ayudhya',
-    logo: 'assets/logos/allianz.svg',
-    matchProvider: /allianz/i,
-  },
-  {
     key: 'axa',
     provider: 'AXA',
     logo: 'assets/logos/axa.svg',
     matchProvider: /axa/i,
+  },
+  {
+    key: 'allianz',
+    provider: 'Allianz Ayudhya',
+    logo: 'assets/logos/allianz.svg',
+    matchProvider: /allianz/i,
   },
   {
     key: 'pacific',
@@ -82,7 +82,23 @@ export const comparisonPlanExtras = {
 };
 
 export function getPlansForInsurer(plans, insurer) {
-  return plans.filter((plan) => insurer.matchProvider.test(plan.provider));
+  const insurerPlanOrder = {
+    axa: ['axa-smartcare-essential', 'axa-easycare-visa-plan-2', 'axa-international-exclusive-platinum'],
+    pacific: ['pchi-maxima-plus', 'pchi-maxima', 'pchi-standard-extra'],
+    allianz: ['allianz-smarter-health'],
+  };
+  const order = insurerPlanOrder[insurer.key] ?? [];
+  const insurerPlans = plans.filter((plan) => insurer.matchProvider.test(plan.provider));
+
+  if (!order.length) {
+    return insurerPlans;
+  }
+
+  return [...insurerPlans].sort((left, right) => {
+    const leftIndex = order.indexOf(left.id);
+    const rightIndex = order.indexOf(right.id);
+    return (leftIndex === -1 ? 999 : leftIndex) - (rightIndex === -1 ? 999 : rightIndex);
+  });
 }
 
 function buildComparisonValues(plan, insurer) {

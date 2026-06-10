@@ -33,6 +33,8 @@ export function renderPlansPage(state, query) {
 
     return (
       Number(right.featured) - Number(left.featured) ||
+      (left.featuredOrder ?? 999) - (right.featuredOrder ?? 999) ||
+      left.monthlyPremium - right.monthlyPremium ||
       (left.displayName ?? left.name).localeCompare(right.displayName ?? right.name, 'th')
     );
   });
