@@ -1,5 +1,5 @@
 import { appUrl } from '../app/router.js';
-import { renderEmptyState } from '../components/ui.js';
+import { renderEmptyState, renderPageHero } from '../components/ui.js';
 import { t } from '../i18n/index.js';
 import { getLocalizedArticle, getLocalizedArticles } from '../i18n/localize.js';
 
@@ -18,14 +18,19 @@ export function renderArticleDetailPage(slug) {
   const relatedArticles = getLocalizedArticles().filter((item) => item.slug !== article.slug).slice(0, 3);
 
   return `
-    <section class="article-detail-hero">
-      <span class="section-eyebrow">${article.category}</span>
-      <h1>${article.title}</h1>
-      <p>${article.excerpt}</p>
-      <div class="article-detail-meta">
-        <span>${article.publishedAt}</span>
-        <span>${article.readTime}</span>
-      </div>
+    ${renderPageHero({
+      eyebrow: article.category,
+      title: article.title,
+      description: article.excerpt,
+      extra: `
+        <div class="article-detail-meta">
+          <span>${article.publishedAt}</span>
+          <span>${article.readTime}</span>
+        </div>
+      `,
+    })}
+
+    <section class="article-detail-cover">
       <div class="article-cover-shell">
         <img src="${article.coverImage}" alt="${article.title}" class="article-cover-image" />
       </div>

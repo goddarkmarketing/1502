@@ -1,10 +1,50 @@
-import { formatCompact, formatCurrency, formatDate } from '../utils/format.js';
+import { formatCurrency, formatDate } from '../utils/format.js';
 import { appUrl, staticUrl } from '../app/router.js';
 import { t } from '../i18n/index.js';
 import { getLocalizedPlan, getPlanDisplayName } from '../i18n/localize.js';
+import { icon, renderEyebrow, renderStars } from './icons.js';
 
 function providerComparisonColumnClass(column, selectedPlanSlug) {
   return column.slug === selectedPlanSlug ? 'provider-comparison-col-selected' : '';
+}
+
+const COMPARISON_ROW_ICONS = {
+  provider: 'shieldCheck',
+  planName: 'fileText',
+  annualLimit: 'coins',
+  annualPremium: 'tag',
+  deductible: 'shieldCheck',
+  network: 'building2',
+  hospitalCover: 'bedDouble',
+  oncology: 'activity',
+};
+
+function renderComparisonRowLabel(label, rowKey, isActionRow = false) {
+  const iconName = isActionRow ? 'clipboardCheck' : COMPARISON_ROW_ICONS[rowKey] ?? 'circle';
+
+  return `
+    <span class="provider-comparison-label-inner">
+      <span class="provider-comparison-label-icon">${icon(iconName, { size: 18, strokeWidth: 2 })}</span>
+      <span>${label}</span>
+    </span>
+  `;
+}
+
+function renderComparisonCellContent(row, cell, column) {
+  if (row.key === 'provider') {
+    return `
+      <span class="provider-comparison-provider-mark">
+        <span class="provider-comparison-provider-icon">${icon('badgeCheck', { size: 16, strokeWidth: 2.4 })}</span>
+        <span>${cell}</span>
+      </span>
+    `;
+  }
+
+  if (row.key === 'planName') {
+    return `<a class="provider-comparison-plan-link" href="${appUrl(`/plans/${column.slug}`)}">${cell}</a>`;
+  }
+
+  return cell;
 }
 
 export function renderInsurerComparisonTable({ title, rows, columns, selectedPlanSlug = null }) {
@@ -21,33 +61,24 @@ export function renderInsurerComparisonTable({ title, rows, columns, selectedPla
                   const selected = providerComparisonColumnClass(column, selectedPlanSlug);
                   return `
                 <th scope="col" class="provider-comparison-brand ${selected}">
-                  <div class="provider-comparison-brand-inner">
-                    <img
-                      class="provider-comparison-logo"
-                      src="${staticUrl(column.logo)}"
-                      alt="${column.provider}"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <label class="provider-comparison-picker-label">
-                      <span class="sr-only">${t('comparison.selectPlan', { provider: column.provider })}</span>
-                      <select
-                        class="provider-comparison-plan-picker"
-                        data-insurer-key="${column.insurerKey}"
-                        aria-label="${t('comparison.selectPlan', { provider: column.provider })}"
-                      >
-                        ${(column.planOptions ?? [])
-                          .map(
-                            (option) => `
-                          <option value="${option.id}" ${option.id === column.planId ? 'selected' : ''}>
-                            ${option.label}
-                          </option>
-                        `,
-                          )
-                          .join('')}
-                      </select>
-                    </label>
-                  </div>
+                  <label class="provider-comparison-picker-label">
+                    <span class="sr-only">${t('comparison.selectPlan', { provider: column.provider })}</span>
+                    <select
+                      class="provider-comparison-plan-picker"
+                      data-insurer-key="${column.insurerKey}"
+                      aria-label="${t('comparison.selectPlan', { provider: column.provider })}"
+                    >
+                      ${(column.planOptions ?? [])
+                        .map(
+                          (option) => `
+                        <option value="${option.id}" ${option.id === column.planId ? 'selected' : ''}>
+                          ${option.label}
+                        </option>
+                      `,
+                        )
+                        .join('')}
+                    </select>
+                  </label>
                 </th>
               `;
                 })
@@ -59,19 +90,14 @@ export function renderInsurerComparisonTable({ title, rows, columns, selectedPla
               .map(
                 (row, index) => `
               <tr class="provider-comparison-row ${index % 2 === 1 ? 'provider-comparison-row-alt' : ''}">
-                <th scope="row" class="provider-comparison-label">${row.label}</th>
+                <th scope="row" class="provider-comparison-label">${renderComparisonRowLabel(row.label, row.key)}</th>
                 ${columns
                   .map((column) => {
                     const cell = column.values[row.key] ?? '—';
-                    const isPlanName = row.key === 'planName';
                     const selected = providerComparisonColumnClass(column, selectedPlanSlug);
                     return `
-                  <td class="provider-comparison-cell ${selected} ${isPlanName ? 'provider-comparison-cell-plan' : ''}">
-                    ${
-                      isPlanName
-                        ? `<a class="provider-comparison-plan-link" href="${appUrl(`/plans/${column.slug}`)}">${cell}</a>`
-                        : cell
-                    }
+                  <td class="provider-comparison-cell ${selected} ${row.key === 'planName' ? 'provider-comparison-cell-plan' : ''}">
+                    ${renderComparisonCellContent(row, cell, column)}
                   </td>
                 `;
                   })
@@ -81,7 +107,7 @@ export function renderInsurerComparisonTable({ title, rows, columns, selectedPla
               )
               .join('')}
             <tr class="provider-comparison-row provider-comparison-row-actions">
-              <th scope="row" class="provider-comparison-label">${t('comparison.selectRow')}</th>
+              <th scope="row" class="provider-comparison-label">${renderComparisonRowLabel(t('comparison.selectRow'), 'select', true)}</th>
               ${columns
                 .map((column) => {
                   const isSelected = column.slug === selectedPlanSlug;
@@ -95,7 +121,11 @@ export function renderInsurerComparisonTable({ title, rows, columns, selectedPla
                     data-plan-id="${column.planId}"
                     aria-pressed="${isSelected ? 'true' : 'false'}"
                   >
-                    ${isSelected ? t('comparison.selected') : t('comparison.selectThis')}
+                    ${
+                      isSelected
+                        ? `<span class="button-with-icon">${icon('check', { size: 16, strokeWidth: 2.5 })}<span>${t('comparison.selected')}</span></span>`
+                        : `<span class="button-with-icon">${icon('clipboardCheck', { size: 16, strokeWidth: 2.2 })}<span>${t('comparison.selectThis')}</span></span>`
+                    }
                   </button>
                 </td>
               `;
@@ -141,10 +171,52 @@ export function renderSelectedPlanBar(plans, selectedPlanSlug) {
 export function renderSectionHeader({ eyebrow, title, description, center = false }) {
   return `
     <div class="section-header ${center ? 'section-header-center' : ''}">
-      ${eyebrow ? `<span class="section-eyebrow">${eyebrow}</span>` : ''}
+      ${eyebrow ? renderEyebrow(eyebrow) : ''}
       <h2>${title}</h2>
       ${description ? `<p>${description}</p>` : ''}
     </div>
+  `;
+}
+
+export function renderPageHero({
+  eyebrow,
+  title,
+  titleLine2 = '',
+  description = '',
+  titleId = '',
+  ariaLabel = '',
+  actions = '',
+  extra = '',
+  wide = false,
+  backgroundImage = 'assets/hero-background.png',
+  backgroundVersion = '1',
+}) {
+  const ariaAttrs = ariaLabel
+    ? ` aria-label="${ariaLabel}"`
+    : titleId
+      ? ` aria-labelledby="${titleId}"`
+      : '';
+
+  const titleMarkup = titleLine2
+    ? `<span class="hero-title-line">${title}</span><span class="hero-title-line">${titleLine2}</span>`
+    : title;
+
+  return `
+    <section
+      class="hero-section page-hero-banner"
+      style="--hero-background: url('${staticUrl(backgroundImage)}?v=${backgroundVersion}')"
+      ${ariaAttrs}
+    >
+      <div class="hero-section-inner">
+        <div class="hero-copy ${wide ? 'hero-copy-wide' : ''}">
+          ${eyebrow ? renderEyebrow(eyebrow, 'hero-eyebrow') : ''}
+          <h1${titleId ? ` id="${titleId}"` : ''}${titleLine2 ? ' class="hero-title-stack"' : ''}>${titleMarkup}</h1>
+          ${description ? `<p>${description}</p>` : ''}
+          ${extra}
+          ${actions ? `<div class="hero-actions">${actions}</div>` : ''}
+        </div>
+      </div>
+    </section>
   `;
 }
 
@@ -152,9 +224,11 @@ export function renderPlanCard(plan, compareIds = []) {
   const localized = getLocalizedPlan(plan);
   const inCompare = compareIds.includes(plan.id);
   const planTitle = localized.displayName ?? getPlanDisplayName(plan);
+  const providerTag = `<span class="plan-provider-tag">${plan.provider}</span>`;
   const mediaMarkup = plan.image
     ? `
       <div class="plan-card-media plan-card-media--banner">
+        ${providerTag}
         <img
           class="plan-card-image"
           src="${staticUrl(plan.image)}"
@@ -166,6 +240,7 @@ export function renderPlanCard(plan, compareIds = []) {
     `
     : `
       <div class="plan-card-media plan-card-media-${plan.category}">
+        ${providerTag}
         <span class="plan-badge">${localized.badge}</span>
         <div class="plan-media-copy">
           <strong>${localized.category}</strong>
@@ -178,23 +253,9 @@ export function renderPlanCard(plan, compareIds = []) {
       ${mediaMarkup}
       <div class="plan-card-body">
         <div class="plan-card-heading">
-          <p class="plan-provider">${plan.provider}</p>
           <h3>${planTitle}</h3>
         </div>
         <p class="plan-description">${localized.description}</p>
-        <div class="plan-meta-grid">
-          <div>
-            <span>${t('plan.premiumFrom')}</span>
-            <strong>${formatCurrency(plan.monthlyPremium)} ${t('plan.perMonth')}</strong>
-          </div>
-          <div>
-            <span>${t('plan.coverage')}</span>
-            <strong>${formatCompact(plan.coverageAmount)} ${t('plan.baht')}</strong>
-          </div>
-        </div>
-        <ul class="plan-benefits-list">
-          ${localized.benefits.map((benefit) => `<li>${benefit}</li>`).join('')}
-        </ul>
         <div class="plan-actions">
           <a class="button button-primary" href="${appUrl(`/plans/${plan.slug}`)}">${t('plan.viewDetails')}</a>
           <button class="button button-secondary compare-toggle" type="button" data-plan-id="${plan.id}">
@@ -210,19 +271,28 @@ export function renderCategoryCard(item) {
   return `
     <article class="category-card">
       <div class="category-card-top">
-        <span class="category-icon">${item.icon}</span>
+        <span class="category-icon">${icon(item.icon)}</span>
         <span class="category-tag">${item.tag}</span>
       </div>
       <div class="category-card-body">
         <h3>${item.name}</h3>
         <p>${item.summary}</p>
         <ul class="category-points">
-          ${item.points.map((point) => `<li>${point}</li>`).join('')}
+          ${item.points
+            .map(
+              (point) => `
+                <li>
+                  <span class="category-point-icon" aria-hidden="true">${icon('circle', { size: 8, fill: 'currentColor', strokeWidth: 0 })}</span>
+                  <span>${point}</span>
+                </li>
+              `,
+            )
+            .join('')}
         </ul>
       </div>
       <div class="category-card-footer">
         <a href="${appUrl(`/categories/${item.slug ?? encodeURIComponent(item.name)}`)}" class="inline-link">${t('category.viewPlans')}</a>
-        <span class="category-arrow">↗</span>
+        <span class="category-arrow">${icon('arrowUpRight', { size: 20, strokeWidth: 2.2 })}</span>
       </div>
     </article>
   `;
@@ -231,7 +301,7 @@ export function renderCategoryCard(item) {
 export function renderTrustCard(item, highlighted = false) {
   return `
     <article class="trust-card ${highlighted ? 'trust-card-highlighted' : ''}">
-      <span class="trust-icon">${item.icon}</span>
+      <span class="trust-icon">${icon(item.icon)}</span>
       <h3>${item.title}</h3>
       <p>${item.description}</p>
     </article>
@@ -263,13 +333,39 @@ export function renderArticleCard(article) {
   `;
 }
 
+export function renderFeaturedArticleCard(article) {
+  return `
+    <article class="article-featured-card">
+      <a href="${appUrl(`/articles/${article.slug}`)}" class="article-featured-media" aria-hidden="true" tabindex="-1">
+        <img
+          src="${article.coverImage}"
+          alt=""
+          class="article-featured-image"
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+      <div class="article-featured-body">
+        <span class="article-featured-badge">${t('articles.featuredLabel')}</span>
+        <span class="article-meta">${article.category} • ${article.readTime}</span>
+        <h2><a href="${appUrl(`/articles/${article.slug}`)}">${article.title}</a></h2>
+        <p>${article.excerpt}</p>
+        <div class="article-featured-footer">
+          <span>${article.publishedAt}</span>
+          <a href="${appUrl(`/articles/${article.slug}`)}" class="button button-primary">${t('articles.readArticle')}</a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
 export function renderTestimonialCard(item) {
   return `
     <article class="testimonial-card">
-      <div class="stars">★★★★★</div>
+      <div class="stars">${renderStars(5)}</div>
       <p>${item.message}</p>
       <div class="testimonial-meta">
-        <span class="avatar">${item.name.charAt(0)}</span>
+        <span class="avatar" aria-hidden="true">${icon('user', { size: 20, strokeWidth: 2.1 })}</span>
         <div>
           <strong>${item.name}</strong>
           <span>${item.role}</span>
@@ -282,12 +378,18 @@ export function renderTestimonialCard(item) {
 export function renderFaqItem(item, index) {
   return `
     <article class="faq-item ${index === 0 ? 'faq-item-open' : ''}" data-faq-index="${index}">
-      <button class="faq-question" type="button">
-        <span>${item.question}</span>
-        <span class="faq-toggle">${index === 0 ? '−' : '+'}</span>
+      <button class="faq-question" type="button" aria-expanded="${index === 0 ? 'true' : 'false'}">
+        <span class="faq-question-copy">
+          <span class="faq-question-label">${t('home.faqQuestionLabel')}</span>
+          <span class="faq-question-text">${item.question}</span>
+        </span>
+        <span class="faq-toggle" aria-hidden="true">${index === 0 ? icon('minus', { size: 18, strokeWidth: 2.4 }) : icon('plus', { size: 18, strokeWidth: 2.4 })}</span>
       </button>
       <div class="faq-answer">
-        <p>${item.answer}</p>
+        <div class="faq-answer-inner">
+          <span class="faq-answer-label">${t('home.faqAnswerLabel')}</span>
+          <p>${item.answer}</p>
+        </div>
       </div>
     </article>
   `;

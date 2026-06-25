@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/goddarkmarketing/portfolio1#readme",
   "dependencies": {
+    "lucide": "^1.21.0",
     "pdf-parse": "^2.4.5"
   }
 }

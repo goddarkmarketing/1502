@@ -15,14 +15,6 @@ function restoreGithubPagesPath() {
 }
 
 restoreGithubPagesPath();
-
-try {
-  const storedLocale = window.localStorage.getItem('curated-coverage-locale');
-  if (storedLocale) {
-    initLocale(JSON.parse(storedLocale));
-  }
-} catch {
-  /* ignore */
-}
+initLocale();
 
 createApp(document.querySelector('#app'));

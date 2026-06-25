@@ -9,8 +9,36 @@ export default {
       answer: '可以。您可在申请跟踪中心修改详情、更换感兴趣的方案或取消申请。',
     },
     {
-      question: '是否已对接真实保险公司？',
-      answer: '您可以比较方案、查看保障详情并提交咨询申请，我们的团队将根据您提供的信息跟进联系。',
+      question: '方案来自哪些保险公司？',
+      answer: '网站产品参考泰国 Chubb Samaggi 与 Chubb Life（见 chubb.com/th-th）。确认保费与条款后，团队会进一步说明。',
+    },
+    {
+      question: '提交申请后是否必须立即付款或签约？',
+      answer: '不需要。提交咨询申请免费且不强制购买，团队会在您决定前说明方案与后续步骤。',
+    },
+    {
+      question: '团队多久会联系我？',
+      answer: '我们将在工作日内通过您选择的渠道回复，如电话、LINE、Facebook 或邮箱。',
+    },
+    {
+      question: '可以先比较多个方案再决定吗？',
+      answer: '可以。在方案页面可比较同类方案的保费、保额与亮点，再提交申请。',
+    },
+    {
+      question: '推荐的方案是否真的能报销医疗费？',
+      answer: '保障范围取决于各方案条款。网站信息为概要，团队会在确认前说明保额、除外责任与条件。',
+    },
+    {
+      question: '咨询是否收费？',
+      answer: '初步咨询免费。通过本网站比较方案并提交申请不收取服务费。',
+    },
+    {
+      question: '如何选择回复联系方式？',
+      answer: '在申请表中选择方便的方式，如回电、LINE、Facebook 或邮箱，我们将按您的选择跟进。',
+    },
+    {
+      question: '决定购买方案时需要准备哪些文件？',
+      answer: '视方案类型可能需要身份证复印件、基本健康信息等。团队会在办理前提供完整清单。',
     },
   ],
   trustPoints: [
@@ -46,50 +74,42 @@ export default {
   ],
   companyHighlights: [
     {
-      title: '寿险与财产险专业经验',
-      description: '超过 28 年经验，让我们更了解保障内容、保单条件及长期客户服务。',
+      title: '个人与家庭保险',
+      description:
+        '量身定制的个人保障，保护对您最重要的事物，并提供预防损失的服务；涵盖健康、人寿、财产、贵重物品及旅行等。',
     },
     {
-      title: '服务超过 10,000 位客户',
-      description: '丰富客户案例帮助团队更系统地筛选方案、协调申请并持续跟进。',
+      title: '理赔服务的差异',
+      description:
+        'Chubb 不仅处理理赔，更力求妥善解决。经验丰富的理赔专员以贴心方式关注每个细节。',
     },
     {
-      title: '泰国及海外售后服务',
-      description: '投保后由团队持续协助，并设有普吉实体办公室及曼谷总部。',
+      title: '保险卓越标准',
+      description:
+        '我们在所做的一切中追求卓越，在您最需要时随时相伴，全球提供 200 多种保险产品与服务。',
     },
   ],
   companyMilestones: [
     {
-      title: '开始提供保险咨询服务',
-      description: '为个人和家庭客户提供方案建议与选择。',
+      title: '个人与家庭',
+      description: '按需求定制的个人保险——房屋、汽车、贵重物品、宠物、旅行等，并提供风险预防指导。',
     },
     {
-      title: '扩展提供商网络',
-      description: '增加更多方案及医院/服务合作伙伴。',
+      title: '企业客户',
+      description: '保护企业、员工与声誉，按行业与规模定制方案，从小型企业到大型机构。',
     },
     {
-      title: '发展在线体验',
-      description: '在同一渠道整合方案比较、申请提交和跟踪。',
+      title: '全球网络',
+      description: '理赔团队遍布 54 个国家，包括亚太地区的泰国。',
     },
   ],
   contactChannels: [
-    { title: '致电我们', note: '每日 09:00 – 18:00' },
-    { title: 'WhatsApp', note: '咨询方案及预约顾问' },
-    { title: 'LINE', note: '咨询方案及预约顾问' },
+    { title: '电话', note: '咨询保险方案' },
+    { title: 'LINE', note: '添加好友咨询方案' },
+    { title: 'Facebook', note: '私信或查看最新动态' },
     { title: '邮箱', note: '工作日内回复' },
   ],
-  officeLocations: [
-    {
-      name: 'AXA 普吉办公室',
-      address: '泰国普吉府普吉市 Damrong 路 Baan Nattakamol 2，37/7，邮编 83000',
-      hours: '每日 09:00 – 18:00',
-    },
-    {
-      name: '在线协调中心',
-      address: '通过网站、电话、WhatsApp 和 LINE 服务',
-      hours: '工作日内回复',
-    },
-  ],
+  officeLocations: [],
   categories: {
     'health-insurance': {
       name: '健康',
@@ -222,6 +242,48 @@ export default {
         {
           heading: '购买前比较除外条款',
           body: '极限运动、特定交通工具或既往症可能有额外条件 — 请仔细阅读除外条款。',
+        },
+      ],
+    },
+    'critical-illness-planning-guide': {
+      title: '购买重疾保险前应关注什么',
+      excerpt: '如何评估保额、给付条件，以及与健康险的搭配方式。',
+      category: '重疾',
+      readTime: '阅读 5 分钟',
+      publishedAt: '2026年3月28日',
+      sections: [
+        {
+          heading: '从真实财务风险出发',
+          body: '重疾往往影响收入与长期支出，先评估家庭可能承担的压力，有助于确定合适保额。',
+        },
+        {
+          heading: '仔细阅读给付条件',
+          body: '有的方案首次确诊即赔，有的按治疗阶段给付，请核对疾病定义与除外条款。',
+        },
+        {
+          heading: '与健康险搭配更完整',
+          body: '健康险覆盖治疗费用，重疾险在收入下降时提供一笔资金，两者互补。',
+        },
+      ],
+    },
+    'tax-deduction-insurance-guide': {
+      title: '如何明智利用保险减税',
+      excerpt: '可抵税保费规划思路，以及每年投保前应核对的要点。',
+      category: '减税',
+      readTime: '阅读 5 分钟',
+      publishedAt: '2026年4月5日',
+      sections: [
+        {
+          heading: '了解实际可抵扣额度',
+          body: '每年抵扣上限有限，请确认保费是否符合条件并与个人税务规划一致。',
+        },
+        {
+          heading: '不要只为减税而买',
+          body: '可抵税方案仍应满足保障需求，仅为减税可能造成长期保费压力。',
+        },
+        {
+          heading: '保留凭证并核对条款',
+          body: '请保留缴费证明，并按当年税法核对条款，必要时咨询专业人士。',
         },
       ],
     },

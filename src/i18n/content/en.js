@@ -11,9 +11,44 @@ export default {
         'Yes. You can go to the request tracking center to edit details, change the plan of interest, or cancel the request.',
     },
     {
-      question: 'Are you connected to real insurance providers?',
+      question: 'Which insurance companies are the plans from?',
       answer:
-        'You can compare plans, view coverage details, and submit consultation requests for our team to follow up based on the information you provide.',
+        'Products on this site reference Chubb Samaggi and Chubb Life Thailand per chubb.com/th-th. Our team will confirm final details and premiums after receiving your request.',
+    },
+    {
+      question: 'Do I have to pay or commit immediately when submitting a request?',
+      answer:
+        'No. Submitting a consultation request is free and does not bind you to purchase. Our team will explain plans and next steps clearly before you decide.',
+    },
+    {
+      question: 'How long until the team contacts me back?',
+      answer:
+        'We aim to respond within business days via your chosen channel — phone, LINE, Facebook, or email.',
+    },
+    {
+      question: 'Can I compare multiple plans before deciding?',
+      answer:
+        'Yes. Use the plans page to compare premiums, coverage amounts, and highlights within the same category before submitting a request.',
+    },
+    {
+      question: 'Will the recommended plan actually cover medical costs?',
+      answer:
+        'Coverage depends on each plan’s terms. Website details are introductory; our team will explain limits, exclusions, and conditions before you confirm.',
+    },
+    {
+      question: 'Is there a fee for consultation?',
+      answer:
+        'Initial consultation is free. Comparing plans and submitting a request through this site has no service fee.',
+    },
+    {
+      question: 'How can I choose how you contact me back?',
+      answer:
+        'Select your preferred channel on the request form — callback, LINE, Facebook, or email — and we will follow up accordingly.',
+    },
+    {
+      question: 'What documents do I need when I decide to buy a plan?',
+      answer:
+        'Depending on the plan type, you may need a copy of your ID, basic health information, or other documents. Our team will provide the full checklist before proceeding.',
     },
   ],
   trustPoints: [
@@ -45,63 +80,70 @@ export default {
     },
     {
       name: 'Mod',
-      role: 'Auto Insurance Customer',
+      role: 'Travel Insurance Customer',
       message:
-        'Instead of talking to many providers, I get an overview first and submit for the plan that truly fits. Saves a lot of time.',
+        'Choosing travel insurance before an overseas trip was easy. I asked via LINE and got complete answers.',
     },
   ],
   companyHighlights: [
     {
-      title: 'Life and Non-Life Insurance Expertise',
-      description: 'More than 28 years of experience helps us understand coverage, policy conditions, and long-term customer care.',
+      title: 'Individuals & Families',
+      description:
+        'Customized personal insurance to protect what matters most, with services that help prevent loss — and cover it if it occurs. Coverage spans health, life, property, valuables, and travel.',
     },
     {
-      title: 'More Than 10,000 Customers Served',
-      description: 'Experience from many customer cases helps our team screen plans, coordinate requests, and follow up systematically.',
+      title: 'The Claims Difference',
+      description:
+        'At Chubb, we don’t just process claims — we make things right. Experienced claims specialists focus on every detail in the most personal way possible.',
     },
     {
-      title: 'After-Sales Care in Thailand and Abroad',
-      description: 'Our support team helps customers after purchase, with a real Phuket office and a head office in Bangkok.',
+      title: 'Insurance Excellence',
+      description:
+        'We deliver excellence in all we do, being there when you need us most — with more than 200 insurance products and client services worldwide.',
     },
   ],
   companyMilestones: [
     {
-      title: 'Started Insurance Advisory Services',
-      description: 'Advising and selecting plans for individual and family customers.',
+      title: 'Individuals & Families',
+      description:
+        'Personal insurance tailored to your needs — property, auto, valuables, pets, travel, and more — with proactive loss-prevention guidance.',
     },
     {
-      title: 'Expanded Provider Network',
-      description: 'Added more plan options and hospital/service partners.',
+      title: 'Businesses',
+      description:
+        'Protection for your business, employees, and reputation — customized to your industry and size, from small business to large enterprise.',
     },
     {
-      title: 'Developed Online Experience',
-      description: 'Combined plan comparison, request submission, and tracking in one channel.',
+      title: 'Global Presence',
+      description:
+        'Claims teams operate in 54 countries worldwide, including Thailand in the Asia Pacific region.',
     },
   ],
   contactChannels: [
-    { title: 'Call Us', note: 'Daily 09:00 – 18:00' },
-    { title: 'WhatsApp', note: 'Ask about plans and schedule consultations' },
-    { title: 'LINE', note: 'Ask about plans and schedule consultations' },
+    { title: 'Phone', note: 'Contact us about insurance plans' },
+    { title: 'LINE', note: 'Add friend and inquire about plans' },
+    { title: 'Facebook', note: 'Chat or view latest updates' },
     { title: 'Email', note: 'Reply within business days' },
   ],
-  officeLocations: [
-    {
-      name: 'AXA Phuket Office',
-      address: '37/7 Baan Nattakamol 2, Damrong Road, Mueang Phuket, Phuket 83000',
-      hours: 'Daily 09:00 – 18:00',
-    },
-    {
-      name: 'Online Coordination Center',
-      address: 'Service via website, phone, WhatsApp, and LINE',
-      hours: 'Reply within business days',
-    },
-  ],
+  officeLocations: [],
   categories: {
     'health-insurance': {
       name: 'Health',
-      tag: 'Plans from 3 companies',
-      summary: 'Health insurance plans from AXA, Pacific Cross, and Allianz — compare on one page.',
-      points: ['Individual and family plans', 'Multiple coverage levels', 'Choose by budget and needs'],
+      tag: 'From Chubb Life',
+      summary: 'Health and hospital rider plans from Chubb Life Thailand.',
+      points: ['3D Health Excellence', 'Health Premium Extra', 'Hospital network'],
+    },
+    'life-insurance': {
+      name: 'Life',
+      tag: 'From Chubb Life',
+      summary: 'Life, savings, retirement, and education plans.',
+      points: ['Life insurance', 'Retirement Plus Happiness', 'Education insurance'],
+    },
+    'travel-insurance': {
+      name: 'Travel',
+      tag: 'From Chubb Samaggi',
+      summary: 'Travel insurance for domestic and overseas trips.',
+      points: ['Emergency medical', 'Trip incidents', 'Destination-based options'],
     },
   },
   articles: {
@@ -124,27 +166,6 @@ export default {
         {
           heading: 'Compare Multiple Plans Before Deciding',
           body: 'Price alone is not enough. Compare core coverage, exclusions, and extras like telemedicine or hospital networks.',
-        },
-      ],
-    },
-    'compare-car-insurance-classes': {
-      title: 'Class 1, 2+, 3+ Auto Insurance — What\'s the Difference?',
-      excerpt: 'Understand each class to pick coverage that truly fits how you use your car.',
-      category: 'Auto',
-      readTime: '4 min read',
-      publishedAt: 'Feb 28, 2026',
-      sections: [
-        {
-          heading: 'Who Class 1 Is For',
-          body: 'Best for daily drivers, new cars, or those wanting full coverage including accident, theft, fire, and third-party property damage.',
-        },
-        {
-          heading: '2+ and 3+ Help Control Budget',
-          body: 'If you want balance between premium and coverage, 2+ and 3+ are popular — check collision terms and limits together.',
-        },
-        {
-          heading: 'Choose Based on Driving Habits',
-          body: 'City daily use, outdoor parking, or low mileage — each needs a different plan. Assess real usage for better value.',
         },
       ],
     },
@@ -190,27 +211,6 @@ export default {
         },
       ],
     },
-    'home-insurance-checklist': {
-      title: 'What to Check Before Buying Home Insurance',
-      excerpt: 'Structure, contents, and commonly overlooked events before you decide.',
-      category: 'Home',
-      readTime: '4 min read',
-      publishedAt: 'Jan 9, 2026',
-      sections: [
-        {
-          heading: 'Separate Building vs. Contents',
-          body: 'Check whether the policy covers structure only or also furniture, appliances, and valuables inside.',
-        },
-        {
-          heading: 'Common Risks in Your Area',
-          body: 'Houses, townhomes, and condos face different risks — leaks, storms, floods — choose for your location.',
-        },
-        {
-          heading: 'Third-Party Liability',
-          body: 'Many plans cover damage to neighbors from incidents at home — important in condos and communities.',
-        },
-      ],
-    },
     'pa-insurance-for-working-age': {
       title: 'Personal Accident Insurance for Working Adults',
       excerpt: 'How to choose PA coverage for treatment, income during recovery, and daily life.',
@@ -232,87 +232,138 @@ export default {
         },
       ],
     },
+    'critical-illness-planning-guide': {
+      title: 'What to Check Before Buying Critical Illness Insurance',
+      excerpt:
+        'How to assess benefit amounts, payout conditions, and pairing with health coverage.',
+      category: 'Critical Illness',
+      readTime: '5 min read',
+      publishedAt: 'Mar 28, 2026',
+      sections: [
+        {
+          heading: 'Start with Real Financial Risk',
+          body: 'Critical illness often affects income and long-term costs. Estimating what your family would face helps set the right benefit amount.',
+        },
+        {
+          heading: 'Read Payout Conditions Carefully',
+          body: 'Some plans pay on first diagnosis, others by treatment stage. Review covered disease definitions and exclusions before buying.',
+        },
+        {
+          heading: 'Pair with Health Insurance',
+          body: 'Health insurance covers treatment costs; critical illness adds a lump sum when income drops. Together they answer different needs.',
+        },
+      ],
+    },
+    'tax-deduction-insurance-guide': {
+      title: 'Using Insurance for Tax Deductions Wisely',
+      excerpt:
+        'Planning ideas for tax-deductible premiums and what to verify before you commit each year.',
+      category: 'Tax Deduction',
+      readTime: '5 min read',
+      publishedAt: 'Apr 5, 2026',
+      sections: [
+        {
+          heading: 'Know Your Actual Deduction Limits',
+          body: 'Annual deduction caps apply. Check how much premium qualifies and whether it fits your tax plan.',
+        },
+        {
+          heading: 'Do Not Focus on Tax Savings Alone',
+          body: 'Deductible plans should still meet your protection goals. Buying only for tax relief can create long-term premium burden.',
+        },
+        {
+          heading: 'Keep Records and Verify Terms',
+          body: 'Keep payment proof and review current-year tax rules with a qualified advisor before finalizing.',
+        },
+      ],
+    },
   },
   plans: {
-    'axa-smartcare-essential': {
-      displayName: 'SmartCare Essential Plan 4',
+    'chubb-3d-health-excellence': {
       category: 'Health',
-      badge: 'IPD up to 10M THB',
-      highlight: 'Inpatient treatment up to 10 million THB per illness',
-      description:
-        'AXA health plan with lump-sum hospital coverage, renewable up to age 99.',
-      benefits: ['IPD limit 10,000,000 THB/illness', 'Renewable up to age 99', 'Optional deductible to reduce premium'],
-      targetAudience: 'Working adults and families needing high treatment limits',
-      waitingPeriod: '30 days',
-    },
-    'axa-international-exclusive-platinum': {
-      displayName: 'International Exclusive Platinum',
-      category: 'Health',
-      badge: 'Worldwide coverage',
-      highlight: 'Medical expenses up to 93 million THB per year',
-      description:
-        'International health insurance with Asia or worldwide territory options, Bronze to Platinum.',
-      benefits: ['Up to 93,000,000 THB/year', 'Selectable coverage territory', 'Emergency treatment outside territory'],
-      targetAudience: 'Frequent travelers or those needing global coverage',
-      waitingPeriod: 'Per coverage terms',
-    },
-    'axa-easycare-visa-plan-2': {
-      displayName: 'EasyCare Visa Plan 2',
-      category: 'Health',
-      badge: 'Visa application friendly',
-      highlight: 'Designed for travelers and visa applicants',
-      description:
-        'Basic health and personal accident plan with optional deductible choices.',
-      benefits: ['Plan 1 and Plan 2 options', '5%–10% family discount', 'Per-visit deductible options'],
-      targetAudience: 'Visa applicants and overseas travelers',
+      badge: 'New health plan from Chubb Life',
+      highlight: 'Comprehensive multi-dimensional health coverage',
+      description: '3D Health Excellence from Chubb Life Thailand — per chubb.com/th-th.',
+      benefits: ['Multi-dimensional health coverage', 'Chubb Life Care hospital network', 'Long-term medical planning'],
+      targetAudience: 'Those seeking comprehensive health coverage from Chubb Life',
       waitingPeriod: 'Per policy terms',
     },
-    'pchi-standard-extra': {
-      displayName: 'Standard Extra',
+    'chubb-health-premium-extra': {
       category: 'Health',
-      badge: 'Great starter value',
-      highlight: 'Pacific Cross Standard group health plan',
-      description:
-        'Health coverage for individuals and families including inpatient care with premium discount options.',
-      benefits: ['Up to 780,000 THB per treatment', '450+ hospital network', 'No-claim discount available'],
-      targetAudience: 'First-time annual health insurance buyers',
+      badge: 'Hospital treatment rider',
+      highlight: 'Actual-cost hospital and surgery coverage',
+      description: 'Health Premium Extra rider from Chubb Life for enhanced treatment coverage.',
+      benefits: ['Hospital and surgery per terms', 'Actual-cost reimbursement', 'Adds to base plan'],
+      targetAudience: 'Those wanting extra treatment limits',
+      waitingPeriod: 'Per rider terms',
+    },
+    'chubb-retirement-plus-happiness': {
+      category: 'Life',
+      badge: 'Tax-deductible annuity',
+      highlight: 'Guaranteed retirement income',
+      description: 'Retirement Plus Happiness from Chubb Life — prepare for life after retirement.',
+      benefits: ['Annuity per plan terms', 'Long-term retirement planning', 'Tax deduction per conditions'],
+      targetAudience: 'Those planning retirement income',
       waitingPeriod: 'Per policy terms',
     },
-    'pchi-maxima': {
-      displayName: 'Maxima',
-      category: 'Health',
-      badge: 'High coverage',
-      highlight: 'Inpatient limit up to 5 million THB per visit',
-      description:
-        'Mid-to-high Pacific Cross plan with high treatment limits and broad coverage.',
-      benefits: ['5,000,000 THB inpatient', 'Chronic dialysis coverage', 'Deductible discount options'],
-      targetAudience: 'Those needing higher limits than starter plans',
+    'chubb-life-insurance': {
+      category: 'Life',
+      badge: 'Family protection',
+      highlight: 'Protection and security for loved ones',
+      description: 'Chubb Life insurance plans for family financial security.',
+      benefits: ['Life coverage per plan', 'Family financial planning', 'Multiple plan options'],
+      targetAudience: 'Long-term life protection planners',
       waitingPeriod: 'Per policy terms',
     },
-    'pchi-maxima-plus': {
-      displayName: 'Maxima Plus',
-      category: 'Health',
-      badge: 'Pacific Cross flagship',
-      highlight: 'Inpatient limit up to 10 million THB per visit',
-      description:
-        'Top Maxima series plan with high treatment limits for long-term peace of mind.',
-      benefits: ['10,000,000 THB inpatient', 'Psychiatric inpatient per terms', 'Personal accident benefits'],
-      targetAudience: 'Those wanting Pacific Cross high-limit health plans',
+    'chubb-savings-insurance': {
+      category: 'Life',
+      badge: 'Save and protect',
+      highlight: 'Combines savings and protection',
+      description: 'Savings insurance from Chubb Life.',
+      benefits: ['Planned savings', 'Life coverage component', 'Medium to long-term goals'],
+      targetAudience: 'Those who want to save with protection',
       waitingPeriod: 'Per policy terms',
     },
-    'allianz-smarter-health': {
-      displayName: 'Smarter Health',
-      category: 'Health',
-      badge: '2026 brochure data',
-      highlight: 'See PDF for full premium and sum assured details',
-      description:
-        'Allianz Ayudhya Smarter Health — open project PDF for full benefit details.',
-      benefits: ['Brochure PDF in project folder', 'Compare with AXA and Pacific Cross', 'Updated per latest documents'],
-      targetAudience: 'Comparing health plans across 3 insurers',
+    'chubb-education-insurance': {
+      category: 'Life',
+      badge: 'Education planning',
+      highlight: 'Fund your child\'s education',
+      description: 'Education insurance from Chubb Life for children\'s schooling goals.',
+      benefits: ['Education fund planning', 'Coverage per plan', 'Long-term family goals'],
+      targetAudience: 'Parents planning education costs',
       waitingPeriod: 'Per policy terms',
+    },
+    'chubb-personal-accident': {
+      category: 'Accident',
+      badge: 'Ready for the unexpected',
+      highlight: 'Accident coverage for daily life',
+      description: 'Personal accident insurance from Chubb Samaggi.',
+      benefits: ['Accident coverage per plan', 'Multiple coverage levels', 'Working-age friendly'],
+      targetAudience: 'Those needing personal accident protection',
+      waitingPeriod: 'Per policy terms',
+    },
+    'chubb-travel-insurance': {
+      category: 'Travel',
+      badge: 'Peace of mind every trip',
+      highlight: 'Confidence on every journey',
+      description: 'Travel insurance from Chubb Samaggi for domestic and overseas trips.',
+      benefits: ['Emergency medical', 'Trip incidents', 'Destination-based options'],
+      targetAudience: 'Domestic and international travelers',
+      waitingPeriod: 'Per trip period',
     },
   },
   insuranceCategories: {
+    health: {
+      label: 'Health',
+      title: 'Health Insurance',
+      description:
+        'Chubb Life health plans such as 3D Health Excellence and hospital riders — multi-dimensional coverage per policy terms.',
+      primaryAction: 'Buy Now',
+      secondaryAction: 'Details',
+      detailLead:
+        'Best for customers planning medical costs and choosing limits, room benefits, and hospital networks that fit their budget.',
+      highlights: ['3D Health Excellence', 'Health Premium Extra', 'Hospital network', 'Multi-dimensional health coverage'],
+      documents: ['Age and gender', 'Medical history or pre-existing conditions', 'Preferred budget', 'Preferred hospitals'],
+    },
     travel: {
       label: 'Travel',
       title: 'Travel Insurance',
@@ -324,42 +375,6 @@ export default {
         'Best for customers traveling overseas who need protection for medical costs, flight delays, and emergencies during the trip.',
       highlights: ['Emergency medical expenses', 'Lost or damaged baggage', 'Flight delay or cancellation', 'Unexpected events worldwide'],
       documents: ['Destination country', 'Travel dates', 'Number of travelers', 'Age of each traveler'],
-    },
-    car: {
-      label: 'Car',
-      title: 'Car Insurance',
-      description:
-        'Compare car coverage that fits real usage, including Class 1, 2+, 3+, and emergency assistance.',
-      primaryAction: 'Buy Now',
-      secondaryAction: 'Details',
-      detailLead:
-        'Best for customers who want to compare insurance class, sum insured, repair options, and emergency assistance.',
-      highlights: ['Class 1, 2+, 3+', 'Accident and third-party coverage', 'Emergency assistance', 'Dealer or garage repair options'],
-      documents: ['Car model and registration year', 'Registration book photo', 'Claim history if available', 'Vehicle usage type'],
-    },
-    health: {
-      label: 'Health',
-      title: 'Health Insurance',
-      description:
-        'Select health plans from multiple insurers by inpatient limit, room benefit, hospital network, and key conditions.',
-      primaryAction: 'Buy Now',
-      secondaryAction: 'Details',
-      detailLead:
-        'Best for customers planning medical expenses and choosing limits, room benefits, and hospital networks that fit their budget.',
-      highlights: ['Inpatient and room benefits', 'Hospital network', 'Pre-existing condition and waiting period terms', 'Compare multiple insurers'],
-      documents: ['Age and gender', 'Medical history or pre-existing conditions', 'Preferred budget', 'Preferred hospitals'],
-    },
-    home: {
-      label: 'Home & Condo',
-      title: 'Home Insurance',
-      description:
-        'Protect houses, condos, and contents against fire, water leakage, natural disasters, and third-party liability.',
-      primaryAction: 'Buy Now',
-      secondaryAction: 'Details',
-      detailLead:
-        'Best for homeowners, condo owners, or landlords who want protection for structure, contents, and household risks.',
-      highlights: ['Fire and natural disasters', 'Water leakage and interior damage', 'Home contents', 'Third-party liability'],
-      documents: ['Property type', 'Province or district', 'Estimated property or contents value', 'Coverage focus'],
     },
     visa: {
       label: 'Visa',
@@ -381,53 +396,29 @@ export default {
       primaryAction: 'Buy Now',
       secondaryAction: 'Details',
       detailLead:
-        'Best for customers with special needs such as business, accident, pet insurance, or those unsure where to start.',
-      highlights: ['Personal accident insurance', 'Business or property insurance', 'Pet insurance', 'Find coverage for special requirements'],
+        'Best for customers with special needs such as life, accident, savings, retirement, or education planning.',
+      highlights: ['Life insurance', 'Personal accident', 'Savings plans', 'Education insurance'],
       documents: ['Your requirements', 'Approximate budget', 'Risks you are concerned about', 'Insured person or asset details'],
     },
   },
   comparisonExtras: {
-    'allianz-smarter-health': {
-      deductible: 'None',
-      network: 'Hospital of choice',
-      hospitalCover: 'Per plan terms',
+    'chubb-3d-health-excellence': {
+      deductible: 'Per plan terms',
+      network: 'Chubb Life Care network',
+      hospitalCover: 'Multi-dimensional health coverage',
       oncology: 'Per plan terms',
     },
-    'axa-smartcare-essential-plan-4': {
-      deductible: 'Optional reduction',
-      network: 'Hospital of choice',
-      hospitalCover: 'Up to 10,000 THB/night',
-      oncology: 'Per plan limit',
-    },
-    'axa-international-exclusive-platinum': {
-      deductible: 'Per selected plan',
-      network: 'Worldwide / Asia',
-      hospitalCover: 'Per plan limit',
-      oncology: 'Per plan limit',
-    },
-    'axa-easycare-visa-plan-2': {
-      deductible: 'Optional reduction',
-      network: 'Per plan network',
-      hospitalCover: 'Per plan terms',
+    'chubb-health-premium-extra': {
+      deductible: 'Per rider terms',
+      network: 'Per policy network',
+      hospitalCover: 'Actual-cost reimbursement',
       oncology: 'Per plan terms',
     },
-    'pacific-cross-standard-extra': {
-      deductible: 'Deductible options',
-      network: '450+ hospitals',
-      hospitalCover: 'Per plan terms',
-      oncology: 'Per plan terms',
-    },
-    'pacific-cross-maxima': {
-      deductible: 'Deductible options',
-      network: '450+ hospitals',
-      hospitalCover: 'Up to 5,000 THB/night',
-      oncology: 'Per plan limit',
-    },
-    'pacific-cross-maxima-plus': {
-      deductible: 'None',
-      network: '450+ hospitals',
-      hospitalCover: 'Up to 6,000 THB/night',
-      oncology: 'Full coverage',
+    'chubb-travel-insurance': {
+      deductible: 'Per plan terms',
+      network: 'Overseas hospitals per terms',
+      hospitalCover: 'Emergency medical while traveling',
+      oncology: '—',
     },
   },
 };

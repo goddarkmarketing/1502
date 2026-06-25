@@ -1,7 +1,7 @@
 import { renderShell } from '../components/layout.js';
+import { icon } from '../components/icons.js';
 import { appPathFromUrl, getRoute, isInternalAppUrl, migrateLegacyHashRoute, navigate } from './router.js';
 import {
-  changeLocale,
   clearCompare,
   deleteRequest,
   getState,
@@ -16,13 +16,14 @@ import {
 } from './store.js';
 import { t } from '../i18n/index.js';
 import { plans } from '../data/mockData.js';
-import { buildWhatsAppUrl } from '../utils/contactLinks.js';
+import { buildMailtoUrl, FACEBOOK_URL, LINE_ADD_URL } from '../utils/contactLinks.js';
 import { renderAboutPage } from '../pages/aboutPage.js';
 import { renderArticleDetailPage } from '../pages/articleDetailPage.js';
 import { renderArticlesPage } from '../pages/articlesPage.js';
 import { renderCategoryPage } from '../pages/categoryPage.js';
 import { renderContactPage } from '../pages/contactPage.js';
 import { renderFaqPage } from '../pages/faqPage.js';
+import { renderHospitalsPage } from '../pages/hospitalsPage.js';
 import { renderHomePage } from '../pages/homePage.js';
 import { renderComparePage } from '../pages/comparePage.js';
 import { renderInsuranceCategoryDetailPage } from '../pages/insuranceCategoryDetailPage.js';
@@ -42,7 +43,7 @@ function buildQuoteDraft(existing = {}, planId = '') {
     email: existing.email ?? '',
     phone: existing.phone ?? '',
     ageRange: existing.ageRange ?? '',
-    contactPreference: existing.contactPreference ?? 'whatsapp',
+    contactPreference: existing.contactPreference ?? 'line',
     coverageGoal: existing.coverageGoal ?? '',
     note: existing.note ?? '',
   };
@@ -103,7 +104,7 @@ function parseForm(event) {
     email: formData.get('email')?.toString() || '',
     phone: formData.get('phone')?.toString() || '',
     ageRange: formData.get('ageRange')?.toString() || '',
-    contactPreference: formData.get('contactPreference')?.toString() || 'whatsapp',
+    contactPreference: formData.get('contactPreference')?.toString() || 'line',
     coverageGoal: formData.get('coverageGoal')?.toString() || '',
     note: formData.get('note')?.toString() || '',
   };
@@ -133,8 +134,16 @@ function renderCurrentPage(state) {
     return renderAboutPage();
   }
 
+  if (route.name === 'hospitals') {
+    return renderHospitalsPage();
+  }
+
   if (route.name === 'contact') {
-    return renderContactPage();
+    return renderContactPage({
+      quoteDraft: state.quoteDraft,
+      quoteErrors,
+      planOptions: plans,
+    });
   }
 
   if (route.name === 'faq') {
@@ -150,7 +159,7 @@ function renderCurrentPage(state) {
   }
 
   if (route.name === 'articles') {
-    return renderArticlesPage();
+    return renderArticlesPage(query);
   }
 
   if (route.name === 'article-detail') {
@@ -168,18 +177,53 @@ function renderCurrentPage(state) {
   return renderNotFoundPage();
 }
 
-function syncLineQrPanel(root, preference) {
-  const panel = root.querySelector('[data-line-qr-panel]');
+function syncLineQrPanel(form, preference) {
+  const panel = form?.querySelector('[data-line-qr-panel]');
   if (panel) {
     panel.hidden = preference !== 'line';
   }
+}
+
+function handleQuoteFormSubmit(event) {
+  event.preventDefault();
+  const payload = parseForm(event);
+  const errors = validateQuoteForm(payload);
+  const existingRequest = payload.id
+    ? getState().requests.find((request) => request.id === payload.id)
+    : null;
+
+  if (Object.keys(errors).length) {
+    quoteErrors = errors;
+    setState({ quoteDraft: payload });
+    render();
+    return;
+  }
+
+  quoteErrors = {};
+  const selectedPlan = payload.planId ? plans.find((plan) => plan.id === payload.planId) : null;
+  upsertRequest({
+    ...payload,
+    id: payload.id || `qr-${crypto.randomUUID()}`,
+    status: existingRequest?.status ?? 'ใหม่',
+    createdAt: existingRequest?.createdAt ?? new Date().toISOString(),
+  });
+
+  if (payload.contactPreference === 'facebook') {
+    window.open(FACEBOOK_URL, '_blank', 'noopener,noreferrer');
+  } else if (payload.contactPreference === 'line') {
+    window.open(LINE_ADD_URL, '_blank', 'noopener,noreferrer');
+  } else if (payload.contactPreference === 'email') {
+    window.open(buildMailtoUrl(payload, selectedPlan), '_self');
+  }
+
+  render();
 }
 
 function bindEvents() {
   rootElement.addEventListener('click', (event) => {
     const target = event.target;
 
-    if (!(target instanceof HTMLElement)) {
+    if (!(target instanceof Element)) {
       return;
     }
 
@@ -201,12 +245,6 @@ function bindEvents() {
 
     if (target.closest('.mobile-toggle')) {
       setState({ mobileMenuOpen: !getState().mobileMenuOpen });
-      return;
-    }
-
-    const localeButton = target.closest('[data-locale]');
-    if (localeButton instanceof HTMLElement) {
-      changeLocale(localeButton.getAttribute('data-locale') || 'th');
       return;
     }
 
@@ -264,6 +302,18 @@ function bindEvents() {
       return;
     }
 
+    const articleCategoryButton = target.closest('[data-filter-article-category]');
+    if (articleCategoryButton) {
+      const form = document.querySelector('#articles-filter-form');
+      const categoryInput = form?.querySelector('input[name="category"]');
+      if (form && categoryInput) {
+        categoryInput.value =
+          articleCategoryButton.getAttribute('data-filter-article-category') || 'ทั้งหมด';
+        form.requestSubmit();
+      }
+      return;
+    }
+
     const insuranceCategoryButton = target.closest('[data-insurance-category]');
     if (insuranceCategoryButton instanceof HTMLElement) {
       const categoryKey = insuranceCategoryButton.getAttribute('data-insurance-category');
@@ -309,14 +359,22 @@ function bindEvents() {
     const faqItem = target.closest('.faq-item');
     const faqQuestion = target.closest('.faq-question');
     if (faqItem && faqQuestion) {
-      document.querySelectorAll('.faq-item').forEach((item) => item.classList.remove('faq-item-open'));
-      faqItem.classList.add('faq-item-open');
-      document.querySelectorAll('.faq-toggle').forEach((toggle) => {
-        toggle.textContent = '+';
+      const wasOpen = faqItem.classList.contains('faq-item-open');
+      document.querySelectorAll('.faq-item').forEach((item) => {
+        item.classList.remove('faq-item-open');
+        const button = item.querySelector('.faq-question');
+        if (button) button.setAttribute('aria-expanded', 'false');
       });
-      const toggle = faqItem.querySelector('.faq-toggle');
-      if (toggle) {
-        toggle.textContent = '−';
+      document.querySelectorAll('.faq-toggle').forEach((toggle) => {
+        toggle.innerHTML = icon('plus', { size: 18, strokeWidth: 2.4 });
+      });
+      if (!wasOpen) {
+        faqItem.classList.add('faq-item-open');
+        faqQuestion.setAttribute('aria-expanded', 'true');
+        const toggle = faqItem.querySelector('.faq-toggle');
+        if (toggle) {
+          toggle.innerHTML = icon('minus', { size: 18, strokeWidth: 2.4 });
+        }
       }
       return;
     }
@@ -352,8 +410,26 @@ function bindEvents() {
       return;
     }
 
-    if (target.name === 'contactPreference' && target.closest('#quote-form')) {
-      syncLineQrPanel(rootElement, target.value);
+    if (target.name === 'contactPreference') {
+      const form = target.closest('#quote-form, #contact-page-form');
+      if (form) {
+        syncLineQrPanel(form, target.value);
+      }
+    }
+  });
+
+  let articlesSearchTimer;
+  rootElement.addEventListener('input', (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement)) {
+      return;
+    }
+
+    if (target.name === 'q' && target.closest('#articles-filter-form')) {
+      clearTimeout(articlesSearchTimer);
+      articlesSearchTimer = setTimeout(() => {
+        target.closest('#articles-filter-form')?.requestSubmit();
+      }, 350);
     }
   });
 
@@ -363,35 +439,8 @@ function bindEvents() {
       return;
     }
 
-    if (target.id === 'quote-form') {
-      event.preventDefault();
-      const payload = parseForm(event);
-      const errors = validateQuoteForm(payload);
-      const existingRequest = payload.id
-        ? getState().requests.find((request) => request.id === payload.id)
-        : null;
-
-      if (Object.keys(errors).length) {
-        quoteErrors = errors;
-        setState({ quoteDraft: payload });
-        render();
-        return;
-      }
-
-      quoteErrors = {};
-      const selectedPlan = payload.planId ? plans.find((plan) => plan.id === payload.planId) : null;
-      upsertRequest({
-        ...payload,
-        id: payload.id || `qr-${crypto.randomUUID()}`,
-        status: existingRequest?.status ?? 'ใหม่',
-        createdAt: existingRequest?.createdAt ?? new Date().toISOString(),
-      });
-
-      if (payload.contactPreference === 'whatsapp') {
-        window.open(buildWhatsAppUrl(payload, selectedPlan), '_blank', 'noopener,noreferrer');
-      }
-
-      render();
+    if (target.id === 'quote-form' || target.id === 'contact-page-form') {
+      handleQuoteFormSubmit(event);
       return;
     }
 
@@ -408,17 +457,34 @@ function bindEvents() {
       if (formData.get('sort')) {
         query.set('sort', formData.get('sort').toString());
       }
-      navigate(`/plans?${query.toString()}`);
+      navigate(`/plans?${query.toString()}`, { preserveScroll: true });
+      return;
+    }
+
+    if (target.id === 'articles-filter-form') {
+      event.preventDefault();
+      const formData = new FormData(target);
+      const query = new URLSearchParams();
+      if (formData.get('q')) {
+        query.set('q', formData.get('q').toString());
+      }
+      if (formData.get('category') && formData.get('category') !== 'ทั้งหมด') {
+        query.set('category', formData.get('category').toString());
+      }
+      navigate(`/articles?${query.toString()}`, { preserveScroll: true });
     }
   });
 
   window.addEventListener('popstate', () => {
     setState({ mobileMenuOpen: false });
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    });
+    if (!window.__preserveScrollOnNextPopstate) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+    }
+    window.__preserveScrollOnNextPopstate = false;
     render();
   });
 }
@@ -548,6 +614,10 @@ function moveSliderByCard(slider, direction) {
 function setupAutoSliders() {
   document.querySelectorAll('[data-auto-slider="true"]').forEach((slider) => {
     if (!(slider instanceof HTMLElement)) {
+      return;
+    }
+
+    if (slider.id === 'plan-slider' && window.matchMedia('(max-width: 760px)').matches) {
       return;
     }
 

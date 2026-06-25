@@ -1,2 +1,4 @@
 .tmp-lk3/
 node_modules/
+temp-hospital-*.txt
+test-results/

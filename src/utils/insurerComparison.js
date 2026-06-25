@@ -4,91 +4,103 @@ import { getComparisonExtra, getLocalizedPlan, getPlanDisplayName } from '../i18
 
 export const comparisonInsurers = [
   {
-    key: 'axa',
-    provider: 'AXA',
-    logo: 'assets/logos/axa.svg',
-    matchProvider: /axa/i,
+    key: 'chubb-life',
+    provider: 'ชับบ์ ไลฟ์ · ประกันชีวิต',
+    logo: 'assets/category-showcase/other.png',
+    matchCategory: 'ประกันชีวิต',
   },
   {
-    key: 'allianz',
-    provider: 'Allianz Ayudhya',
-    logo: 'assets/logos/allianz.svg',
-    matchProvider: /allianz/i,
+    key: 'chubb-health',
+    provider: 'ชับบ์ ไลฟ์ · สุขภาพ',
+    logo: 'assets/category-showcase/health.png',
+    matchCategory: 'สุขภาพ',
   },
   {
-    key: 'pacific',
-    provider: 'Pacific Cross',
-    logo: 'assets/logos/pacific-cross.avif',
-    matchProvider: /pacific/i,
+    key: 'chubb-estate',
+    provider: 'ชับบ์ ไลฟ์ · มรดก',
+    logo: 'assets/category-showcase/other.png',
+    matchCategory: 'ประกันมรดก',
   },
 ];
 
 export const defaultComparisonPlanIds = {
-  allianz: 'allianz-smarter-health',
-  axa: 'axa-smartcare-essential',
-  pacific: 'pchi-maxima-plus',
+  'chubb-life': 'chubb-life-protector',
+  'chubb-health': 'chubb-3d-health-excellence',
+  'chubb-estate': 'chubb-lifetime-value',
 };
 
 export const comparisonPlanExtras = {
-  'allianz-smarter-health': {
-    provider: 'Allianz Ayudhya',
+  'chubb-life-protector': {
+    provider: 'ชับบ์ ไลฟ์',
+    deductible: '—',
+    network: '—',
+    hospitalCover: '—',
+    oncology: '—',
+  },
+  'chubb-3d-health-excellence': {
+    provider: 'ชับบ์ ไลฟ์',
+    deductible: 'ตามเงื่อนไขแผน',
+    network: 'เครือข่ายโรงพยาบาลชับบ์ ไลฟ์ แคร์',
+    hospitalCover: 'ครอบคลุมทุกมิติสุขภาพ',
+    oncology: 'ตามเงื่อนไขแผน',
+  },
+  'chubb-health-premium-extra': {
+    provider: 'ชับบ์ ไลฟ์',
+    deductible: 'ตามเงื่อนไขสัญญาเพิ่มเติม',
+    network: 'โรงพยาบาลตามเงื่อนไขกรมธรรม์',
+    hospitalCover: 'เหมาจ่ายตามจริง',
+    oncology: 'ตามเงื่อนไขแผน',
+  },
+  'chubb-lifetime-value': {
+    provider: 'ชับบ์ ไลฟ์',
+    deductible: '—',
+    network: '—',
+    hospitalCover: '—',
+    oncology: '—',
+  },
+  'chubb-retirement-plus-happiness': {
+    provider: 'ชับบ์ ไลฟ์',
     deductible: 'ไม่มี',
-    network: 'เลือกโรงพยาบาลได้',
+    network: '—',
+    hospitalCover: '—',
+    oncology: '—',
+  },
+  'chubb-ci-extra-plus': {
+    provider: 'ชับบ์ ไลฟ์',
+    deductible: '—',
+    network: '—',
+    hospitalCover: '—',
+    oncology: 'คุ้มครองโรคร้ายแรงตลอดชีพ',
+  },
+  'chubb-basic-work-play': {
+    provider: 'ชับบ์สามัคคี',
+    deductible: 'ตามเงื่อนไขแผน',
+    network: '—',
     hospitalCover: 'ตามเงื่อนไขแผน',
     oncology: 'ตามเงื่อนไขแผน',
-  },
-  'axa-smartcare-essential-plan-4': {
-    provider: 'AXA Thailand',
-    deductible: 'เลือกลดเบี้ยได้',
-    network: 'เลือกโรงพยาบาลได้',
-    hospitalCover: 'สูงสุด 10,000 บาท/คืน',
-    oncology: 'ครอบคลุมตามวงเงินแผน',
-  },
-  'axa-international-exclusive-platinum': {
-    provider: 'AXA Thailand',
-    deductible: 'ตามแผนที่เลือก',
-    network: 'ทั่วโลก / เอเชีย',
-    hospitalCover: 'ตามวงเงินแผน',
-    oncology: 'ครอบคลุมตามวงเงินแผน',
-  },
-  'axa-easycare-visa-plan-2': {
-    provider: 'AXA Thailand',
-    deductible: 'เลือกลดเบี้ยได้',
-    network: 'ตามเครือข่ายแผน',
-    hospitalCover: 'ตามเงื่อนไขแผน',
-    oncology: 'ตามเงื่อนไขแผน',
-  },
-  'pacific-cross-standard-extra': {
-    provider: 'Pacific Cross',
-    deductible: 'มีตัวเลือก deductible',
-    network: 'เครือข่าย 450+ แห่ง',
-    hospitalCover: 'ตามเงื่อนไขแผน',
-    oncology: 'ตามเงื่อนไขแผน',
-  },
-  'pacific-cross-maxima': {
-    provider: 'Pacific Cross',
-    deductible: 'มีตัวเลือก deductible',
-    network: 'เครือข่าย 450+ แห่ง',
-    hospitalCover: 'สูงสุด 5,000 บาท/คืน',
-    oncology: 'ครอบคลุมตามวงเงินแผน',
-  },
-  'pacific-cross-maxima-plus': {
-    provider: 'Pacific Cross',
-    deductible: 'ไม่มี',
-    network: 'เครือข่าย 450+ แห่ง',
-    hospitalCover: 'สูงสุด 6,000 บาท/คืน',
-    oncology: 'ครอบคลุมเต็มจำนวน',
   },
 };
 
 export function getPlansForInsurer(plans, insurer) {
   const insurerPlanOrder = {
-    axa: ['axa-smartcare-essential', 'axa-easycare-visa-plan-2', 'axa-international-exclusive-platinum'],
-    pacific: ['pchi-maxima-plus', 'pchi-maxima', 'pchi-standard-extra'],
-    allianz: ['allianz-smarter-health'],
+    'chubb-life': [
+      'chubb-life-protector',
+      'chubb-life-protector-90-20',
+      'chubb-whole-life-extra',
+    ],
+    'chubb-health': [
+      'chubb-3d-health-excellence',
+      'chubb-health-premium-extra',
+      'chubb-basic-work-play',
+    ],
+    'chubb-estate': [
+      'chubb-lifetime-value',
+      'chubb-signature-legacy-10',
+      'chubb-century-life-protection',
+    ],
   };
   const order = insurerPlanOrder[insurer.key] ?? [];
-  const insurerPlans = plans.filter((plan) => insurer.matchProvider.test(plan.provider));
+  const insurerPlans = plans.filter((plan) => plan.category === insurer.matchCategory);
 
   if (!order.length) {
     return insurerPlans;
@@ -122,31 +134,31 @@ function buildComparisonValues(plan, insurer) {
 }
 
 export function buildComparisonColumns(plans, comparisonPlanIds) {
-  return comparisonInsurers.map((insurer) => {
-    const insurerPlans = getPlansForInsurer(plans, insurer);
-    const preferredId = comparisonPlanIds[insurer.key] ?? defaultComparisonPlanIds[insurer.key];
-    const plan =
-      insurerPlans.find((item) => item.id === preferredId) ??
-      insurerPlans[0] ??
-      null;
+  return comparisonInsurers
+    .map((insurer) => {
+      const insurerPlans = getPlansForInsurer(plans, insurer);
+      const preferredId = comparisonPlanIds[insurer.key] ?? defaultComparisonPlanIds[insurer.key];
+      const plan =
+        insurerPlans.find((item) => item.id === preferredId) ?? insurerPlans[0] ?? null;
 
-    if (!plan) {
-      return null;
-    }
+      if (!plan) {
+        return null;
+      }
 
-    return {
-      insurerKey: insurer.key,
-      provider: insurer.provider,
-      logo: insurer.logo,
-      planId: plan.id,
-      slug: plan.slug,
-      planOptions: insurerPlans.map((item) => ({
-        id: item.id,
-        label: getPlanDisplayName(item),
-      })),
-      values: buildComparisonValues(plan, insurer),
-    };
-  }).filter(Boolean);
+      return {
+        insurerKey: insurer.key,
+        provider: insurer.provider,
+        logo: insurer.logo,
+        planId: plan.id,
+        slug: plan.slug,
+        planOptions: insurerPlans.map((item) => ({
+          id: item.id,
+          label: getPlanDisplayName(item),
+        })),
+        values: buildComparisonValues(plan, insurer),
+      };
+    })
+    .filter(Boolean);
 }
 
 export function buildComparisonTableData({

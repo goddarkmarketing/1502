@@ -1,62 +1,55 @@
-import { partners } from '../data/mockData.js';
-import { staticUrl } from '../app/router.js';
-import { renderSectionHeader } from '../components/ui.js';
+import { appUrl } from '../app/router.js';
+import { renderPageHero, renderSectionHeader } from '../components/ui.js';
+import { icon } from '../components/icons.js';
 import { t } from '../i18n/index.js';
 import { getLocalizedCompanyHighlights, getLocalizedCompanyMilestones } from '../i18n/localize.js';
 
+const HIGHLIGHT_ICONS = ['shieldCheck', 'layers', 'messagesSquare'];
+
+const ABOUT_STATS = [
+  { valueKey: 'statAssetsValue', labelKey: 'statAssetsLabel' },
+  { valueKey: 'statClaimsValue', labelKey: 'statClaimsLabel' },
+  { valueKey: 'statCountriesValue', labelKey: 'statCountriesLabel' },
+  { valueKey: 'statProductsValue', labelKey: 'statProductsLabel' },
+];
+
 export function renderAboutPage() {
-  const highlightImages = [
-    'https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80',
-  ];
   return `
-    <section class="page-hero compact">
-      ${renderSectionHeader({
-        eyebrow: t('about.eyebrow'),
-        title: t('about.title'),
-        description: t('about.desc'),
-      })}
+    ${renderPageHero({
+      eyebrow: t('about.eyebrow'),
+      title: t('about.title'),
+      description: t('about.desc'),
+      titleId: 'about-hero-title',
+      backgroundImage: 'assets/about-hero-background.png',
+      backgroundVersion: '1',
+    })}
+
+    <section class="about-stats" aria-label="${t('about.statsLabel')}">
+      ${ABOUT_STATS.map(
+        (stat) => `
+          <article class="about-stat-card">
+            <strong class="about-stat-value">${t(`about.${stat.valueKey}`)}</strong>
+            <span class="about-stat-label">${t(`about.${stat.labelKey}`)}</span>
+          </article>
+        `,
+      ).join('')}
     </section>
 
-    <section class="section-white info-grid">
-      ${getLocalizedCompanyHighlights()
-        .map(
-          (item, index) => `
-            <article class="info-card">
-              <div class="info-card-media" style="background-image: linear-gradient(180deg, rgba(15, 23, 42, 0.06), rgba(15, 23, 42, 0.18)), url('${highlightImages[index] ?? highlightImages[0]}');"></div>
-              <div class="info-card-body">
+    <section class="about-section">
+      ${renderSectionHeader({
+        title: t('about.highlightsTitle'),
+        description: t('about.highlightsDesc'),
+      })}
+      <div class="about-highlight-grid">
+        ${getLocalizedCompanyHighlights()
+          .map(
+            (item, index) => `
+              <article class="about-highlight-card">
+                <span class="about-highlight-icon" aria-hidden="true">
+                  ${icon(HIGHLIGHT_ICONS[index] ?? 'shieldCheck', { size: 22, strokeWidth: 2.1 })}
+                </span>
                 <h3>${item.title}</h3>
                 <p>${item.description}</p>
-              </div>
-            </article>
-          `,
-        )
-        .join('')}
-    </section>
-
-    <section class="license-proof">
-      <span>${t('about.licenseLabel')}</span>
-      <strong>${t('about.licenseNumber')}</strong>
-    </section>
-
-    <section class="section-surface about-timeline-section">
-      ${renderSectionHeader({
-        title: t('about.timelineTitle'),
-        description: t('about.timelineDesc'),
-      })}
-      <div class="milestone-list milestone-timeline">
-        ${getLocalizedCompanyMilestones()
-          .map(
-            (item) => `
-              <article class="milestone-item milestone-card">
-                <div class="milestone-year-wrap">
-                  <span class="milestone-year">${item.year}</span>
-                </div>
-                <div class="milestone-content">
-                  <h3>${item.title}</h3>
-                  <p>${item.description}</p>
-                </div>
               </article>
             `,
           )
@@ -64,24 +57,49 @@ export function renderAboutPage() {
       </div>
     </section>
 
-    <section class="section-white">
+    <section class="about-credential">
+      <div class="about-credential-main">
+        <span class="about-credential-icon" aria-hidden="true">
+          ${icon('badgeCheck', { size: 24, strokeWidth: 2.1 })}
+        </span>
+        <div>
+          <span class="about-credential-label">${t('about.licenseLabel')}</span>
+          <strong class="about-credential-number">${t('about.licenseNumber')}</strong>
+        </div>
+      </div>
+      <div class="about-credential-actions">
+        <a class="button button-primary" href="${appUrl('/plans')}">
+          ${icon('shieldCheck', { size: 18, strokeWidth: 2.2 })}
+          <span>${t('nav.plans')}</span>
+        </a>
+        <a class="button button-secondary" href="${appUrl('/contact')}">
+          ${icon('messageCircle', { size: 18, strokeWidth: 2.2 })}
+          <span>${t('nav.contact')}</span>
+        </a>
+        <a class="button button-secondary" href="https://www.chubb.com/" target="_blank" rel="noreferrer">
+          ${icon('arrowUpRight', { size: 18, strokeWidth: 2.2 })}
+          <span>${t('about.chubbLinkLabel')}</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="about-section about-timeline-section">
       ${renderSectionHeader({
-        title: t('about.partnersTitle'),
-        description: t('about.partnersDesc'),
+        title: t('about.timelineTitle'),
+        description: t('about.timelineDesc'),
       })}
-      <div class="logo-grid">
-        ${partners
+      <div class="about-timeline">
+        ${getLocalizedCompanyMilestones()
           .map(
-            (partner) => `
-              <article class="logo-grid-item">
-                <span class="partner-logo">
-                  ${
-                    partner.logo
-                      ? `<img src="${staticUrl(partner.logo)}" alt="${partner.name} logo" class="partner-logo-image partner-logo-image-${partner.logoScale ?? 'standard'}" loading="lazy" decoding="async" />`
-                      : `<span class="partner-logo-fallback">${partner.mark}</span>`
-                  }
-                </span>
-                <strong>${partner.name}</strong>
+            (item) => `
+              <article class="about-timeline-item">
+                <div class="about-timeline-marker">
+                  <span class="about-timeline-year">${item.year}</span>
+                </div>
+                <div class="about-timeline-card">
+                  <h3>${item.title}</h3>
+                  <p>${item.description}</p>
+                </div>
               </article>
             `,
           )

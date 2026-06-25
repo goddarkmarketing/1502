@@ -30,10 +30,12 @@ function contentMap(key) {
 
 export function getCategoryLabelSync(categoryKey) {
   const map = {
+    ประกันชีวิต: () => t('filters.life'),
     สุขภาพ: () => t('filters.health'),
-    ชีวิต: () => t('footer.life'),
-    รถยนต์: () => t('footer.car'),
-    เดินทาง: () => t('footer.travel'),
+    โรคร้ายแรง: () => t('filters.criticalIllness'),
+    ลดหย่อนภาษี: () => t('filters.taxDeduction'),
+    วางแผนเกษียณ: () => t('filters.retirement'),
+    ประกันมรดก: () => t('filters.estate'),
   };
   if (getLocale() === 'th') return categoryKey;
   return map[categoryKey]?.() ?? categoryKey;
@@ -42,6 +44,20 @@ export function getCategoryLabelSync(categoryKey) {
 export function getFilterLabelSync(filterValue) {
   if (filterValue === 'ทั้งหมด') return t('filters.all');
   return getCategoryLabelSync(filterValue);
+}
+
+export function getArticleCategoryLabelSync(categoryKey) {
+  if (categoryKey === 'ทั้งหมด') return t('filters.all');
+  const map = {
+    สุขภาพ: () => t('filters.health'),
+    ชีวิต: () => t('filters.life'),
+    โรคร้ายแรง: () => t('filters.criticalIllness'),
+    ลดหย่อนภาษี: () => t('filters.taxDeduction'),
+    เดินทาง: () => t('articleCategories.travel'),
+    อุบัติเหตุ: () => t('articleCategories.accident'),
+  };
+  if (getLocale() === 'th') return categoryKey;
+  return map[categoryKey]?.() ?? categoryKey;
 }
 
 export function getLocalizedFaqs() {
@@ -155,6 +171,7 @@ export function getLocalizedArticles() {
     const localized = map?.[item.slug] ?? {};
     return {
       ...item,
+      categoryKey: item.category,
       title: localized.title ?? item.title,
       excerpt: localized.excerpt ?? item.excerpt,
       category: localized.category ?? getCategoryLabelSync(item.category),

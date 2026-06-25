@@ -72,6 +72,10 @@ export function getRoute() {
     return { name: 'about', params: {} };
   }
 
+  if (path === '/hospitals') {
+    return { name: 'hospitals', params: {} };
+  }
+
   if (path === '/contact') {
     return { name: 'contact', params: {} };
   }
@@ -107,11 +111,15 @@ export function getRoute() {
   return { name: 'not-found', params: {} };
 }
 
-export function navigate(path) {
+export function navigate(path, options = {}) {
   const normalized = path.startsWith('/') ? path : `/${path}`;
   const [pathname, search = ''] = normalized.split('?');
   const nextUrl = `${appUrl(pathname)}${search ? `?${search}` : ''}`;
   const currentUrl = `${window.location.pathname}${window.location.search}`;
+
+  if (options.preserveScroll) {
+    window.__preserveScrollOnNextPopstate = true;
+  }
 
   if (currentUrl === nextUrl) {
     window.dispatchEvent(new PopStateEvent('popstate'));

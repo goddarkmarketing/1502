@@ -1,5 +1,5 @@
 import { appUrl } from '../app/router.js';
-import { renderSectionHeader } from '../components/ui.js';
+import { renderPageHero } from '../components/ui.js';
 import { getLocale } from '../i18n/index.js';
 import en from '../i18n/locales/en.js';
 import th from '../i18n/locales/th.js';
@@ -13,13 +13,11 @@ function getLegalContent(key) {
 
 function renderLegalPage(content) {
   return `
-    <section class="page-hero compact">
-      ${renderSectionHeader({
-        eyebrow: content.eyebrow,
-        title: content.title,
-        description: content.intro,
-      })}
-    </section>
+    ${renderPageHero({
+      eyebrow: content.eyebrow,
+      title: content.title,
+      description: content.intro,
+    })}
 
     <section class="section-white legal-page">
       <p class="legal-updated">${content.updated}</p>

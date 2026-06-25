@@ -1,6 +1,7 @@
 import { plans } from '../data/mockData.js';
 import { appUrl, staticUrl } from '../app/router.js';
-import { renderEmptyState } from '../components/ui.js';
+import { renderEmptyState, renderPageHero } from '../components/ui.js';
+import { renderCheckListItems } from '../components/icons.js';
 import { formatCompact, formatCurrency } from '../utils/format.js';
 import { t } from '../i18n/index.js';
 import { getLocalizedPlan, getPlanDisplayName } from '../i18n/localize.js';
@@ -97,6 +98,22 @@ function renderPricingSection(plan) {
   `;
 }
 
+function renderBrochureSection(plan) {
+  if (!plan.brochureUrl) {
+    return '';
+  }
+
+  return `
+    <section class="detail-panel brochure-panel">
+      <h2>${t('plan.brochureTitle')}</h2>
+      <p>${t('plan.brochureLead')}</p>
+      <a class="button button-secondary" href="${staticUrl(plan.brochureUrl)}" target="_blank" rel="noreferrer">
+        ${t('plan.openBrochure')}
+      </a>
+    </section>
+  `;
+}
+
 export function renderPlanDetailPage(slug, state) {
   const rawPlan = plans.find((item) => item.slug === slug);
 
@@ -114,67 +131,68 @@ export function renderPlanDetailPage(slug, state) {
   const planTitle = plan.displayName ?? getPlanDisplayName(plan);
 
   return `
+    ${renderPageHero({
+      eyebrow: plan.category,
+      title: planTitle,
+      description: plan.description,
+      wide: true,
+      extra: `
+        <div class="detail-highlights">
+          <div>
+            <span>${t('plan.monthlyPremium')}</span>
+            <strong>${formatCurrency(plan.monthlyPremium)}</strong>
+          </div>
+          <div>
+            <span>${t('plan.annualPremium')}</span>
+            <strong>${formatCurrency(plan.annualPremium)}</strong>
+          </div>
+          <div>
+            <span>${t('plan.coverageAmount')}</span>
+            <strong>${formatCompact(plan.coverageAmount)} ${t('plan.baht')}</strong>
+          </div>
+        </div>
+      `,
+      actions: `
+        <button class="button button-primary" type="button" data-open-quote="true" data-plan-id="${plan.id}">${t('plan.requestAdvice')}</button>
+        <button class="button button-secondary compare-toggle" type="button" data-plan-id="${plan.id}">
+          ${compareActive ? t('plan.removeFromCompare') : t('plan.addCompare')}
+        </button>
+      `,
+    })}
+
     <section class="detail-shell">
-      <div class="detail-hero">
-        <div class="detail-copy">
-          <span class="section-eyebrow">${plan.category}</span>
-          <h1>${planTitle}</h1>
-          <p>${plan.description}</p>
-          <div class="detail-highlights">
-            <div>
-              <span>${t('plan.monthlyPremium')}</span>
-              <strong>${formatCurrency(plan.monthlyPremium)}</strong>
-            </div>
-            <div>
-              <span>${t('plan.annualPremium')}</span>
-              <strong>${formatCurrency(plan.annualPremium)}</strong>
-            </div>
-            <div>
-              <span>${t('plan.coverageAmount')}</span>
-              <strong>${formatCompact(plan.coverageAmount)} ${t('plan.baht')}</strong>
-            </div>
+      <div class="detail-summary-card">
+        <span class="plan-badge">${plan.badge}</span>
+        <h3>${plan.provider}</h3>
+        <p>${plan.highlight}</p>
+        <dl>
+          <div>
+            <dt>${t('plan.targetAudience')}</dt>
+            <dd>${plan.targetAudience}</dd>
           </div>
-          <div class="detail-actions">
-            <button class="button button-primary" type="button" data-open-quote="true" data-plan-id="${plan.id}">${t('plan.requestAdvice')}</button>
-            <button class="button button-secondary compare-toggle" type="button" data-plan-id="${plan.id}">
-              ${compareActive ? t('plan.removeFromCompare') : t('plan.addCompare')}
-            </button>
+          <div>
+            <dt>${t('plan.waitingPeriod')}</dt>
+            <dd>${plan.waitingPeriod}</dd>
           </div>
-        </div>
-        <div class="detail-summary-card">
-          <span class="plan-badge">${plan.badge}</span>
-          <h3>${plan.provider}</h3>
-          <p>${plan.highlight}</p>
-          <dl>
-            <div>
-              <dt>${t('plan.targetAudience')}</dt>
-              <dd>${plan.targetAudience}</dd>
-            </div>
-            <div>
-              <dt>${t('plan.waitingPeriod')}</dt>
-              <dd>${plan.waitingPeriod}</dd>
-            </div>
-          </dl>
-        </div>
+        </dl>
       </div>
 
       <div class="detail-columns">
         <section class="detail-panel">
           <h2>${t('plan.mainCoverage')}</h2>
           <ul class="coverage-list">
-            ${plan.benefits.map((benefit) => `<li>${benefit}</li>`).join('')}
+            ${renderCheckListItems(plan.benefits)}
           </ul>
         </section>
         <section class="detail-panel">
           <h2>${t('plan.decisionServices')}</h2>
           <ul class="coverage-list">
-            <li>${t('plan.service1')}</li>
-            <li>${t('plan.service2')}</li>
-            <li>${t('plan.service3')}</li>
+            ${renderCheckListItems([t('plan.service1'), t('plan.service2'), t('plan.service3')])}
           </ul>
         </section>
       </div>
 
+      ${renderBrochureSection(rawPlan)}
       ${renderPricingSection(rawPlan)}
     </section>
   `;

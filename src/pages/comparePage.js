@@ -2,7 +2,8 @@ import { appUrl } from '../app/router.js';
 import { t } from '../i18n/index.js';
 import { getLocalizedPlans, getPlanDisplayName } from '../i18n/localize.js';
 import { formatCompact, formatCurrency } from '../utils/format.js';
-import { renderEmptyState } from '../components/ui.js';
+import { renderEmptyState, renderPageHero } from '../components/ui.js';
+import { icon, renderCheckListItems } from '../components/icons.js';
 
 const compareRows = [
   {
@@ -49,7 +50,7 @@ function renderMobileCompareCards(selectedPlans) {
                   <span>${plan.provider}</span>
                   <h2>${getPlanDisplayName(plan)}</h2>
                 </div>
-                <button type="button" data-compare-remove="${plan.id}" aria-label="${t('compareBar.remove', { plan: getPlanDisplayName(plan) })}">×</button>
+                <button type="button" data-compare-remove="${plan.id}" aria-label="${t('compareBar.remove', { plan: getPlanDisplayName(plan) })}">${icon('x', { size: 18, strokeWidth: 2.2 })}</button>
               </div>
 
               <dl class="compare-page-mobile-details">
@@ -67,8 +68,8 @@ function renderMobileCompareCards(selectedPlans) {
 
               <div class="compare-page-mobile-benefits">
                 <span>${t('plan.mainCoverage')}</span>
-                <ul>
-                  ${plan.benefits.map((benefit) => `<li>${benefit}</li>`).join('')}
+                <ul class="compare-page-benefits">
+                  ${renderCheckListItems(plan.benefits)}
                 </ul>
               </div>
 
@@ -100,18 +101,16 @@ export function renderComparePage(state) {
   }
 
   return `
-    <section class="compare-page-hero">
-      <div>
-        <span class="section-eyebrow">${t('comparePage.eyebrow')}</span>
-        <h1>${t('comparePage.title')}</h1>
-        <p>${t('comparePage.description')}</p>
-      </div>
-      <div class="compare-page-actions">
+    ${renderPageHero({
+      eyebrow: t('comparePage.eyebrow'),
+      title: t('comparePage.title'),
+      description: t('comparePage.description'),
+      actions: `
         <a class="button button-secondary" href="${appUrl('/plans')}">${t('comparePage.addMore')}</a>
         <button class="button button-primary" type="button" data-open-quote="true">${t('comparePage.askAdvisor')}</button>
         <button class="button button-secondary compare-page-clear-action" type="button" data-compare-clear="true">${t('compareBar.clear')}</button>
-      </div>
-    </section>
+      `,
+    })}
 
     <section class="compare-page-shell">
       <div class="compare-page-scroll">
@@ -126,7 +125,7 @@ export function renderComparePage(state) {
                       <div class="compare-page-plan-head">
                         <span>${plan.provider}</span>
                         <strong>${getPlanDisplayName(plan)}</strong>
-                        <button type="button" data-compare-remove="${plan.id}">×</button>
+                        <button type="button" data-compare-remove="${plan.id}">${icon('x', { size: 18, strokeWidth: 2.2 })}</button>
                       </div>
                     </th>
                   `,
@@ -152,7 +151,7 @@ export function renderComparePage(state) {
                   (plan) => `
                     <td>
                       <ul class="compare-page-benefits">
-                        ${plan.benefits.map((benefit) => `<li>${benefit}</li>`).join('')}
+                        ${renderCheckListItems(plan.benefits)}
                       </ul>
                     </td>
                   `,

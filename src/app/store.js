@@ -6,7 +6,6 @@ const STORAGE_KEYS = {
   compare: 'curated-coverage-compare',
   selectedPlan: 'curated-coverage-selected-plan',
   comparisonPlans: 'curated-coverage-comparison-plans',
-  locale: 'curated-coverage-locale',
 };
 
 export const sampleRequests = [
@@ -52,7 +51,6 @@ const state = {
   selectedPlanSlug: null,
   comparisonPlanIds: { ...defaultComparisonPlanIds },
   lastToast: '',
-  locale: 'en',
 };
 
 function emit() {
@@ -96,14 +94,7 @@ export function hydrateStore() {
       ...defaultComparisonPlanIds,
       ...readStorage(STORAGE_KEYS.comparisonPlans, {}),
     };
-    const storedLocale = readStorage(STORAGE_KEYS.locale, null);
-    if (storedLocale && ['en', 'zh', 'th'].includes(storedLocale)) {
-      state.locale = storedLocale;
-      setLocale(storedLocale);
-    } else {
-      setLocale('en');
-      state.locale = 'en';
-    }
+    setLocale();
     state.loading = false;
     emit();
   }, 260);
@@ -213,16 +204,6 @@ export function upsertRequest(payload) {
   state.quoteDraft = null;
   writeStorage(STORAGE_KEYS.requests, state.requests);
   queueToast(existingIndex >= 0 ? t('toast.requestUpdated') : t('toast.requestSubmitted'));
-}
-
-export function changeLocale(locale) {
-  if (!['en', 'zh', 'th'].includes(locale) || state.locale === locale) {
-    return;
-  }
-  setLocale(locale);
-  state.locale = locale;
-  writeStorage(STORAGE_KEYS.locale, locale);
-  emit();
 }
 
 export function deleteRequest(requestId) {

@@ -1,51 +1,42 @@
 import { renderQuoteModal } from './forms.js';
-import { appUrl, staticUrl } from '../app/router.js';
-import { LOCALE_LABELS, SUPPORTED_LOCALES, t } from '../i18n/index.js';
+import { appUrl, getRoute, staticUrl } from '../app/router.js';
+import { t } from '../i18n/index.js';
 import { getPlanDisplayName } from '../i18n/localize.js';
+import { icon } from './icons.js';
+import {
+  EMAIL,
+  FACEBOOK_URL,
+  LINE_ADD_URL,
+  LINE_ID,
+  PRIMARY_PHONE,
+  PRIMARY_PHONE_DISPLAY,
+} from '../utils/contactLinks.js';
 
 function renderFloatingContact() {
   const items = [
     {
       label: 'LINE',
-      href: 'https://line.me/R/ti/p/0617822979',
+      href: LINE_ADD_URL,
       className: 'line',
-      icon: `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="2.5" y="3" width="19" height="16" rx="8" fill="currentColor"/>
-          <path d="M9.5 18.2 8.7 21l3-2h1.9c4.4 0 7.9-3 7.9-7s-3.5-7-7.9-7H10.4C6 5 2.5 8 2.5 12c0 3 2 5.6 5 6.6Z" fill="currentColor"/>
-          <text x="12" y="13.6" text-anchor="middle" font-size="5.2" font-weight="700" fill="#ffffff" font-family="Arial, sans-serif">LINE</text>
-        </svg>
-      `,
+      icon: icon('messageCircle', { size: 24, strokeWidth: 1.8 }),
     },
     {
-      label: 'WhatsApp',
-      href: 'https://wa.me/66617822979',
-      className: 'whatsapp',
-      icon: `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="currentColor" d="M12 2.5a9.3 9.3 0 0 0-8 14l-1 4.2 4.3-1a9.3 9.3 0 1 0 4.7-17.2Zm0 2a7.3 7.3 0 0 1 6.2 11.2l-.3.4.6 1.8-1.9-.5-.4.2A7.3 7.3 0 0 1 5 11.8a7.3 7.3 0 0 1 7-7.3Zm-3.1 3.7c-.2 0-.5.1-.7.4-.3.3-.9.9-.9 2.1s.9 2.4 1 2.5c.1.2 1.8 2.8 4.4 3.8 2.2.9 2.6.7 3.1.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2-.1-.1-.2-.2-.5-.3l-1.7-.8c-.2-.1-.4-.1-.6.2l-.7.9c-.1.2-.3.2-.5.1a6 6 0 0 1-1.8-1.1 6.6 6.6 0 0 1-1.2-1.6c-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.3.3-.5.1-.2.1-.3 0-.5l-.8-1.8c-.2-.4-.4-.4-.6-.4h-.5Z"/>
-        </svg>
-      `,
+      label: 'Facebook',
+      href: FACEBOOK_URL,
+      className: 'facebook',
+      icon: icon('share2', { size: 24, strokeWidth: 1.8 }),
     },
     {
       label: t('contact.email'),
-      href: 'mailto:phuketwealth@gmail.com',
+      href: `mailto:${EMAIL}`,
       className: 'email',
-      icon: `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 6.5h16a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 20 17.5H4A1.5 1.5 0 0 1 2.5 16V8A1.5 1.5 0 0 1 4 6.5Zm-1 1.3 9 6 9-6"/>
-        </svg>
-      `,
+      icon: icon('mail', { size: 24, strokeWidth: 1.8 }),
     },
     {
       label: t('contact.phone'),
-      href: 'tel:0617822979',
+      href: `tel:${PRIMARY_PHONE}`,
       className: 'phone',
-      icon: `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M7.2 4.5h2.2l1.2 4.1-1.8 1.8a14.7 14.7 0 0 0 4.8 4.8l1.8-1.8 4.1 1.2v2.2c0 .8-.6 1.5-1.4 1.6-.5 0-1 .1-1.4.1-7 0-12.7-5.7-12.7-12.7 0-.5 0-1 .1-1.4.1-.8.8-1.4 1.6-1.4Z"/>
-        </svg>
-      `,
+      icon: icon('phone', { size: 24, strokeWidth: 1.8 }),
     },
   ];
 
@@ -53,10 +44,7 @@ function renderFloatingContact() {
     <details class="floating-contact">
       <summary class="floating-contact-trigger" aria-label="${t('contact.channels')}">
         <span class="floating-contact-ring"></span>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M12 4.5c4.7 0 8.5 3.1 8.5 7 0 3.3-2.7 6-6.4 6.8l-3.7 1.7.8-2.9c-4-.2-7.2-3.1-7.2-6.9 0-3.9 3.8-7 8.5-7Z"/>
-          <path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" d="M8.5 11.5h7M8.5 14.5h4.5"/>
-        </svg>
+        ${icon('messagesSquare', { size: 24, strokeWidth: 1.9 })}
       </summary>
       <div class="floating-contact-menu">
         ${items
@@ -71,23 +59,6 @@ function renderFloatingContact() {
           .join('')}
       </div>
     </details>
-  `;
-}
-
-function renderLangSwitcher(state) {
-  return `
-    <div class="lang-switcher" role="group" aria-label="${t('lang.label')}">
-      ${SUPPORTED_LOCALES.map(
-        (locale) => `
-          <button
-            type="button"
-            class="lang-switcher-btn ${state.locale === locale ? 'lang-switcher-btn-active' : ''}"
-            data-locale="${locale}"
-            aria-pressed="${state.locale === locale ? 'true' : 'false'}"
-          >${LOCALE_LABELS[locale]}</button>
-        `,
-      ).join('')}
-    </div>
   `;
 }
 
@@ -114,7 +85,7 @@ function renderFloatingCompareBar(state, plans = []) {
               (plan) => `
                 <button class="floating-compare-chip" type="button" data-compare-remove="${plan.id}" aria-label="${t('compareBar.remove', { plan: getPlanDisplayName(plan) })}">
                   <span>${getPlanDisplayName(plan)}</span>
-                  <strong aria-hidden="true">×</strong>
+                  <strong aria-hidden="true">${icon('x', { size: 14, strokeWidth: 2.5 })}</strong>
                 </button>
               `,
             )
@@ -129,27 +100,75 @@ function renderFloatingCompareBar(state, plans = []) {
   `;
 }
 
+const NAV_ROUTE_GROUPS = {
+  home: ['home'],
+  plans: ['plans', 'plan-detail', 'compare', 'category-detail', 'insurance-category-detail'],
+  about: ['about', 'hospitals'],
+  articles: ['articles', 'article-detail'],
+  faq: ['faq'],
+  contact: ['contact'],
+};
+
+function isNavActive(navKey) {
+  return NAV_ROUTE_GROUPS[navKey]?.includes(getRoute().name) ?? false;
+}
+
+function renderNavLink(href, label, navKey) {
+  const active = isNavActive(navKey);
+  return `<a href="${href}" class="nav-link${active ? ' nav-link-active' : ''}"${active ? ' aria-current="page"' : ''}>${label}</a>`;
+}
+
+function renderContactNavCta() {
+  const active = isNavActive('contact');
+  return `<a href="${appUrl('/contact')}" class="button button-primary nav-contact-cta${active ? ' nav-contact-cta-active' : ''}"${active ? ' aria-current="page"' : ''}>${t('nav.contact')}</a>`;
+}
+
+function renderAboutNav() {
+  const route = getRoute();
+  const aboutCurrent = route.name === 'about';
+  const hospitalsCurrent = route.name === 'hospitals';
+
+  return `
+    <div class="nav-dropdown${hospitalsCurrent ? ' nav-dropdown-active' : ''}">
+      <a
+        href="${appUrl('/about')}"
+        class="nav-link nav-dropdown-trigger${aboutCurrent ? ' nav-link-active' : ''}"
+        ${aboutCurrent ? 'aria-current="page"' : ''}
+      >
+        <span>${t('nav.about')}</span>
+        <span class="nav-dropdown-chevron" aria-hidden="true">${icon('chevronDown', { size: 16, strokeWidth: 2.2 })}</span>
+      </a>
+      <div class="nav-dropdown-menu" role="menu" aria-label="${t('nav.aboutMenu')}">
+        <a
+          href="${appUrl('/hospitals')}"
+          class="nav-dropdown-link${hospitalsCurrent ? ' nav-dropdown-link-active' : ''}"
+          role="menuitem"
+          ${hospitalsCurrent ? 'aria-current="page"' : ''}
+        >${t('nav.hospitals')}</a>
+      </div>
+    </div>
+  `;
+}
+
 export function renderHeader(state) {
   return `
     <header class="site-header-wrap">
       <div class="site-header">
         <div class="brand-lockup">
-          <a href="${appUrl('/')}" class="brand-mark" aria-label="InsureMe @Thailand">
-            <img src="${staticUrl('assets/logos/insureme-thailand.png')}?v=2" alt="InsureMe @Thailand" />
+          <a href="${appUrl('/')}" class="brand-mark" aria-label="InsureWithCat">
+            <img src="${staticUrl('assets/logos/insurewithcat.png')}?v=1" alt="InsureWithCat" />
           </a>
         </div>
         <nav class="site-nav ${state.mobileMenuOpen ? 'site-nav-open' : ''}">
-          <a href="${appUrl('/')}" class="nav-link">${t('nav.home')}</a>
-          <a href="${appUrl('/plans')}" class="nav-link">${t('nav.plans')}</a>
-          <a href="${appUrl('/about')}" class="nav-link">${t('nav.about')}</a>
-          <a href="${appUrl('/articles')}" class="nav-link">${t('nav.articles')}</a>
-          <a href="${appUrl('/contact')}" class="nav-link">${t('nav.contact')}</a>
-          ${renderLangSwitcher(state)}
-          <button class="button button-primary nav-cta" type="button" data-open-quote="true">${t('nav.submitRequest')}</button>
+          ${renderNavLink(appUrl('/'), t('nav.home'), 'home')}
+          ${renderNavLink(appUrl('/plans'), t('nav.plans'), 'plans')}
+          ${renderAboutNav()}
+          ${renderNavLink(appUrl('/articles'), t('nav.articles'), 'articles')}
+          ${renderNavLink(appUrl('/faq'), t('nav.faq'), 'faq')}
+          ${renderContactNavCta()}
         </nav>
         <div class="header-actions">
-          ${renderLangSwitcher(state)}
-          <button class="mobile-toggle" type="button" aria-label="${t('nav.openMenu')}">☰</button>
+          <button class="mobile-toggle" type="button" aria-label="${t('nav.openMenu')}">${icon('menu', { size: 22, strokeWidth: 2 })}</button>
         </div>
       </div>
     </header>
@@ -161,46 +180,89 @@ export function renderFooter() {
   return `
     <footer class="site-footer-wrap">
       <div class="site-footer">
-        <div class="footer-brand-column">
-          <strong>InsureMe @Thailand</strong>
-          <p>${t('footer.tagline')}</p>
-          <div class="footer-contact-list">
-            <span>${t('footer.email')}: phuketwealth@gmail.com</span>
-            <span>WhatsApp / LINE: 0617822979</span>
-            <span>${t('footer.phone')}: 0617822979</span>
-            <span>${t('footer.hours')}</span>
+        <div class="footer-main">
+          <div class="footer-brand-column">
+            <a href="${appUrl('/')}" class="footer-brand-mark" aria-label="InsureMe @Thailand">
+              <img src="${staticUrl('assets/logos/insurewithcat.png')}?v=1" alt="InsureWithCat" width="220" height="48" />
+            </a>
+            <p class="footer-tagline">${t('footer.tagline')}</p>
+            <ul class="footer-contact-list">
+              <li>
+                <a class="footer-contact-item" href="mailto:${EMAIL}">
+                  ${icon('mail', { size: 17, strokeWidth: 2 })}
+                  <span>${EMAIL}</span>
+                </a>
+              </li>
+              <li>
+                <a class="footer-contact-item" href="${LINE_ADD_URL}" target="_blank" rel="noreferrer">
+                  ${icon('messageCircle', { size: 17, strokeWidth: 2 })}
+                  <span>LINE: ${LINE_ID}</span>
+                </a>
+              </li>
+              <li>
+                <a class="footer-contact-item" href="${FACEBOOK_URL}" target="_blank" rel="noreferrer">
+                  ${icon('share2', { size: 17, strokeWidth: 2 })}
+                  <span>Facebook</span>
+                </a>
+              </li>
+              <li>
+                <a class="footer-contact-item" href="tel:${PRIMARY_PHONE}">
+                  ${icon('phone', { size: 17, strokeWidth: 2 })}
+                  <span>${PRIMARY_PHONE_DISPLAY}</span>
+                </a>
+              </li>
+              <li>
+                <span class="footer-contact-item footer-contact-item-static">
+                  ${icon('clock', { size: 17, strokeWidth: 2 })}
+                  <span>${t('footer.hours')}</span>
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-columns">
+            <div class="footer-link-column">
+              <span class="footer-heading">${t('footer.mainMenu')}</span>
+              <a href="${appUrl('/')}">${t('nav.home')}</a>
+              <a href="${appUrl('/plans')}">${t('footer.allPlans')}</a>
+              <a href="${appUrl('/about')}">${t('nav.about')}</a>
+              <a href="${appUrl('/hospitals')}">${t('nav.hospitals')}</a>
+              <a href="${appUrl('/faq')}">${t('footer.faq')}</a>
+              <a href="${appUrl('/articles')}">${t('nav.articles')}</a>
+              <a href="${appUrl('/contact')}">${t('nav.contact')}</a>
+            </div>
+
+            <div class="footer-link-column">
+              <span class="footer-heading">${t('footer.categories')}</span>
+              <a href="${appUrl('/plans')}?category=${encodeURIComponent('ประกันชีวิต')}">${t('footer.life')}</a>
+              <a href="${appUrl('/plans')}?category=${encodeURIComponent('สุขภาพ')}">${t('footer.health')}</a>
+              <a href="${appUrl('/plans')}?category=${encodeURIComponent('โรคร้ายแรง')}">${t('footer.criticalIllness')}</a>
+              <a href="${appUrl('/plans')}?category=${encodeURIComponent('ลดหย่อนภาษี')}">${t('footer.taxDeduction')}</a>
+              <a href="${appUrl('/plans')}?category=${encodeURIComponent('วางแผนเกษียณ')}">${t('footer.retirement')}</a>
+              <a href="${appUrl('/plans')}?category=${encodeURIComponent('ประกันมรดก')}">${t('footer.estate')}</a>
+            </div>
+
+            <div class="footer-link-column footer-info-column">
+              <span class="footer-heading">${t('footer.moreInfo')}</span>
+              <span class="footer-info-line">
+                ${icon('building2', { size: 16, strokeWidth: 2 })}
+                <span>${t('footer.hq')}</span>
+              </span>
+              <span class="footer-info-line">
+                ${icon('badgeCheck', { size: 16, strokeWidth: 2 })}
+                <span>${t('footer.license')}</span>
+              </span>
+              <span class="footer-info-line">${t('footer.support')}</span>
+            </div>
           </div>
         </div>
 
-        <div class="footer-link-column">
-          <span class="footer-heading">${t('footer.mainMenu')}</span>
-          <a href="${appUrl('/')}">${t('nav.home')}</a>
-          <a href="${appUrl('/plans')}">${t('footer.allPlans')}</a>
-          <a href="${appUrl('/about')}">${t('nav.about')}</a>
-          <a href="${appUrl('/faq')}">${t('footer.faq')}</a>
-          <a href="${appUrl('/articles')}">${t('nav.articles')}</a>
-          <a href="${appUrl('/contact')}">${t('nav.contact')}</a>
-        </div>
-
-        <div class="footer-link-column">
-          <span class="footer-heading">${t('footer.categories')}</span>
-          <a href="${appUrl('/plans')}?category=สุขภาพ">${t('footer.health')}</a>
-          <a href="${appUrl('/plans')}?category=ชีวิต">${t('footer.life')}</a>
-          <a href="${appUrl('/plans')}?category=รถยนต์">${t('footer.car')}</a>
-          <a href="${appUrl('/plans')}?category=เดินทาง">${t('footer.travel')}</a>
-        </div>
-
-        <div class="footer-link-column">
-          <span class="footer-heading">${t('footer.moreInfo')}</span>
-          <span>${t('footer.hq')}</span>
-          <span>${t('footer.license')}</span>
-          <span>${t('footer.support')}</span>
-        </div>
-
         <div class="footer-bottom">
-          <span>© ${year} InsureMe @Thailand. ${t('footer.rights')}</span>
-          <a href="${appUrl('/privacy')}">${t('footer.privacy')}</a>
-          <a href="${appUrl('/terms')}">${t('footer.terms')}</a>
+          <span class="footer-copyright">© ${year} InsureMe @Thailand. ${t('footer.rights')}</span>
+          <div class="footer-legal-links">
+            <a href="${appUrl('/privacy')}">${t('footer.privacy')}</a>
+            <a href="${appUrl('/terms')}">${t('footer.terms')}</a>
+          </div>
         </div>
       </div>
     </footer>

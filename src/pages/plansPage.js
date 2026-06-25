@@ -1,6 +1,7 @@
 import { filters } from '../data/mockData.js';
 import { appUrl } from '../app/router.js';
-import { renderEmptyState, renderPlanCard, renderSectionHeader } from '../components/ui.js';
+import { renderEmptyState, renderPageHero, renderPlanCard } from '../components/ui.js';
+import { filterCategoryIcon } from '../components/icons.js';
 import { t } from '../i18n/index.js';
 import { getFilterLabelSync, getLocalizedPlans } from '../i18n/localize.js';
 
@@ -40,45 +41,49 @@ export function renderPlansPage(state, query) {
   });
 
   return `
-    <section class="page-hero compact">
-      ${renderSectionHeader({
-        eyebrow: t('plans.eyebrow'),
-        title: t('plans.title'),
-        description: t('plans.desc'),
-      })}
-    </section>
+    ${renderPageHero({
+      eyebrow: t('plans.eyebrow'),
+      title: t('plans.title'),
+      description: t('plans.desc'),
+      backgroundImage: 'assets/plans-hero-background.png',
+      backgroundVersion: '1',
+    })}
 
     <section class="directory-layout">
       <aside class="filter-panel">
-        <form id="plans-filter-form">
-          <label>
-            <span>${t('plans.searchLabel')}</span>
-            <input name="q" value="${keyword}" placeholder="${t('plans.searchPlaceholder')}" />
+        <div class="filter-panel-head">
+          <h2>${t('plans.filterTitle')}</h2>
+          <p>${t('plans.filterDesc')}</p>
+        </div>
+        <form id="plans-filter-form" class="plans-filter-form">
+          <label class="filter-field filter-field-search">
+            <input name="q" value="${keyword}" placeholder="${t('plans.searchPlaceholder')}" aria-label="${t('plans.searchLabel')}" />
           </label>
-          <label>
-            <span>${t('plans.categoryLabel')}</span>
-            <div class="chip-grid">
+          <div class="filter-field">
+            <span class="filter-field-label">${t('plans.categoryLabel')}</span>
+            <div class="chip-grid filter-chip-grid">
               ${filters
                 .map(
                   (item) => `
                     <button class="chip ${item === category ? 'chip-active' : ''}" type="button" data-filter-category="${item}">
-                      ${getFilterLabelSync(item)}
+                      ${filterCategoryIcon(item)}
+                      <span>${getFilterLabelSync(item)}</span>
                     </button>
                   `,
                 )
                 .join('')}
             </div>
-          </label>
-          <input type="hidden" name="category" value="${category}" />
-          <label>
-            <span>${t('plans.sortLabel')}</span>
+            <input type="hidden" name="category" value="${category}" />
+          </div>
+          <label class="filter-field">
+            <span class="filter-field-label">${t('plans.sortLabel')}</span>
             <select name="sort">
               <option value="featured" ${sort === 'featured' ? 'selected' : ''}>${t('plans.sortFeatured')}</option>
               <option value="price-low" ${sort === 'price-low' ? 'selected' : ''}>${t('plans.sortPriceLow')}</option>
               <option value="coverage-high" ${sort === 'coverage-high' ? 'selected' : ''}>${t('plans.sortCoverageHigh')}</option>
             </select>
           </label>
-          <button class="button button-primary" type="submit">${t('plans.updateResults')}</button>
+          <button class="button button-primary filter-submit" type="submit">${t('plans.updateResults')}</button>
         </form>
       </aside>
       <div class="directory-content">

@@ -1,11 +1,17 @@
 import { plans } from '../data/mockData.js';
 import { appUrl } from '../app/router.js';
-import { renderEmptyState, renderPlanCard, renderSectionHeader } from '../components/ui.js';
+import { renderEmptyState, renderPageHero, renderPlanCard } from '../components/ui.js';
+import { renderCheckListItems } from '../components/icons.js';
 import { t } from '../i18n/index.js';
 import { getLocalizedCategory, getLocalizedPlans } from '../i18n/localize.js';
 
 const categorySlugToKey = {
+  'life-insurance': 'ประกันชีวิต',
   'health-insurance': 'สุขภาพ',
+  'critical-illness-insurance': 'โรคร้ายแรง',
+  'tax-deduction-insurance': 'ลดหย่อนภาษี',
+  'retirement-planning': 'วางแผนเกษียณ',
+  'estate-insurance': 'ประกันมรดก',
 };
 
 export function renderCategoryPage(slug, state) {
@@ -27,19 +33,17 @@ export function renderCategoryPage(slug, state) {
   });
 
   return `
-    <section class="page-hero compact">
-      ${renderSectionHeader({
-        eyebrow: category.name,
-        title: t('category.titleTemplate', { category: category.name }),
-        description: category.summary,
-      })}
-    </section>
+    ${renderPageHero({
+      eyebrow: category.name,
+      title: t('category.titleTemplate', { category: category.name }),
+      description: category.summary,
+    })}
 
     <section class="category-landing-layout">
       <aside class="detail-panel">
         <h2>${t('category.highlights')}</h2>
         <ul class="coverage-list">
-          ${category.points.map((point) => `<li>${point}</li>`).join('')}
+          ${renderCheckListItems(category.points)}
         </ul>
         <button class="button button-primary" type="button" data-open-quote="true">${t('category.requestAdvice')}</button>
       </aside>

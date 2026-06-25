@@ -1,5 +1,6 @@
 import { appUrl, staticUrl } from '../app/router.js';
-import { renderEmptyState } from '../components/ui.js';
+import { renderEmptyState, renderPageHero } from '../components/ui.js';
+import { renderDetailListItems, renderEyebrow } from '../components/icons.js';
 import { t } from '../i18n/index.js';
 import {
   getLocalizedInsuranceCategory,
@@ -21,16 +22,17 @@ export function renderInsuranceCategoryDetailPage(slug) {
   const relatedCategories = getLocalizedInsuranceCategories().filter((item) => item.key !== category.key);
 
   return `
-    <section class="insurance-detail-hero">
-      <div class="insurance-detail-copy">
-        <span class="section-eyebrow">${category.label}</span>
-        <h1>${category.title}</h1>
-        <p>${category.detailLead}</p>
-        <div class="insurance-detail-actions">
-          <button class="button button-primary" type="button" data-open-quote="true">${category.primaryAction}</button>
-          <a class="button button-secondary" href="${appUrl('/')}#insurance-categories">${t('insuranceDetail.viewOtherCategories')}</a>
-        </div>
-      </div>
+    ${renderPageHero({
+      eyebrow: category.label,
+      title: category.title,
+      description: category.detailLead,
+      actions: `
+        <button class="button button-primary" type="button" data-open-quote="true">${category.primaryAction}</button>
+        <a class="button button-secondary" href="${appUrl('/')}#insurance-categories">${t('insuranceDetail.viewOtherCategories')}</a>
+      `,
+    })}
+
+    <section class="insurance-detail-media-section">
       <div class="insurance-detail-media">
         <img src="${staticUrl(category.image)}" alt="${category.title}" loading="eager" decoding="async" />
       </div>
@@ -38,25 +40,25 @@ export function renderInsuranceCategoryDetailPage(slug) {
 
     <section class="insurance-detail-grid">
       <article class="insurance-detail-panel">
-        <span class="section-eyebrow">${t('insuranceDetail.coverageEyebrow')}</span>
+        ${renderEyebrow(t('insuranceDetail.coverageEyebrow'))}
         <h2>${t('insuranceDetail.highlightsTitle', { title: category.title })}</h2>
         <ul class="insurance-detail-list">
-          ${category.highlights.map((item) => `<li>${item}</li>`).join('')}
+          ${renderDetailListItems(category.highlights)}
         </ul>
       </article>
 
       <article class="insurance-detail-panel insurance-detail-panel-accent">
-        <span class="section-eyebrow">${t('insuranceDetail.documentsEyebrow')}</span>
+        ${renderEyebrow(t('insuranceDetail.documentsEyebrow'))}
         <h2>${t('insuranceDetail.documentsTitle')}</h2>
         <ul class="insurance-detail-list">
-          ${category.documents.map((item) => `<li>${item}</li>`).join('')}
+          ${renderDetailListItems(category.documents)}
         </ul>
       </article>
     </section>
 
     <section class="insurance-detail-process">
       <div>
-        <span class="section-eyebrow">${t('insuranceDetail.processEyebrow')}</span>
+        ${renderEyebrow(t('insuranceDetail.processEyebrow'))}
         <h2>${t('insuranceDetail.processTitle')}</h2>
       </div>
       <div class="insurance-detail-steps">
@@ -80,7 +82,7 @@ export function renderInsuranceCategoryDetailPage(slug) {
 
     <section class="insurance-detail-related">
       <div class="section-header">
-        <span class="section-eyebrow">${t('insuranceDetail.relatedEyebrow')}</span>
+        ${renderEyebrow(t('insuranceDetail.relatedEyebrow'))}
         <h2>${t('insuranceDetail.relatedTitle')}</h2>
       </div>
       <div class="insurance-detail-related-grid">
