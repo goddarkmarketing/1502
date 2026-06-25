@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="th">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +8,8 @@
   <body>
     <script>
       (function redirectToAppRoot() {
-        const basePath = '/portfolio3';
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const basePath = pathParts.length ? `/${pathParts[0]}` : '';
         const nextPath =
           window.location.pathname + window.location.search + window.location.hash;
 
