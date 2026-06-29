@@ -11,7 +11,7 @@ export function buildInquiryMessage(formValues, plan) {
   const planName = plan ? getPlanDisplayName(plan) : 'ยังไม่ได้เลือกแผน';
 
   return [
-    'สวัสดีค่ะ ต้องการสอบถามประกันภัยผ่าน InsureMe @Thailand',
+    'สวัสดีค่ะ ต้องการสอบถามประกันภัยผ่าน InsureWithCat',
     '',
     `ชื่อ: ${formValues.fullName}`,
     `อีเมล: ${formValues.email}`,
@@ -26,7 +26,7 @@ export function buildInquiryMessage(formValues, plan) {
 }
 
 export function buildMailtoUrl(formValues, plan) {
-  const subject = encodeURIComponent('สอบถามแผนประกัน — InsureMe @Thailand');
+  const subject = encodeURIComponent('สอบถามแผนประกัน — InsureWithCat');
   const body = encodeURIComponent(buildInquiryMessage(formValues, plan));
   return `mailto:${EMAIL}?subject=${subject}&body=${body}`;
 }

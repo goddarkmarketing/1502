@@ -42,7 +42,7 @@ export default {
     eyebrow: 'Legal',
     title: 'Privacy Policy',
     intro:
-      'This policy explains how InsureMe @Thailand collects, uses, and protects personal information when you use our website and advisory services.',
+      'This policy explains how InsureWithCat collects, uses, and protects personal information when you use our website and advisory services.',
     updated: 'Last updated: June 2026',
     contactCta: 'Contact Us',
     backHome: 'Back to Home',
@@ -50,7 +50,7 @@ export default {
       {
         heading: '1. Who We Are',
         paragraphs: [
-          'InsureMe @Thailand is an insurance comparison and advisory service operating in Thailand. We help visitors compare insurance plans and connect with licensed advisors.',
+          'InsureWithCat is an insurance comparison and advisory service operating in Thailand. We help visitors compare insurance plans and connect with licensed advisors.',
           'Insurance broker license no. 6304007553. Contact: Litapat.ta@gmail.com, 0653561416.',
         ],
       },
@@ -102,7 +102,7 @@ export default {
     eyebrow: 'Legal',
     title: 'Terms of Service',
     intro:
-      'These terms govern your use of the InsureMe @Thailand website and related advisory coordination services. By using this site, you agree to these terms.',
+      'These terms govern your use of the InsureWithCat website and related advisory coordination services. By using this site, you agree to these terms.',
     updated: 'Last updated: June 2026',
     contactCta: 'Contact Us',
     backHome: 'Back to Home',
@@ -110,7 +110,7 @@ export default {
       {
         heading: '1. About Our Service',
         paragraphs: [
-          'InsureMe @Thailand provides insurance plan information, comparison tools, and coordination with licensed insurance advisors in Thailand.',
+          'InsureWithCat provides insurance plan information, comparison tools, and coordination with licensed insurance advisors in Thailand.',
           'We are an insurance broker (license no. 6304007553), not an insurer. Final coverage terms, premiums, and policy documents are determined by the respective insurance company.',
         ],
       },
@@ -145,7 +145,7 @@ export default {
       {
         heading: '6. Limitation of Liability',
         paragraphs: [
-          'To the fullest extent permitted by law, InsureMe @Thailand is not liable for indirect, incidental, or consequential damages arising from use of this website or reliance on displayed information.',
+          'To the fullest extent permitted by law, InsureWithCat is not liable for indirect, incidental, or consequential damages arising from use of this website or reliance on displayed information.',
           'We do not guarantee uninterrupted access to the site and may modify or discontinue features at any time.',
         ],
       },
@@ -290,7 +290,7 @@ export default {
   about: {
     eyebrow: 'About Us',
     title: 'Making Insurance Selection Simple and Trustworthy',
-    desc: 'InsureMe @Thailand supports customers with more than 28 years of life and non-life insurance experience, after-sales care, and real offices in Phuket and Bangkok.',
+    desc: 'InsureWithCat supports customers with more than 28 years of life and non-life insurance experience, after-sales care, and real offices in Phuket and Bangkok.',
     statsLabel: 'Key figures',
     highlightsTitle: 'What Customers Trust',
     highlightsDesc:
@@ -324,7 +324,7 @@ export default {
     licenseNumber: 'No. 6304007553',
     lineQrTitle: 'Connect on LINE',
     lineQrDesc: 'Scan the QR code below with LINE to add us and start chatting about insurance plans.',
-    lineQrAlt: 'LINE QR code for InsureMe @Thailand',
+    lineQrAlt: 'LINE QR code for InsureWithCat',
     openLine: 'Open LINE',
     openFacebook: 'Open Facebook',
   },
@@ -421,7 +421,7 @@ export default {
     coveragePlaceholder: 'e.g. Family health / First car',
     lineQrTitle: 'Scan LINE QR Code',
     lineQrHint: 'Scan this QR code with the LINE app to connect with our team.',
-    lineQrAlt: 'LINE QR code for InsureMe @Thailand',
+    lineQrAlt: 'LINE QR code for InsureWithCat',
     note: 'Additional Details',
     notePlaceholder: 'Budget, conditions, or other notes',
     cancel: 'Cancel',

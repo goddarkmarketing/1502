@@ -41,7 +41,7 @@ export default {
     eyebrow: '法律信息',
     title: '隐私政策',
     intro:
-      '本政策说明 InsureMe @Thailand 在您使用本网站及咨询服务时，如何收集、使用和保护您的个人信息。',
+      '本政策说明 InsureWithCat 在您使用本网站及咨询服务时，如何收集、使用和保护您的个人信息。',
     updated: '最后更新：2026年6月',
     contactCta: '联系我们',
     backHome: '返回首页',
@@ -49,7 +49,7 @@ export default {
       {
         heading: '1. 服务提供方',
         paragraphs: [
-          'InsureMe @Thailand 是泰国的保险比较与咨询服务，帮助访客比较保险方案并与持证顾问对接。',
+          'InsureWithCat 是泰国的保险比较与咨询服务，帮助访客比较保险方案并与持证顾问对接。',
           '保险经纪牌照编号：6304007553。联系方式：Litapat.ta@gmail.com，0653561416。',
         ],
       },
@@ -101,7 +101,7 @@ export default {
     eyebrow: '法律信息',
     title: '服务条款',
     intro:
-      '本条款规范您对 InsureMe @Thailand 网站及相关咨询协调服务的使用。使用本网站即表示您同意本条款。',
+      '本条款规范您对 InsureWithCat 网站及相关咨询协调服务的使用。使用本网站即表示您同意本条款。',
     updated: '最后更新：2026年6月',
     contactCta: '联系我们',
     backHome: '返回首页',
@@ -109,7 +109,7 @@ export default {
       {
         heading: '1. 关于我们的服务',
         paragraphs: [
-          'InsureMe @Thailand 提供保险方案信息、比较工具，并协调泰国持证保险顾问的服务。',
+          'InsureWithCat 提供保险方案信息、比较工具，并协调泰国持证保险顾问的服务。',
           '我们是保险经纪（牌照编号 6304007553），并非保险公司。最终保障条款、保费及保单文件由相应保险公司确定。',
         ],
       },
@@ -144,7 +144,7 @@ export default {
       {
         heading: '6. 责任限制',
         paragraphs: [
-          '在法律允许的最大范围内，InsureMe @Thailand 不对因使用本网站或依赖所显示信息而产生的间接、附带或后果性损害承担责任。',
+          '在法律允许的最大范围内，InsureWithCat 不对因使用本网站或依赖所显示信息而产生的间接、附带或后果性损害承担责任。',
           '我们不保证网站持续可用，并可能随时修改或停止部分功能。',
         ],
       },
@@ -286,7 +286,7 @@ export default {
   about: {
     eyebrow: '关于我们',
     title: '让选择保险变得简单可信',
-    desc: 'InsureMe @Thailand 凭借超过 28 年寿险与财产险经验、售后服务团队，以及普吉和曼谷实体办公室为客户提供支持。',
+    desc: 'InsureWithCat 凭借超过 28 年寿险与财产险经验、售后服务团队，以及普吉和曼谷实体办公室为客户提供支持。',
     statsLabel: '关键数据',
     highlightsTitle: '客户信赖的优势',
     highlightsDesc: '我们让信息清晰、比较便捷，并在选定方案后持续提供跟进支持。',
@@ -317,7 +317,7 @@ export default {
     licenseNumber: '编号 6304007553',
     lineQrTitle: '通过 LINE 联系',
     lineQrDesc: '使用 LINE 扫描下方二维码添加我们，咨询保险方案。',
-    lineQrAlt: 'InsureMe @Thailand LINE 二维码',
+    lineQrAlt: 'InsureWithCat LINE 二维码',
     openLine: '打开 LINE',
     openFacebook: '打开 Facebook',
   },
@@ -413,7 +413,7 @@ export default {
     coveragePlaceholder: '例如：家庭健康 / 首辆车',
     lineQrTitle: '扫描 LINE 二维码',
     lineQrHint: '使用 LINE 应用扫描此二维码，即可添加我们并开始咨询。',
-    lineQrAlt: 'InsureMe @Thailand LINE 二维码',
+    lineQrAlt: 'InsureWithCat LINE 二维码',
     note: '补充说明',
     notePlaceholder: '预算、条件或其他说明',
     cancel: '取消',

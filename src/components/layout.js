@@ -182,7 +182,7 @@ export function renderFooter() {
       <div class="site-footer">
         <div class="footer-main">
           <div class="footer-brand-column">
-            <a href="${appUrl('/')}" class="footer-brand-mark" aria-label="InsureMe @Thailand">
+            <a href="${appUrl('/')}" class="footer-brand-mark" aria-label="InsureWithCat">
               <img src="${staticUrl('assets/logos/insurewithcat.png')}?v=1" alt="InsureWithCat" width="220" height="48" />
             </a>
             <p class="footer-tagline">${t('footer.tagline')}</p>
@@ -269,7 +269,7 @@ export function renderFooter() {
         </div>
 
         <div class="footer-bottom">
-          <span class="footer-copyright">© ${year} InsureMe @Thailand. ${t('footer.rights')}</span>
+          <span class="footer-copyright">© ${year} InsureWithCat. ${t('footer.rights')}</span>
           <div class="footer-legal-links">
             <a href="${appUrl('/privacy')}">${t('footer.privacy')}</a>
             <a href="${appUrl('/terms')}">${t('footer.terms')}</a>
