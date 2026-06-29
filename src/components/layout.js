@@ -244,15 +244,26 @@ export function renderFooter() {
 
             <div class="footer-link-column footer-info-column">
               <span class="footer-heading">${t('footer.moreInfo')}</span>
-              <span class="footer-info-line">
-                ${icon('building2', { size: 16, strokeWidth: 2 })}
-                <span>${t('footer.hq')}</span>
-              </span>
-              <span class="footer-info-line">
-                ${icon('badgeCheck', { size: 16, strokeWidth: 2 })}
-                <span>${t('footer.license')}</span>
-              </span>
-              <span class="footer-info-line">${t('footer.support')}</span>
+              <div class="footer-info-block">
+                <div class="footer-info-line">
+                  ${icon('building2', { size: 16, strokeWidth: 2 })}
+                  <div class="footer-info-copy">
+                    <strong class="footer-info-label">${t('footer.hqTitle')}</strong>
+                    <p class="footer-info-text">${t('footer.hqStreet')}</p>
+                    <p class="footer-info-text">${t('footer.hqBuilding')}</p>
+                    <p class="footer-info-text">${t('footer.hqDistrict')}</p>
+                    <p class="footer-info-text">${t('footer.hqPostal')}</p>
+                  </div>
+                </div>
+                <div class="footer-info-line">
+                  ${icon('badgeCheck', { size: 16, strokeWidth: 2 })}
+                  <div class="footer-info-copy">
+                    <span class="footer-info-label">${t('footer.licenseLabel')}</span>
+                    <span class="footer-info-number">${t('footer.licenseNumber')}</span>
+                  </div>
+                </div>
+                <p class="footer-info-note">${t('footer.support')}</p>
+              </div>
             </div>
           </div>
         </div>

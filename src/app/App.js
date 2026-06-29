@@ -506,12 +506,30 @@ function render() {
   setupAutoSliders();
 }
 
+function getSliderGap(slider) {
+  if (slider.id === 'testimonial-slider') {
+    return 14;
+  }
+
+  return 22;
+}
+
 function getSliderCardSelector(slider) {
   return slider.dataset.sliderCard || '.category-card';
 }
 
 function getSliderVisibleCount(slider) {
   if (slider.id === 'plan-slider') {
+    if (window.matchMedia('(max-width: 760px)').matches) {
+      return 1;
+    }
+    if (window.matchMedia('(max-width: 1080px)').matches) {
+      return 2;
+    }
+    return 3;
+  }
+
+  if (slider.id === 'testimonial-slider') {
     if (window.matchMedia('(max-width: 760px)').matches) {
       return 1;
     }
@@ -536,7 +554,7 @@ function getSliderMetrics(slider) {
   }
 
   const firstCard = cards[0];
-  const gap = 22;
+  const gap = getSliderGap(slider);
   const step = firstCard.getBoundingClientRect().width + gap;
   const maxIndex = getSliderMaxIndex(slider, cards);
   const activeIndex = Math.max(0, Math.min(maxIndex, Math.round(slider.scrollLeft / step)));
@@ -618,6 +636,10 @@ function setupAutoSliders() {
     }
 
     if (slider.id === 'plan-slider' && window.matchMedia('(max-width: 760px)').matches) {
+      return;
+    }
+
+    if (slider.id === 'testimonial-slider' && !window.matchMedia('(max-width: 760px)').matches) {
       return;
     }
 

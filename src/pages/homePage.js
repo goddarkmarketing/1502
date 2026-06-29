@@ -121,6 +121,7 @@ export function renderHomePage(state) {
         ];
   const faqs = getLocalizedFaqs();
   const articleTopics = getLocalizedArticles();
+  const testimonials = getLocalizedTestimonials();
 
   return `
     <section
@@ -215,14 +216,32 @@ export function renderHomePage(state) {
 
     ${renderHospitalNetworkSection({ className: 'partner-section', showGrid: false, showCta: false })}
 
-    <section class="section-white">
+    <section class="section-white home-testimonials-section">
       ${renderSectionHeader({
         title: t('home.testimonialTitle'),
         description: t('home.testimonialDesc'),
         center: true,
       })}
-      <div class="testimonial-grid">
-        ${getLocalizedTestimonials().map((item) => renderTestimonialCard(item)).join('')}
+      <div
+        class="testimonial-slider-shell"
+        id="testimonial-slider"
+        data-auto-slider="true"
+        data-slider-card=".testimonial-card"
+      >
+        <div class="testimonial-slider-track testimonial-grid">
+          ${testimonials.map((item) => renderTestimonialCard(item)).join('')}
+        </div>
+      </div>
+      <div class="slider-dots" id="testimonial-slider-dots" aria-label="${t('home.sliderStatus')}">
+        ${Array.from({ length: testimonials.length }, (_, index) => `
+          <button
+            class="slider-dot ${index === 0 ? 'slider-dot-active' : ''}"
+            type="button"
+            data-slider-dot="testimonial-slider"
+            data-slider-index="${index}"
+            aria-label="${t('home.sliderGoTo', { n: index + 1 })}"
+          ></button>
+        `).join('')}
       </div>
     </section>
 

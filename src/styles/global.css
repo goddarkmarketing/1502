@@ -3114,6 +3114,22 @@ a.contact-page-channel-item:hover {
   padding-bottom: 10px;
 }
 
+.testimonial-slider-shell {
+  container-type: inline-size;
+}
+
+.testimonial-slider-track.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.testimonial-card {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
 .slider-dots {
   display: flex;
   justify-content: center;
@@ -4671,13 +4687,61 @@ textarea:focus {
   color: var(--primary-strong);
 }
 
+.footer-info-column {
+  gap: 14px;
+}
+
+.footer-info-block {
+  display: grid;
+  gap: 18px;
+}
+
 .footer-info-column .footer-info-line {
-  display: inline-flex;
+  display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 10px;
   font-size: 0.94rem;
   line-height: 1.65;
   color: var(--text-muted);
+}
+
+.footer-info-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.footer-info-label {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.footer-info-text {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.footer-info-number {
+  display: block;
+  margin-top: 2px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.footer-info-note {
+  margin: 0;
+  padding-top: 2px;
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text-muted);
+  max-width: 36ch;
 }
 
 .footer-info-column .footer-info-line .lucide {
@@ -4888,13 +4952,16 @@ textarea:focus {
 @media (max-width: 1080px) {
   .featured-grid,
   .trust-grid,
-  .testimonial-grid,
   .info-grid,
   .articles-grid,
   .logo-grid,
   .about-highlight-grid,
   .about-stats,
   .contact-primary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .testimonial-slider-track.testimonial-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -4952,11 +5019,16 @@ textarea:focus {
   .home-articles-grid .article-card:nth-child(4) {
     display: none;
   }
+
+  .home-testimonials-section .slider-dots {
+    display: none;
+  }
 }
 
 @media (max-width: 760px) {
   :root {
-    --layout-gutter: 14px;
+    --layout-gutter: 20px;
+    --layout-bleed-padding: 22px;
     --section-title-size: clamp(1.85rem, 7.4vw, 2.35rem);
     --detail-title-size: var(--section-title-size);
   }
@@ -5149,7 +5221,38 @@ textarea:focus {
   }
 
   .hero-section-inner {
-    padding-block: 28px 32px;
+    padding: 24px var(--layout-bleed-padding) 32px;
+  }
+
+  .hero-section:not(.page-hero-banner) .hero-copy {
+    max-width: none;
+    padding: 18px 16px 20px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(250, 245, 255, 0.94) 100%);
+    border: 1px solid rgba(168, 85, 247, 0.12);
+    box-shadow: 0 16px 40px rgba(168, 85, 247, 0.08);
+  }
+
+  .hero-section:not(.page-hero-banner) .hero-copy p {
+    font-size: 0.96rem;
+    line-height: 1.65;
+  }
+
+  .hero-section:not(.page-hero-banner) .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .hero-section:not(.page-hero-banner) .hero-actions .button {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.35;
+    min-height: 48px;
+    padding-inline: 16px;
   }
 
   .hero-copy {
@@ -5163,13 +5266,14 @@ textarea:focus {
   }
 
   .insurance-category-heading-band {
-    padding: 34px var(--layout-gutter) 40px;
+    padding: 36px var(--layout-bleed-padding) 40px;
   }
 
   .insurance-category-heading {
     max-width: none;
     width: 100%;
     text-align: left;
+    padding-inline: 2px;
   }
 
   .insurance-category-heading h2 {
@@ -5196,7 +5300,7 @@ textarea:focus {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     justify-content: stretch;
     margin-inline: calc(-1 * var(--layout-gutter));
-    padding-inline: var(--layout-gutter);
+    padding-inline: var(--layout-bleed-padding);
     padding-block: 14px 28px;
     overflow: visible;
   }
@@ -5210,6 +5314,7 @@ textarea:focus {
 
   .insurance-category-panels {
     min-height: 0;
+    padding-inline: var(--layout-gutter);
   }
 
   .insurance-category-panel:not(.insurance-category-panel-active) {
@@ -5222,6 +5327,8 @@ textarea:focus {
     min-height: 0;
     height: auto;
     grid-template-columns: 1fr;
+    border-radius: 18px;
+    overflow: hidden;
   }
 
   .insurance-category-media {
@@ -5241,7 +5348,7 @@ textarea:focus {
 
   .insurance-category-copy {
     height: auto;
-    padding: 20px;
+    padding: 20px 18px 22px;
   }
 
   .insurance-category-actions .button {
@@ -5256,6 +5363,76 @@ textarea:focus {
   .hero-section.page-hero-banner .hero-copy h1 {
     font-size: clamp(1.85rem, 6.8vw, 2.5rem);
     line-height: 1.14;
+  }
+
+  .hero-section.page-hero-banner .hero-copy {
+    width: 100%;
+    max-width: none;
+    padding: 18px 16px 20px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(250, 245, 255, 0.94) 100%);
+    border: 1px solid rgba(168, 85, 247, 0.12);
+    box-shadow: 0 16px 40px rgba(168, 85, 247, 0.08);
+  }
+
+  .hero-section.page-hero-banner .hero-copy p {
+    font-size: 0.96rem;
+    line-height: 1.65;
+  }
+
+  .hero-section.page-hero-banner .detail-highlights {
+    margin: 16px 0 18px;
+    gap: 10px;
+  }
+
+  .hero-section.page-hero-banner .detail-highlights > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px 14px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(168, 85, 247, 0.1);
+  }
+
+  .hero-section.page-hero-banner .detail-highlights span {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .hero-section.page-hero-banner .detail-highlights strong {
+    font-size: 1.04rem;
+    line-height: 1.3;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .hero-section.page-hero-banner .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 2px;
+  }
+
+  .hero-section.page-hero-banner .hero-actions .button {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.35;
+    min-height: 48px;
+    padding-inline: 16px;
+  }
+
+  .hero-section.page-hero-banner:has(.detail-highlights) {
+    min-height: 0;
+    align-items: flex-start;
+  }
+
+  .hero-section.page-hero-banner:has(.detail-highlights) .hero-section-inner {
+    padding-block: 20px 28px;
+    padding-inline: var(--layout-bleed-padding);
   }
 
   .hero-line-dark {
@@ -5585,7 +5762,6 @@ textarea:focus {
 
   .hero-stats,
   .trust-grid,
-  .testimonial-grid,
   .info-grid,
   .logo-grid,
   .about-highlight-grid,
@@ -5595,6 +5771,46 @@ textarea:focus {
   .detail-highlights,
   .form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .home-testimonials-section .slider-dots {
+    display: flex;
+    margin-top: 14px;
+  }
+
+  .testimonial-slider-shell {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin-inline: calc(-1 * var(--layout-gutter));
+    padding-inline: var(--layout-gutter);
+    scroll-padding-inline: var(--layout-gutter);
+    padding-bottom: 4px;
+  }
+
+  .testimonial-slider-shell::-webkit-scrollbar {
+    display: none;
+  }
+
+  .testimonial-slider-track.testimonial-grid {
+    display: flex;
+    align-items: stretch;
+    gap: 14px;
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .testimonial-slider-track .testimonial-card {
+    flex: 0 0 min(calc(100vw - 2 * var(--layout-gutter) - 28px), 340px);
+    width: min(calc(100vw - 2 * var(--layout-gutter) - 28px), 340px);
+    scroll-snap-align: start;
+    min-height: 100%;
+  }
+
+  .testimonial-card p {
+    font-size: 0.96rem;
+    line-height: 1.65;
   }
 
   .featured-grid,
@@ -5829,6 +6045,12 @@ textarea:focus {
 
   .plan-section-top .section-header h2 {
     font-size: clamp(1.35rem, 4.8vw, 1.85rem);
+    white-space: normal;
+    line-height: 1.2;
+  }
+
+  .section-header h2 {
+    line-height: 1.16;
   }
 
   .plan-slider-controls {
