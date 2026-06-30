@@ -32,7 +32,7 @@ export const trustPoints = [
   {
     icon: 'clock',
     title: 'บริการลูกค้าตลอด 24 ชั่วโมง',
-    description: 'ชับบ์สามัคคี โทร. 1758 และชับบ์ ไลฟ์ โทร. 1283 พร้อมช่องทางออนไลน์ MyAccount',
+    description: 'ชับบ์ ไลฟ์ โทร. 1283 พร้อมช่องทางออนไลน์ MyAccount',
   },
   {
     icon: 'layers',
