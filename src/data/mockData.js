@@ -32,7 +32,7 @@ export const trustPoints = [
   {
     icon: 'clock',
     title: 'บริการลูกค้าตลอด 24 ชั่วโมง',
-    description: 'ชับบ์ ไลฟ์ โทร. 1283 พร้อมช่องทางออนไลน์ MyAccount',
+    description: 'โทร. 1283 พร้อมช่องทางออนไลน์ MyAccount',
   },
   {
     icon: 'layers',
