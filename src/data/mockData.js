@@ -232,7 +232,7 @@ export const companyMilestones = [
 ];
 
 export const contactChannels = [
-  { title: 'โทรศัพท์', detail: '0653561416', note: 'ติดต่อสอบถามแผนประกัน' },
+  { title: 'โทรศัพท์', detail: '0653564146', note: 'ติดต่อสอบถามแผนประกัน' },
   { title: 'LINE', detail: 'Minigirl65', note: 'เพิ่มเพื่อนและสอบถามแผนประกัน' },
   { title: 'Facebook', detail: 'facebook.com/share/1DD7YHzCBp', note: 'ทักแชทหรือดูข่าวสารล่าสุด' },
   { title: 'อีเมล', detail: 'Litapat.ta@gmail.com', note: 'ตอบกลับภายในวันทำการ' },

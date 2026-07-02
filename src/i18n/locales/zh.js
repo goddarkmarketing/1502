@@ -50,7 +50,7 @@ export default {
         heading: '1. 服务提供方',
         paragraphs: [
           'InsureWithCat 是泰国的保险比较与咨询服务，帮助访客比较保险方案并与持证顾问对接。',
-          '保险经纪牌照编号：6304007553。联系方式：Litapat.ta@gmail.com，0653561416。',
+          '保险经纪牌照编号：6304007553。联系方式：Litapat.ta@gmail.com，0653564146。',
         ],
       },
       {
@@ -152,7 +152,7 @@ export default {
         heading: '7. 适用法律与联系',
         paragraphs: [
           '本条款受泰国法律管辖。争议由泰国有管辖权的法院处理，强制性消费者保护规则另有规定的除外。',
-          '条款相关问题请联系：Litapat.ta@gmail.com 或 0653561416。',
+          '条款相关问题请联系：Litapat.ta@gmail.com 或 0653564146。',
         ],
       },
     ],

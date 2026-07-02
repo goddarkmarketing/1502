@@ -51,7 +51,7 @@ export default {
         heading: '1. Who We Are',
         paragraphs: [
           'InsureWithCat is an insurance comparison and advisory service operating in Thailand. We help visitors compare insurance plans and connect with licensed advisors.',
-          'Insurance broker license no. 6304007553. Contact: Litapat.ta@gmail.com, 0653561416.',
+          'Insurance broker license no. 6304007553. Contact: Litapat.ta@gmail.com, 0653564146.',
         ],
       },
       {
@@ -153,7 +153,7 @@ export default {
         heading: '7. Governing Law and Contact',
         paragraphs: [
           'These terms are governed by the laws of Thailand. Disputes shall be subject to the jurisdiction of competent courts in Thailand, unless otherwise required by mandatory consumer protection rules.',
-          'Questions about these terms: Litapat.ta@gmail.com or 0653561416.',
+          'Questions about these terms: Litapat.ta@gmail.com or 0653564146.',
         ],
       },
     ],

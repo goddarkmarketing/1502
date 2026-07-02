@@ -1,7 +1,7 @@
 import { getPlanDisplayName } from '../i18n/localize.js';
 
-export const PRIMARY_PHONE = '0653561416';
-export const PRIMARY_PHONE_DISPLAY = '0653561416';
+export const PRIMARY_PHONE = '0653564146';
+export const PRIMARY_PHONE_DISPLAY = '0653564146';
 export const EMAIL = 'Litapat.ta@gmail.com';
 export const FACEBOOK_URL = 'https://www.facebook.com/share/1DD7YHzCBp/?mibextid=wwXIfr';
 export const LINE_ID = 'Minigirl65';
